@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Walk a PM through **post-install workspace setup** so they finish with:
 
-1. A clear mental model of what the plugin installed and where files live
+1. A clear mental model of what skills they have and where files live
 2. `CLAUDE.md` and `Knowledge/workspace-tools.md` filled for their product and company
 3. Awareness of all 11 workflow skills and which to run first
 4. A saved summary at `Knowledge/onboarding-summary.md` with a personalized next step
@@ -19,10 +19,59 @@ Walk a PM through **post-install workspace setup** so they finish with:
 
 - Friendly, plain language — assume the user is a PM, not a CLI expert
 - **One phase at a time.** Confirm before advancing.
+- **Progress header is mandatory** at the start of every phase message (see Progress display below); phase explanation follows it
 - Ask **1–3 questions per turn**, never a wall of questions
 - Show a **short preview** of file changes before writing
 - Never fabricate company data — use `[NEED: ...]` for skipped fields
 - If the user already has partially filled files, **merge** (replace placeholders only; preserve custom content)
+- Use emoji sparingly in progress UI: ✅ done, 🔵 current step, ○ pending
+
+## Progress display (show every phase)
+
+Claude Code has no native progress-bar API. Show progress **in chat** at the start of every phase message (and immediately on resume). Keep the block to **7 lines max**.
+
+### Phase order and labels
+
+| Step | `phase` value | Display label |
+|------|---------------|---------------|
+| 1 | `welcome` | Welcome |
+| 2 | `workspace` | Workspace |
+| 3 | `claude_md` | Your product context |
+| 4 | `tools` | Your tools |
+| 5 | `mcp` | MCP check |
+| 6 | `tour` | Skills tour |
+| 7 | `finish` | Finish |
+
+### How to build the header
+
+1. Read `Knowledge/onboarding-state.json` (or assume step 1 if missing / starting fresh).
+2. Mark completed phases `[x]`, current phase with `← *you are here*`, pending as `[ ]`.
+3. Print **Template A (default)** — checkbox list:
+
+```markdown
+**BuilderOS setup — step <N> of 7**
+
+- [x] Welcome
+- [x] Workspace
+- [ ] Your product context  ← *you are here*
+- [ ] Your tools
+- [ ] MCP check
+- [ ] Skills tour
+- [ ] Finish
+```
+
+4. **Template B (fallback)** if checkboxes look noisy on CLI — compact emoji rail:
+
+```markdown
+**Setup:** ✅ Welcome · ✅ Workspace · 🔵 Context · ○ Tools · ○ MCP · ○ Tour · ○ Done
+*Step 3 of 7*
+```
+
+5. On **complete** (`finish` done): all `[x]`, then `**Setup complete**` — no "you are here" line.
+
+### Persist progress to disk
+
+After printing the header (and whenever `onboarding-state.json` changes), write the same checklist to `Knowledge/onboarding-progress.md` so desktop users can pin it in the file pane. On completion, add `Status: complete` at the top and keep the file as a reference.
 
 ## Resume support
 
@@ -38,7 +87,8 @@ On start, check `Knowledge/onboarding-state.json`:
 ```
 
 - If present and `complete` is not `true`: offer **resume** (continue from `phase`) or **start fresh** (delete state and restart)
-- After each phase completes, update the state file
+- On **resume**, print the progress header **immediately** before asking resume vs fresh
+- After each phase completes, update the state file and `Knowledge/onboarding-progress.md`
 - When onboarding finishes, set `"complete": true` and keep the file for reference
 
 Valid `phase` values (in order): `welcome` → `workspace` → `claude_md` → `tools` → `mcp` → `tour` → `finish`
@@ -67,32 +117,67 @@ Use this table when explaining what the user has. Skills 01–11 ship with the p
 
 ### Phase: welcome
 
+**Progress:** Print progress header first (step 1 of 7 — Welcome is current). Write `Knowledge/onboarding-progress.md`.
+
 Explain in plain language:
 
-- They installed a **Claude Code plugin** with 11 PM workflow skills (show the table above, compactly)
-- Skills read/write files in **this workspace folder** — not inside the plugin install
-- Plugin code lives read-only at `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/`
-- Their editable files: `CLAUDE.md`, `Knowledge/`, `Outputs/`, `Learnings/`
+- They have **11 PM workflow skills** (show the table above, compactly)
+- Their key files: `CLAUDE.md`, `Knowledge/`, `Outputs/`, `Learnings/`
 
 Ask: *"Ready to set up your workspace? This takes about 5–10 minutes."*
 
-Update state: `completed` includes `welcome`, `phase` → `workspace`.
+Update state: `completed` includes `welcome`, `phase` → `workspace`. Refresh `Knowledge/onboarding-progress.md`.
 
 ### Phase: workspace
 
+**Progress:** Print progress header first (step 2 of 7 — Workspace is current). Write `Knowledge/onboarding-progress.md`.
+
+**Say to the user before you touch anything:**
+
+> "Next I'll set up your **workspace** — the folder where BuilderOS keeps your PM work."
+
+Then explain what you're about to create (use this table — adapt if some already exist):
+
+| Folder / file | What it's for |
+|---------------|---------------|
+| `CLAUDE.md` | Your product context — role, company, metrics. Every skill reads this first. |
+| `Knowledge/` | Config and reference docs (tool connections, competitors, etc.) |
+| `Knowledge/workspace-tools.md` | Which tools you use (Monday, Mixpanel, …) and their MCP server names |
+| `Outputs/` | Where skills save PRDs, tech plans, and reports |
+| `Learnings/` | Retros and process notes from `/10-learn` |
+
+Add one line of reassurance: *"If you've run bootstrap before, I'll only fill in what's missing — I won't overwrite anything you've already edited."*
+
+**Then do the work** (report each action in plain language as you go):
+
 1. Verify `Knowledge/`, `Outputs/`, `Learnings/` exist. Create any that are missing (`mkdir -p`).
+   - *Say:* "Created `Outputs/` — this is where your PRDs will land." (or "Already had `Outputs/` — leaving it alone.")
 2. If `CLAUDE.md` or `Knowledge/workspace-tools.md` is missing, bootstrap:
    - Prefer running the plugin bootstrap script if you can resolve its path:
      `bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/*/bin/bootstrap.sh`
    - Or copy from plugin templates without overwriting existing files:
      - `templates/CLAUDE.md.template` → `CLAUDE.md`
      - `templates/Knowledge/workspace-tools.md.template` → `Knowledge/workspace-tools.md`
+   - *Say:* "Copied starter `CLAUDE.md` — we'll fill in your details in the next step." (not "ran bootstrap.sh")
 3. **Never overwrite** existing `CLAUDE.md` or `Knowledge/workspace-tools.md`.
-4. Optionally run `bin/validate-workspace.sh` from the plugin (if available) and report gaps.
+4. Optionally run `bin/validate-workspace.sh` from the plugin (if available) and report gaps in plain language (not raw script output).
 
-Confirm workspace is ready. Update state: `completed` includes `workspace`, `phase` → `claude_md`.
+**Wrap up** with a short checklist the user can scan:
+
+```
+✓ Workspace folder: <path>
+✓ Folders: Knowledge/, Outputs/, Learnings/
+✓ CLAUDE.md — <created | already existed>
+✓ workspace-tools.md — <created | already existed>
+```
+
+Ask: *"Look good? Next we'll fill in your product context."*
+
+Update state: `completed` includes `workspace`, `phase` → `claude_md`. Refresh `Knowledge/onboarding-progress.md`.
 
 ### Phase: claude_md
+
+**Progress:** Print progress header first (step 3 of 7 — Your product context is current). Write `Knowledge/onboarding-progress.md`.
 
 Interview for `CLAUDE.md`. Map answers to these fields from the template:
 
@@ -118,9 +203,11 @@ Interview for `CLAUDE.md`. Map answers to these fields from the template:
 
 Show a preview of the PM Context header block, then write/update `CLAUDE.md`.
 
-Update state: `completed` includes `claude_md`, `phase` → `tools`.
+Update state: `completed` includes `claude_md`, `phase` → `tools`. Refresh `Knowledge/onboarding-progress.md`.
 
 ### Phase: tools
+
+**Progress:** Print progress header first (step 4 of 7 — Your tools is current). Write `Knowledge/onboarding-progress.md`.
 
 Interview for `Knowledge/workspace-tools.md`. For each category, ask if they use it. If yes, collect tool name, workspace URL, optional board/project ID, and MCP server name. If no, mark the section:
 
@@ -139,9 +226,11 @@ Remind: MCP servers are configured in Claude Code (`/mcp` or `~/.claude.json`); 
 
 Show preview, then write/update `Knowledge/workspace-tools.md` (merge with existing content; don't wipe custom notes).
 
-Update state: `completed` includes `tools`, `phase` → `mcp`.
+Update state: `completed` includes `tools`, `phase` → `mcp`. Refresh `Knowledge/onboarding-progress.md`.
 
 ### Phase: mcp
+
+**Progress:** Print progress header first (step 5 of 7 — MCP check is current). Write `Knowledge/onboarding-progress.md`.
 
 1. Ask the user to run `/mcp` in Claude Code (or tell you which MCP servers they have configured).
 2. Cross-check server names in `Knowledge/workspace-tools.md` against what's configured.
@@ -152,9 +241,11 @@ Update state: `completed` includes `tools`, `phase` → `mcp`.
 
 If they have no MCP servers yet, that's OK — explain skills 01–10 work with pasted content too; only auto-pull needs MCP.
 
-Update state: `completed` includes `mcp`, `phase` → `tour`.
+Update state: `completed` includes `mcp`, `phase` → `tour`. Refresh `Knowledge/onboarding-progress.md`.
 
 ### Phase: tour
+
+**Progress:** Print progress header first (step 6 of 7 — Skills tour is current). Write `Knowledge/onboarding-progress.md`.
 
 1. Show the skill pipeline briefly: discovery (01) → planning (02–04) → PRD (05) → tech plan (06) → review (07–09) → learn (10). Skill 11 is separate.
 2. Ask one question: **"What are you trying to accomplish this week?"**
@@ -171,9 +262,11 @@ Update state: `completed` includes `mcp`, `phase` → `tour`.
 
 Store the recommendation for the finish phase.
 
-Update state: `completed` includes `tour`, `phase` → `finish`.
+Update state: `completed` includes `tour`, `phase` → `finish`. Refresh `Knowledge/onboarding-progress.md`.
 
 ### Phase: finish
+
+**Progress:** Print progress header first (step 7 of 7 — all steps done, show **Setup complete**). Write final `Knowledge/onboarding-progress.md` with `Status: complete`.
 
 1. Optionally run `bin/validate-workspace.sh` and mention any remaining gaps (non-blocking).
 2. Write `Knowledge/onboarding-summary.md`:
@@ -198,7 +291,7 @@ Run `<slash-command>` because <one sentence tied to their stated goal>.
 - Re-run `/00-onboarding` anytime to update context
 ```
 
-3. Set `Knowledge/onboarding-state.json` → `"complete": true`, `phase` → `finish`.
+3. Set `Knowledge/onboarding-state.json` → `"complete": true`, `phase` → `finish`. Set `Knowledge/onboarding-progress.md` → `Status: complete`.
 4. Congratulate briefly. Tell them their summary is saved and give the single recommended slash command to run now.
 
 ## File-write rules
@@ -206,7 +299,7 @@ Run `<slash-command>` because <one sentence tied to their stated goal>.
 - Write files relative to the **workspace root** (where `CLAUDE.md` lives)
 - Preserve all non-placeholder content in existing files
 - Do not create `Outputs/` artifacts beyond what bootstrap needs
-- `onboarding-summary.md` and `onboarding-state.json` live under `Knowledge/`
+- `onboarding-summary.md`, `onboarding-progress.md`, and `onboarding-state.json` live under `Knowledge/`
 
 ## Anti-patterns
 
@@ -215,3 +308,4 @@ Run `<slash-command>` because <one sentence tied to their stated goal>.
 - Do not invent MCP server names — ask or use `[NEED: ...]`
 - Do not skip the goal question — the next-step recommendation depends on it
 - Do not dump the entire INSTALL.md — link to it for deep dives (skill 11, MCP setup)
+- Do not skip the progress header — users need orientation at every phase
