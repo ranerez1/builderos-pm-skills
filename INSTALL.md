@@ -2,27 +2,16 @@
 
 A step-by-step walkthrough to install this plugin and run your first skill. Estimated time: 5 minutes (or 15 minutes if you also set up skill 10's competitor capture).
 
----
+## What you'll do
 
-## Before you start: which Claude is this for?
-
-**Plugins only work in Claude Code.** They do **not** work in the regular Claude chat app.
-
-| Where you're typing | Does `/plugin` work? | What to do |
-|---|---|---|
-| **Claude Code in a terminal** (`claude` CLI) | ✅ Yes | Use the `/plugin …` slash commands in this guide, or the equivalent `claude plugin …` shell commands. |
-| **Claude Code IDE extension** (VS Code, JetBrains) | ✅ Yes | Use the `/plugin …` slash commands in Claude Code's panel. |
-| **Claude desktop app** (the chat app on Mac/Windows) | ❌ No | Use the **shell commands** in this guide from a terminal (`claude plugin …`). |
-| **claude.ai in your browser** | ❌ No | Same — install from a terminal. |
-
-If you typed `/plugin marketplace add …` and saw **"`/plugin` isn't available in this environment"**, you're in the chat app, not Claude Code. Switch to a terminal and use the `claude plugin …` form shown in each step below.
-
-> **Quick check:** open a terminal and run `claude --version`. If it prints a version, Claude Code is installed and the shell commands in this guide will work regardless of which Claude UI you usually chat in.
+1. Open a terminal on your computer.
+2. Run two `claude plugin …` commands to install the plugin.
+3. Run one bootstrap script to set up a workspace folder.
+4. Try your first skill.
 
 ## Prerequisites
 
-- **Claude Code** installed and authenticated. ([install guide](https://docs.claude.com/en/docs/claude-code)) — this is a separate install from the Claude desktop chat app.
-- A **terminal app** (see Step 0 below if you're not sure what that means).
+- **Claude Code** installed and authenticated ([install guide](https://docs.claude.com/en/docs/claude-code)). Quick check: open a terminal and run `claude --version` — if you see a version number, you're set.
 - A workspace folder where you want to use the skills (your product repo, a PM scratch dir, anything).
 
 Optional, per skill:
@@ -278,7 +267,16 @@ Your `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` content stays put �
 ## Troubleshooting
 
 **`/plugin isn't available in this environment`**
-You're typing into the Claude desktop **chat** app or claude.ai, neither of which supports plugins. Open a terminal and use `claude plugin marketplace add …` and `claude plugin install …` instead — the skills will then be available in any Claude Code session (CLI or IDE) on that machine. The chat app itself still can't run them.
+You're typing into a Claude UI that doesn't support plugins. Plugins only work in Claude Code:
+
+| Where you're typing | Does `/plugin` work? |
+|---|---|
+| Claude Code in a terminal (`claude` CLI) | ✅ |
+| Claude Code IDE extension (VS Code, JetBrains) | ✅ |
+| Claude desktop chat app (Mac/Windows) | ❌ |
+| claude.ai in your browser | ❌ |
+
+The fix is the same regardless: open a terminal and use the `claude plugin marketplace add …` / `claude plugin install …` shell commands from Steps 1–2. Skills installed that way work in any Claude Code session afterwards.
 
 **"That's a Claude Code CLI command — you need to run it directly in your terminal" (or similar wording from Claude)**
 You pasted a `claude plugin …` shell command into a Claude conversation. Those commands run on **your computer's shell**, not inside Claude. Open your terminal app (Step 0), paste the same command at the shell prompt (the `$` or `%` line), and press Enter.
