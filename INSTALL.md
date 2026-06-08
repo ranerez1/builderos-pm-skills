@@ -129,7 +129,7 @@ claude plugin list
 
 You should see `builderos-pm-skills@builderos-pm` with status `✔ enabled`.
 
-**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/`. The 10 skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/01-customer-discovery` through `/10-competitor-feature-analysis`) and auto-triggered by the model when relevant.
+**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/`. The 10 skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/01-customer-discovery` through `/10-competitor-feature-analysis`) and auto-triggered by the model when relevant.
 
 ---
 
@@ -153,7 +153,7 @@ The `cd` puts your terminal "inside" that folder so the next commands act on it.
 The plugin ships a one-command setup script that creates the right folders and copies two starter files in. Run this **in the same terminal**, from inside your workspace folder:
 
 ```bash
-bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/bin/bootstrap.sh
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/bin/bootstrap.sh
 ```
 
 You'll see output like:
@@ -166,7 +166,7 @@ You'll see output like:
 Next: open CLAUDE.md and Knowledge/workspace-tools.md in your editor and fill in your details.
 ```
 
-> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `0.1.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
+> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `0.2.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
 
 ### 3c. Edit the two starter files
 
@@ -184,8 +184,8 @@ From your workspace folder, run these four lines:
 
 ```bash
 mkdir -p Knowledge Outputs Learnings
-cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/templates/CLAUDE.md.template ./CLAUDE.md
-cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/templates/CLAUDE.md.template ./CLAUDE.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
 ls -la
 ```
 
@@ -231,7 +231,7 @@ For a richer test, try `/01-customer-discovery` with a tracker MCP configured (i
 Skill 10 captures logged-in competitor product UI via [CloakBrowser](https://cloakbrowser.dev/) and compares features across competitors. It has native dependencies the plugin can't auto-install.
 
 ```bash
-PLUGIN_DIR=~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0
+PLUGIN_DIR=~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0
 cd "$PLUGIN_DIR/skills/10-competitor-feature-analysis"
 
 # Install Node deps
@@ -304,7 +304,7 @@ Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRA
 
 | What | Where |
 |------|-------|
-| Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/` |
+| Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/` |
 | Marketplace registry | `~/.claude/plugins/known_marketplaces.json` |
 | Your PM context | `<workspace>/CLAUDE.md` |
 | MCP/tool config | `<workspace>/Knowledge/workspace-tools.md` |
