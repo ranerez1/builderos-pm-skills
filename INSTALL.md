@@ -22,7 +22,7 @@ If you typed `/plugin marketplace add …` and saw **"`/plugin` isn't available 
 ## Prerequisites
 
 - **Claude Code** installed and authenticated. ([install guide](https://docs.claude.com/en/docs/claude-code)) — this is a separate install from the Claude desktop chat app.
-- A **terminal** (macOS Terminal, iTerm2, or any shell). Required for the universal install path.
+- A **terminal app** (see Step 0 below if you're not sure what that means).
 - A workspace folder where you want to use the skills (your product repo, a PM scratch dir, anything).
 
 Optional, per skill:
@@ -31,23 +31,63 @@ Optional, per skill:
 
 ---
 
+## Step 0 — Open a terminal (not a Claude chat)
+
+> If you're comfortable in a shell, skip to Step 1.
+
+The install commands in this guide are **shell commands** — they run in a terminal app on your computer, not inside any Claude UI.
+
+**Do NOT:**
+- ❌ Paste these commands into the Claude chat app, claude.ai, or the chat panel inside Claude Code. Claude will treat them as a message and reply with text instead of running them.
+
+**DO:**
+- ✅ Open a real terminal app and paste the commands at the shell prompt.
+
+**How to open a terminal:**
+
+| OS | App to open | How to find it |
+|---|---|---|
+| **macOS** | Terminal (built-in) or iTerm2 | Press `⌘ + Space`, type `Terminal`, hit Enter |
+| **Windows** | Windows Terminal, PowerShell, or Command Prompt | Press `Win` key, type `Terminal`, hit Enter |
+| **Linux** | gnome-terminal, Konsole, xterm, etc. | Press `Ctrl + Alt + T` on most distros |
+
+You'll know you're in the right place when you see a **shell prompt** — something like:
+
+```
+your-username@your-mac ~ %
+```
+
+or
+
+```
+PS C:\Users\you>
+```
+
+That's where commands like `claude plugin marketplace add …` go.
+
+**Self-check before continuing:** at the shell prompt, run:
+
+```bash
+claude --version
+```
+
+If it prints a version number, you're good. If it says "command not found", finish [installing Claude Code](https://docs.claude.com/en/docs/claude-code) first.
+
+---
+
 ## Step 1 — Add the marketplace
 
 A "marketplace" is just a registry that tells Claude Code where to find one or more plugins. This repo is a single-plugin marketplace.
 
-**Recommended (works from any environment):** open a terminal and run
+**At the terminal prompt you opened in Step 0**, type (or paste) this and press Enter:
 
 ```bash
 claude plugin marketplace add ranerez1/builderos-pm-skills
 ```
 
-**Already inside Claude Code (CLI/IDE)?** You can also type:
-
-```
-/plugin marketplace add ranerez1/builderos-pm-skills
-```
-
-> If `/plugin` returns `"/plugin isn't available in this environment"`, you're in the Claude desktop **chat** app or claude.ai — not Claude Code. Use the shell command above instead.
+> ⚠️ **This is a shell command, not a chat message.** It runs in your terminal app — not in Claude chat, not in claude.ai, not in the Claude Code chat panel. If you paste it into a Claude conversation, Claude will reply with words instead of running it.
+>
+> If you're already in a Claude Code session (CLI or IDE), you can alternatively type `/plugin marketplace add ranerez1/builderos-pm-skills` directly into Claude Code. If you see `"/plugin isn't available in this environment"`, you're in the chat app — go back to your terminal.
 
 **Expected output:**
 
@@ -67,17 +107,13 @@ You should see `builderos-pm` listed alongside any other marketplaces you have.
 
 ## Step 2 — Install the plugin
 
-**From any terminal:**
+**In the same terminal**, run:
 
 ```bash
 claude plugin install builderos-pm-skills@builderos-pm
 ```
 
-**Or inside Claude Code (CLI/IDE):**
-
-```
-/plugin install builderos-pm-skills@builderos-pm
-```
+(Alternatively, from inside a Claude Code session: `/plugin install builderos-pm-skills@builderos-pm`.)
 
 **Expected output:**
 
@@ -208,6 +244,9 @@ Your `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` content stays put �
 
 **`/plugin isn't available in this environment`**
 You're typing into the Claude desktop **chat** app or claude.ai, neither of which supports plugins. Open a terminal and use `claude plugin marketplace add …` and `claude plugin install …` instead — the skills will then be available in any Claude Code session (CLI or IDE) on that machine. The chat app itself still can't run them.
+
+**"That's a Claude Code CLI command — you need to run it directly in your terminal" (or similar wording from Claude)**
+You pasted a `claude plugin …` shell command into a Claude conversation. Those commands run on **your computer's shell**, not inside Claude. Open your terminal app (Step 0), paste the same command at the shell prompt (the `$` or `%` line), and press Enter.
 
 **`Permission denied (publickey)` when installing**
 The marketplace's `source.url` is HTTPS, so this shouldn't happen on a clean install. If you see this, check that your `marketplace.json` cache wasn't stale — run `claude plugin marketplace update builderos-pm` and re-install.
