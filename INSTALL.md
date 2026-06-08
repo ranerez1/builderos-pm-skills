@@ -60,7 +60,7 @@ That's where commands like `claude plugin marketplace add …` go.
 claude --version
 ```
 
-If it prints a version number, you're good. If it says "command not found", finish [installing Claude Code](https://docs.claude.com/en/docs/claude-code) first.
+If it prints a version number, you're good. If it says "command not found", see [Troubleshooting](#troubleshooting) — usually it's a quick PATH fix, or you need to [install Claude Code](https://docs.claude.com/en/docs/claude-code) first.
 
 ---
 
@@ -308,6 +308,45 @@ Your `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` content stays put �
 ---
 
 ## Troubleshooting
+
+**`command not found: claude` (or `'claude' is not recognized`)**
+The installer puts `claude` at `~/.local/bin/claude` (macOS/Linux) or `%USERPROFILE%\.local\bin\claude.exe` (Windows). If that folder isn't on your PATH, the shell won't find it even though install succeeded.
+
+Check if the binary is there:
+
+```bash
+ls ~/.local/bin/claude          # macOS / Linux
+```
+
+```powershell
+Test-Path "$env:USERPROFILE\.local\bin\claude.exe"   # Windows
+```
+
+- **File missing** → [install Claude Code](https://docs.claude.com/en/docs/claude-code), then retry.
+- **File exists** → add the install dir to PATH (one-time), then open a new terminal:
+
+**macOS (zsh):**
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**Linux (bash):**
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Windows (PowerShell):**
+
+```powershell
+$currentPath = [Environment]::GetEnvironmentVariable('PATH', 'User')
+[Environment]::SetEnvironmentVariable('PATH', "$currentPath;$env:USERPROFILE\.local\bin", 'User')
+```
+
+Restart the terminal, then run `claude --version` again. More detail: [Claude Code install troubleshooting](https://code.claude.com/docs/en/troubleshoot-install).
 
 **`/plugin isn't available in this environment`**
 You're typing into a Claude UI that doesn't support plugins. Plugins only work in Claude Code:
