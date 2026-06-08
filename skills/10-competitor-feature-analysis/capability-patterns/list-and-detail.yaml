@@ -1,0 +1,26 @@
+id: list-and-detail
+name: List and detail
+description: User browses a list or table and opens a detail view for one item.
+expectedStates:
+  - main
+  - detail
+entrySurfaces:
+  - home
+  - dashboard
+  - sidebar
+  - search
+discoveryHints:
+  - list
+  - table
+  - browse
+  - view all
+  - records
+safeActions:
+  - navigate
+  - filter
+  - open_row
+forbiddenActions:
+  - delete_production
+  - bulk_delete
+forbiddenActionsNote: Do not delete rows to reach detail.
+successSignalGuidance: Look for row click targets, detail panels, and breadcrumb or back navigation.

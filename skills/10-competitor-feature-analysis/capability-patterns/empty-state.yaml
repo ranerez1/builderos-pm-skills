@@ -1,0 +1,22 @@
+id: empty-state
+name: Empty state
+description: Surface shown when no data exists yet for a resource type.
+expectedStates:
+  - main
+  - empty
+entrySurfaces:
+  - home
+  - workspace
+  - list
+discoveryHints:
+  - empty
+  - no items
+  - get started
+  - first
+safeActions:
+  - navigate
+  - filter_to_empty_test_account
+forbiddenActions:
+  - delete_production
+  - wipe_account
+successSignalGuidance: Look for zero-data illustrations, onboarding CTAs, and create-first-item prompts.

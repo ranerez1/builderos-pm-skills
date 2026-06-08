@@ -1,0 +1,25 @@
+id: workflow-action
+name: Workflow action
+description: User performs an action that may require confirmation or shows success state.
+expectedStates:
+  - main
+  - confirm
+  - success
+entrySurfaces:
+  - home
+  - workspace
+  - action menu
+discoveryHints:
+  - publish
+  - deploy
+  - approve
+  - submit
+  - run
+safeActions:
+  - navigate
+  - open_modal
+  - confirm_safe_action
+forbiddenActions:
+  - delete_production
+  - irreversible_prod_action
+successSignalGuidance: Look for primary action buttons, confirmation dialogs, and success toasts or status badges.

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "builderos-pm",
+  "description": "BuilderOS PM skills marketplace — single-plugin marketplace shipping the BuilderOS PM workflow library.",
+  "owner": {
+    "name": "Ran Erez",
+    "email": "ran@re-focus.io"
+  },
+  "plugins": [
+    {
+      "name": "builderos-pm-skills",
+      "description": "BuilderOS PM workflow skills: discovery, planning, PRD, review, learn, competitor analysis.",
+      "author": { "name": "Ran Erez" },
+      "category": "product-management",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/ranerez/builderos-pm-skills.git",
+        "path": ".",
+        "ref": "main"
+      }
+    }
+  ]
+}

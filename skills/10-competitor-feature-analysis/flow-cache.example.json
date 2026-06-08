@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "feature": "environment variables",
+  "featureSlug": "environment-variables",
+  "competitor": "competitor-a",
+  "capabilityPattern": "configure-setting",
+  "scope": "project",
+  "lastVerified": "2026-06-05",
+  "startUrl": "https://example.com/project/settings/environment-variables",
+  "notes": "",
+  "screens": [
+    {
+      "state": "main",
+      "label": "Environment variable list",
+      "url": "https://example.com/project/settings/environment-variables",
+      "actions": [],
+      "successSignals": ["environment", "variable"]
+    },
+    {
+      "state": "create",
+      "label": "Add variable panel",
+      "url": "https://example.com/project/settings/environment-variables",
+      "actions": [
+        { "click": { "role": "button", "name": "Add variable" } },
+        { "wait": { "settle": true } }
+      ],
+      "successSignals": ["key", "value"]
+    }
+  ],
+  "forbiddenActions": ["delete", "revoke_all"]
+}

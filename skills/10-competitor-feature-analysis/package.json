@@ -1,0 +1,19 @@
+{
+  "name": "10-competitor-feature-analysis",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "competitor-setup": "node scripts/setup.mjs",
+    "competitor-login": "node scripts/login.mjs",
+    "competitor-discover": "node scripts/discover.mjs",
+    "competitor-flow": "node scripts/flow.mjs",
+    "competitor-research": "node scripts/research.mjs",
+    "competitor-screenshot": "node scripts/screenshot.mjs",
+    "competitor-presentation": "node scripts/presentation.mjs",
+    "competitor-scaffold-report": "node scripts/scaffold-report.mjs"
+  },
+  "dependencies": {
+    "cloakbrowser": "^0.3.31",
+    "playwright-core": "^1.40.0"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "type": "comparison",
+  "feature": "environment variables",
+  "featureSlug": "environment-variables",
+  "date": "2026-06-05",
+  "runDir": "Outputs/competitor-research/environment-variables-2026-06-05",
+  "competitors": ["competitor-a", "competitor-b"],
+  "summary": "Both expose env vars at the project level, but competitor-a treats per-environment parity and bulk import as table stakes while competitor-b lags on developer-migration workflows.",
+  "keyInsights": [
+    {
+      "title": "Per-environment parity is the dividing line",
+      "detail": "competitor-a supports production, preview, and development; competitor-b stops at staging and production.",
+      "competitor": "competitor-a"
+    },
+    {
+      "title": "Secret masking maturity differs",
+      "detail": "competitor-a masks values inline at entry; competitor-b only masks after save."
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "Per-environment values",
+      "competitor-a": "Yes — production, preview, development",
+      "competitor-b": "Partial — staging and production only"
+    },
+    {
+      "name": "Secret masking in UI",
+      "competitor-a": "Yes",
+      "competitor-b": "Partial — masked after save only"
+    },
+    {
+      "name": "Bulk .env import",
+      "competitor-a": "Yes — paste .env ([env vars docs](https://example.com/docs/env))",
+      "competitor-b": "No — manual entry only"
+    }
+  ],
+  "flows": [
+    {
+      "competitor": "competitor-a",
+      "label": "Add a per-environment variable",
+      "steps": [
+        {
+          "state": "main",
+          "path": "screenshots/competitor-a-main.png",
+          "url": "https://example.com/settings/env",
+          "caption": "Env var list grouped by environment"
+        },
+        {
+          "state": "create",
+          "path": "screenshots/competitor-a-create.png",
+          "caption": "Add panel: key, value, environment toggles, bulk paste"
+        }
+      ]
+    },
+    {
+      "competitor": "competitor-b",
+      "label": "Add a variable",
+      "steps": [
+        {
+          "state": "main",
+          "path": "screenshots/competitor-b-main.png",
+          "caption": "Flat list, staging/production tabs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+id: create-resource
+name: Create resource
+description: User creates a new entity from a primary workspace or list view.
+expectedStates:
+  - main
+  - create
+  - error
+entrySurfaces:
+  - home
+  - workspace
+  - sidebar
+  - search
+discoveryHints:
+  - create
+  - add
+  - new
+  - plus
+  - compose
+safeActions:
+  - navigate
+  - open_modal
+  - fill_form
+  - submit_validation_only
+forbiddenActions:
+  - delete_production
+  - revoke_all
+  - billing_checkout
+successSignalGuidance: Look for empty form fields, save/add buttons, and primary create affordances.

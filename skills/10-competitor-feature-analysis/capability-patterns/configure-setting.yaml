@@ -1,0 +1,28 @@
+id: configure-setting
+name: Configure setting
+description: User finds and edits a configuration surface in settings or admin.
+expectedStates:
+  - main
+  - edit
+  - error
+entrySurfaces:
+  - settings
+  - admin
+  - preferences
+  - account
+discoveryHints:
+  - settings
+  - configure
+  - preferences
+  - admin
+  - security
+safeActions:
+  - navigate
+  - toggle
+  - fill_form
+  - submit_validation_only
+forbiddenActions:
+  - delete_production
+  - revoke_all
+  - billing_checkout
+successSignalGuidance: Look for labeled toggles, form fields, save/apply buttons, and scope selectors.

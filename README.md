@@ -1,0 +1,107 @@
+# BuilderOS PM Skills
+
+A Claude Code plugin with 10 PM workflow skills covering the full loop from customer discovery → planning → PRD → review → learn → competitor analysis.
+
+## Skills
+
+| # | Slash command | What it does |
+|---|---------------|--------------|
+| 01 | `/01-customer-discovery` | Synthesize customer feedback (meetings, calls, notes, CSVs) into the top user-problem trends. Read-only. |
+| 02 | `/02-pm-planner` | Turn an unstructured problem space into 2–3 initiative candidates, then a focused kickoff one-pager. |
+| 03 | `/03-cto-planner` | Stress-test an initiative against the existing codebase; surface gaps, edge cases, open questions. |
+| 04 | `/04-ux-planner` | Produce a UX plan: users, journeys, IA, key screens/states, UX acceptance criteria. |
+| 05 | `/05-prd-to-tech-plan` | Write a concise, implementation-ready Technical Design Doc to `Outputs/Technical Docs/`. |
+| 06 | `/06-ui-ux-review` | Review PRD + UI implementation; return prioritized feedback and concrete fixes. |
+| 07 | `/07-rnd-reviewer` | Review PRD/TDD + implementation as a senior engineer. |
+| 08 | `/08-pm-reviewer` | Review PRD + shipped experience as a PM (problem, scope, trade-offs, metrics, rollout). |
+| 09 | `/09-learn` | Ship retro (update PRD/TDD) and/or process–skill improvement; writes to `Learnings/`. |
+| 10 | `/10-competitor-feature-analysis` | Capture logged-in competitor product UI via CloakBrowser, compare a feature across competitors, generate a report + HTML deck. |
+
+## Install
+
+### 1. Add the marketplace and install the plugin
+
+```
+/plugin marketplace add ranerez/builderos-pm-skills
+/plugin install builderos-pm-skills@builderos-pm
+```
+
+(or replace `ranerez/builderos-pm-skills` with the git URL where you host this.)
+
+### 2. Bootstrap your workspace
+
+The plugin can't write to your project tree. Copy the starter files in once per workspace:
+
+```bash
+# from your workspace root
+cp -n <plugin-path>/templates/CLAUDE.md.template ./CLAUDE.md
+mkdir -p Knowledge Outputs Learnings
+cp -n <plugin-path>/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
+```
+
+Edit `CLAUDE.md` (fill in your role/company/product/metric) and `Knowledge/workspace-tools.md` (fill in your tracker/analytics/MCP server names).
+
+### 3. (Skill 10 only) Install Node deps for competitor analysis
+
+Skill 10 ships its own `package.json` and uses CloakBrowser. From your workspace root:
+
+```bash
+cd .claude/plugins/builderos-pm/builderos-pm-skills/skills/10-competitor-feature-analysis
+npm install
+npm run competitor-setup
+```
+
+See `skills/10-competitor-feature-analysis/INSTALL.md` for full details (creates `Knowledge/competitors.md`, login flow per competitor, etc.).
+
+## What you need to provide
+
+The skills are vendor-agnostic. To make them work end-to-end, configure your own:
+
+- **MCP servers**: tracker (Monday/Jira/Linear/Notion), analytics (Mixpanel/Amplitude/PostHog), email/calendar (Gmail/Outlook), docs (Notion/Google Drive). Configure these in your Claude Code MCP settings, then list their server names in `Knowledge/workspace-tools.md`.
+- **Workspace folders**: `Outputs/`, `Learnings/`, `Knowledge/` at the workspace root. Skills write artifacts there.
+- **PM context**: `CLAUDE.md` at workspace root — terminology, writing rules, sub-agent roles. The template ships everything except your company-specific fields.
+
+## Per-skill prereqs
+
+| Skill | Needs an MCP server? | Notes |
+|-------|----------------------|-------|
+| 01 customer-discovery | Tracker / docs MCP **OR** local CSV/folder paths | Set under "Customer Meeting Transcripts" in workspace-tools |
+| 02–08 planning/review | Optional — works with pasted content too | MCP makes it pull context automatically |
+| 09 learn | Tracker MCP optional | Reads PRD/TDD from `Outputs/`, writes to `Learnings/` |
+| 10 competitor-analysis | None — uses CloakBrowser locally | Needs Node 18+, macOS/Windows |
+
+## Updating
+
+```
+/plugin update builderos-pm-skills
+```
+
+## Layout
+
+```
+.
+├── .claude-plugin/
+│   ├── plugin.json
+│   └── marketplace.json
+├── README.md
+├── LICENSE
+├── skills/
+│   ├── 01-customer-discovery/SKILL.md
+│   ├── 02-pm-planner/SKILL.md
+│   ├── 03-cto-planner/SKILL.md
+│   ├── 04-ux-planner/SKILL.md
+│   ├── 05-prd-to-tech-plan/SKILL.md
+│   ├── 06-ui-ux-review/SKILL.md
+│   ├── 07-rnd-reviewer/SKILL.md
+│   ├── 08-pm-reviewer/SKILL.md
+│   ├── 09-learn/SKILL.md
+│   └── 10-competitor-feature-analysis/      # SKILL.md + scripts + INSTALL.md
+└── templates/
+    ├── CLAUDE.md.template
+    ├── Knowledge/workspace-tools.md.template
+    └── empty-dirs/{Outputs,Learnings,Knowledge}/.gitkeep
+```
+
+## License
+
+MIT — see `LICENSE`.

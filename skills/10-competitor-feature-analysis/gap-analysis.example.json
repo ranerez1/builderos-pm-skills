@@ -1,0 +1,67 @@
+{
+  "type": "gap-analysis",
+  "feature": "environment variables",
+  "featureSlug": "environment-variables",
+  "date": "2026-06-05",
+  "runDir": "Outputs/competitor-research/environment-variables-2026-06-05",
+  "ownProduct": {
+    "slug": "your-product",
+    "name": "Your Product"
+  },
+  "summary": "Your Product matches competitors on validation and audit, but trails on per-environment parity and bulk import — both high-value, frequently requested capabilities.",
+  "keyInsights": [
+    {
+      "title": "Per-environment parity is the top P0 gap",
+      "detail": "Competitors ship full prod/preview/dev splits; Your Product is production-only in MVP.",
+      "competitor": "your-product"
+    },
+    {
+      "title": "Bulk .env import is table stakes for migration",
+      "detail": "competitor-a ships it; Your Product and competitor-b force manual entry."
+    }
+  ],
+  "comparisonReport": "environment-variables-comparison-2026-06-05.md",
+  "rows": [
+    {
+      "capability": "Per-environment values",
+      "valueTier": "P0",
+      "competitor-a": { "status": "Shipped", "note": "All envs supported" },
+      "competitor-b": { "status": "Shipped", "note": "Staging + prod" },
+      "your-product": { "status": "Partial", "note": "Production only in MVP" },
+      "gapSummary": "Preview/dev parity missing"
+    },
+    {
+      "capability": "Bulk .env import",
+      "valueTier": "P1",
+      "competitor-a": { "status": "Shipped", "note": "" },
+      "competitor-b": { "status": "Gap", "note": "Manual entry only" },
+      "your-product": { "status": "Gap", "note": "" },
+      "gapSummary": "Table-stakes for migration flows"
+    }
+  ],
+  "ownProductStrengths": [
+    "Inline validation before deploy",
+    "Audit log on env changes"
+  ],
+  "topSix": [
+    {
+      "rank": 1,
+      "capability": "Per-environment values",
+      "valueTier": "P0",
+      "communitySignal": "Frequently requested in competitor forums",
+      "communityUrls": ["https://example.com/thread/1"],
+      "productDifference": "Own product lacks preview/dev split"
+    }
+  ],
+  "screenshots": [
+    {
+      "competitor": "competitor-a",
+      "state": "main",
+      "path": "screenshots/competitor-a-main.png"
+    }
+  ],
+  "dataQuality": {
+    "auditSources": ["Knowledge/02-Product-Knowledge/", "Outputs/Product PRDs/"],
+    "assumptions": ["your-product Partial status verified against latest PRD non-goals"]
+  }
+}
