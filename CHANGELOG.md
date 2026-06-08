@@ -2,6 +2,23 @@
 
 All notable changes to this plugin are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/) loosely.
 
+## 1.1.0 — 2026-06-08
+
+### Added
+- **New skill `/00-onboarding`** — interactive post-install guide that bootstraps the workspace, fills `CLAUDE.md` and `Knowledge/workspace-tools.md` conversationally, explains installed skills, and writes `Knowledge/onboarding-summary.md` with a personalized next step. Supports resume via `Knowledge/onboarding-state.json`.
+- **`bin/validate-workspace.sh`** — checks workspace folders and flags unfilled placeholders in config files.
+
+### Changed
+- `bin/bootstrap.sh` and templates now point new users to `/00-onboarding` instead of manual file editing.
+- `INSTALL.md` Step 3 adds guided onboarding as the recommended path after bootstrap.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code to pick up `/00-onboarding`
+3. Open your workspace and run `/00-onboarding` to fill or refresh context (safe on existing workspaces — merges, does not overwrite custom content)
+
+---
+
 ## 1.0.0 — 2026-06-08
 
 ### Added

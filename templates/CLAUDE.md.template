@@ -1,5 +1,7 @@
 # PM Context
 
+> First time? Run `/00-onboarding` in Claude Code to fill this file conversationally.
+>
 > Copy this file to your workspace root as `CLAUDE.md` and fill in `[BRACKETED]` values.
 > Skills assume this context exists. Anything you remove here, the skills will start guessing at.
 

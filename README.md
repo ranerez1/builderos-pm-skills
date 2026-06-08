@@ -1,11 +1,12 @@
 # BuilderOS PM Skills
 
-A Claude Code plugin with 11 PM workflow skills covering the full loop from customer discovery → planning → PRD → tech plan → review → learn → competitor analysis.
+A Claude Code plugin with 11 PM workflow skills (+ interactive onboarding) covering the full loop from customer discovery → planning → PRD → tech plan → review → learn → competitor analysis.
 
 ## Skills
 
 | # | Slash command | What it does |
 |---|---------------|--------------|
+| 00 | `/00-onboarding` | Guided first-time setup: fill `CLAUDE.md` and `workspace-tools.md`, tour installed skills, get a personalized next step. |
 | 01 | `/01-customer-discovery` | Synthesize customer feedback (meetings, calls, notes, CSVs) into the top user-problem trends. Read-only. |
 | 02 | `/02-pm-planner` | Turn an unstructured problem space into 2–3 initiative candidates, then a focused kickoff one-pager. |
 | 03 | `/03-cto-planner` | Stress-test an initiative against the existing codebase; surface gaps, edge cases, open questions. |
@@ -33,7 +34,7 @@ claude plugin install builderos-pm-skills@builderos-pm
 >
 > Already inside Claude Code (CLI or IDE)? You can alternatively use `/plugin marketplace add …` and `/plugin install …` directly there. Plugins do not work in the Claude desktop chat app or claude.ai.
 
-Then copy `templates/CLAUDE.md.template` and `templates/Knowledge/workspace-tools.md.template` into your workspace and edit them.
+Then bootstrap your workspace and run `/00-onboarding` in Claude Code (recommended) — or copy the templates and edit them manually.
 
 **Full step-by-step walkthrough** (recommended for first install): [INSTALL.md](INSTALL.md).
 
@@ -72,6 +73,7 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 ├── README.md
 ├── LICENSE
 ├── skills/
+│   ├── 00-onboarding/SKILL.md
 │   ├── 01-customer-discovery/SKILL.md
 │   ├── 02-pm-planner/SKILL.md
 │   ├── 03-cto-planner/SKILL.md

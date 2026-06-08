@@ -7,7 +7,8 @@ A step-by-step walkthrough to install this plugin and run your first skill. Esti
 1. Open a terminal on your computer.
 2. Run two `claude plugin …` commands to install the plugin.
 3. Run one bootstrap script to set up a workspace folder.
-4. Try your first skill.
+4. Run `/00-onboarding` in Claude Code to fill your context and pick a first skill.
+5. Try your recommended skill (or `/05-create-prd` to smoke-test).
 
 ## Prerequisites
 
@@ -118,7 +119,7 @@ claude plugin list
 
 You should see `builderos-pm-skills@builderos-pm` with status `✔ enabled`.
 
-**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/`. The 11 skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/01-customer-discovery` through `/11-competitor-feature-analysis`) and auto-triggered by the model when relevant.
+**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/`. Skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/00-onboarding` for setup, `/01-customer-discovery` through `/11-competitor-feature-analysis` for PM work) and auto-triggered by the model when relevant.
 
 ---
 
@@ -152,19 +153,38 @@ You'll see output like:
 ✓ Copied CLAUDE.md (PM context — edit this next)
 ✓ Copied Knowledge/workspace-tools.md (tool config — edit this next)
 
-Next: open CLAUDE.md and Knowledge/workspace-tools.md in your editor and fill in your details.
+Next:
+  1. Open Claude Code in this folder and run /00-onboarding
+  2. Or edit CLAUDE.md and Knowledge/workspace-tools.md manually.
 ```
 
 > If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `1.0.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
 
-### 3c. Edit the two starter files
+### 3c. Run the onboarding guide (recommended)
 
-Open them in any text editor (TextEdit, VS Code, Cursor, vim — your call):
+Open **Claude Code** (desktop app, CLI, or IDE extension) with your workspace folder as the project root, then run:
+
+```
+/00-onboarding
+```
+
+The guide will walk you through:
+
+- What the plugin installed and where files live
+- Filling `CLAUDE.md` with your role, company, product, and metrics
+- Configuring `Knowledge/workspace-tools.md` for your tracker, analytics, and other tools
+- A tour of skills 01–11 and a **personalized recommendation** for what to run first
+
+When you finish, it saves a summary at `Knowledge/onboarding-summary.md`. You can re-run `/00-onboarding` anytime to update context — it merges with existing files instead of overwriting your edits.
+
+### 3d. Manual alternative (edit files yourself)
+
+If you prefer not to use the guided flow, open the starter files in any text editor (TextEdit, VS Code, Cursor, vim):
 
 - **`CLAUDE.md`** — fill in the `[BRACKETED]` placeholders: your role, company, product, primary metric. Delete anything that doesn't apply. This is the context every skill reads first.
 - **`Knowledge/workspace-tools.md`** — fill in your tracker / analytics / docs tool names and the MCP server names that connect to them. Skip the sections you don't have — the skills that need a missing tool will tell you what's missing.
 
-That's it. The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them.
+The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them.
 
 <details>
 <summary><strong>Manual alternative (if the bootstrap script doesn't work)</strong></summary>
@@ -178,7 +198,7 @@ cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/templates/Know
 ls -la
 ```
 
-The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` are there. Then edit `CLAUDE.md` and `Knowledge/workspace-tools.md` per 3c.
+The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` are there. Then run `/00-onboarding` (Step 3c) or edit the files manually (Step 3d).
 
 </details>
 
@@ -203,7 +223,7 @@ Set them up via Claude Code's MCP configuration (see [MCP docs](https://docs.cla
 
 ## Step 5 — Verify with your first skill
 
-Open Claude Code in your workspace root. Try a no-MCP-required smoke test:
+Open Claude Code in your workspace root. If you ran `/00-onboarding`, use the slash command it recommended. Otherwise, try a no-MCP-required smoke test:
 
 ```
 /05-create-prd
@@ -377,7 +397,10 @@ The skill reads `Knowledge/workspace-tools.md` for MCP server names. Either fill
 CloakBrowser only ships macOS and Windows binaries today. Skill 11 won't work on Linux. The other 10 skills work everywhere.
 
 **A skill produces blank/empty output**
-Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRACKETED]` placeholders. Most skills read it as required context.
+Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRACKETED]` placeholders. Most skills read it as required context. Run `/00-onboarding` to fill gaps conversationally.
+
+**`/00-onboarding` doesn't appear in the slash menu**
+Restart Claude Code after updating the plugin. Run `claude plugin list` to confirm `builderos-pm-skills` is enabled, then `claude plugin update builderos-pm-skills`.
 
 ---
 
@@ -389,6 +412,8 @@ Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRA
 | Marketplace registry | `~/.claude/plugins/known_marketplaces.json` |
 | Your PM context | `<workspace>/CLAUDE.md` |
 | MCP/tool config | `<workspace>/Knowledge/workspace-tools.md` |
+| Onboarding summary | `<workspace>/Knowledge/onboarding-summary.md` |
+| Onboarding resume state | `<workspace>/Knowledge/onboarding-state.json` |
 | Competitor list (skill 11) | `<workspace>/Knowledge/competitors.md` |
 | Generated PRDs / TDDs | `<workspace>/Outputs/` |
 | Retros / learnings | `<workspace>/Learnings/` |

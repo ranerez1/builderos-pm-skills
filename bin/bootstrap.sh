@@ -59,6 +59,7 @@ fi
 
 echo
 echo "Next:"
-echo "  1. Open CLAUDE.md in your editor — fill in the [BRACKETED] placeholders."
-echo "  2. Open Knowledge/workspace-tools.md — fill in your tracker/analytics/MCP server names."
-echo "  3. Open Claude Code in this folder and try /05-create-prd to test."
+echo "  1. Open Claude Code in this folder and run /00-onboarding"
+echo "     (guided setup for CLAUDE.md, workspace-tools.md, and your first skill)."
+echo "  2. Or edit CLAUDE.md and Knowledge/workspace-tools.md manually."
+echo "  3. Then try /05-create-prd to smoke-test."

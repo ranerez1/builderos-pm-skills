@@ -1,5 +1,7 @@
 # Workspace Tools
 
+> First time? Run `/00-onboarding` in Claude Code to fill this file conversationally.
+
 Skills read this file to resolve tool URLs/IDs and MCP server names.
 **Update this file when you switch tools or workspaces — no skill files need changing.**
 
