@@ -19,12 +19,16 @@ A Claude Code plugin with 10 PM workflow skills covering the full loop from cust
 
 ## Install
 
-**Quick start:**
+**Quick start** (run in a terminal — works regardless of which Claude UI you use day-to-day):
 
+```bash
+claude plugin marketplace add ranerez1/builderos-pm-skills
+claude plugin install builderos-pm-skills@builderos-pm
 ```
-/plugin marketplace add ranerez1/builderos-pm-skills
-/plugin install builderos-pm-skills@builderos-pm
-```
+
+> Already inside Claude Code (CLI or IDE)? You can use `/plugin marketplace add …` and `/plugin install …` instead.
+>
+> Plugins do **not** work in the Claude desktop chat app or claude.ai — those don't have `/plugin`. Always install from a terminal.
 
 Then copy `templates/CLAUDE.md.template` and `templates/Knowledge/workspace-tools.md.template` into your workspace and edit them.
 

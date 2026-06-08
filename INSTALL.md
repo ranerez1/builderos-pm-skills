@@ -4,10 +4,25 @@ A step-by-step walkthrough to install this plugin and run your first skill. Esti
 
 ---
 
+## Before you start: which Claude is this for?
+
+**Plugins only work in Claude Code.** They do **not** work in the regular Claude chat app.
+
+| Where you're typing | Does `/plugin` work? | What to do |
+|---|---|---|
+| **Claude Code in a terminal** (`claude` CLI) | ✅ Yes | Use the `/plugin …` slash commands in this guide, or the equivalent `claude plugin …` shell commands. |
+| **Claude Code IDE extension** (VS Code, JetBrains) | ✅ Yes | Use the `/plugin …` slash commands in Claude Code's panel. |
+| **Claude desktop app** (the chat app on Mac/Windows) | ❌ No | Use the **shell commands** in this guide from a terminal (`claude plugin …`). |
+| **claude.ai in your browser** | ❌ No | Same — install from a terminal. |
+
+If you typed `/plugin marketplace add …` and saw **"`/plugin` isn't available in this environment"**, you're in the chat app, not Claude Code. Switch to a terminal and use the `claude plugin …` form shown in each step below.
+
+> **Quick check:** open a terminal and run `claude --version`. If it prints a version, Claude Code is installed and the shell commands in this guide will work regardless of which Claude UI you usually chat in.
+
 ## Prerequisites
 
-- **Claude Code** installed and authenticated. ([install guide](https://docs.claude.com/en/docs/claude-code))
-- A **terminal** (macOS Terminal, iTerm2, or any shell).
+- **Claude Code** installed and authenticated. ([install guide](https://docs.claude.com/en/docs/claude-code)) — this is a separate install from the Claude desktop chat app.
+- A **terminal** (macOS Terminal, iTerm2, or any shell). Required for the universal install path.
 - A workspace folder where you want to use the skills (your product repo, a PM scratch dir, anything).
 
 Optional, per skill:
@@ -20,17 +35,19 @@ Optional, per skill:
 
 A "marketplace" is just a registry that tells Claude Code where to find one or more plugins. This repo is a single-plugin marketplace.
 
-In Claude Code, type:
+**Recommended (works from any environment):** open a terminal and run
+
+```bash
+claude plugin marketplace add ranerez1/builderos-pm-skills
+```
+
+**Already inside Claude Code (CLI/IDE)?** You can also type:
 
 ```
 /plugin marketplace add ranerez1/builderos-pm-skills
 ```
 
-or from your shell:
-
-```bash
-claude plugin marketplace add ranerez1/builderos-pm-skills
-```
+> If `/plugin` returns `"/plugin isn't available in this environment"`, you're in the Claude desktop **chat** app or claude.ai — not Claude Code. Use the shell command above instead.
 
 **Expected output:**
 
@@ -50,14 +67,16 @@ You should see `builderos-pm` listed alongside any other marketplaces you have.
 
 ## Step 2 — Install the plugin
 
-```
-/plugin install builderos-pm-skills@builderos-pm
-```
-
-or:
+**From any terminal:**
 
 ```bash
 claude plugin install builderos-pm-skills@builderos-pm
+```
+
+**Or inside Claude Code (CLI/IDE):**
+
+```
+/plugin install builderos-pm-skills@builderos-pm
 ```
 
 **Expected output:**
@@ -161,18 +180,14 @@ Full skill 10 walkthrough is in [`skills/10-competitor-feature-analysis/INSTALL.
 
 ## Updating
 
-When this plugin gets new skills or fixes:
-
-```
-/plugin update builderos-pm-skills
-```
-
-or:
+When this plugin gets new skills or fixes, from a terminal:
 
 ```bash
 claude plugin marketplace update builderos-pm
 claude plugin update builderos-pm-skills
 ```
+
+(or inside Claude Code: `/plugin update builderos-pm-skills`).
 
 Restart Claude Code to apply.
 
@@ -190,6 +205,9 @@ Your `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` content stays put �
 ---
 
 ## Troubleshooting
+
+**`/plugin isn't available in this environment`**
+You're typing into the Claude desktop **chat** app or claude.ai, neither of which supports plugins. Open a terminal and use `claude plugin marketplace add …` and `claude plugin install …` instead — the skills will then be available in any Claude Code session (CLI or IDE) on that machine. The chat app itself still can't run them.
 
 **`Permission denied (publickey)` when installing**
 The marketplace's `source.url` is HTTPS, so this shouldn't happen on a clean install. If you see this, check that your `marketplace.json` cache wasn't stale — run `claude plugin marketplace update builderos-pm` and re-install.
