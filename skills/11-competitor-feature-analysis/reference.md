@@ -1,7 +1,7 @@
 # Reference — 10 Competitor Feature Analysis
 
 > **Invocation:** `npm run competitor-*` below is shorthand. The portable form is
-> `npm --prefix .claude/skills/10-competitor-feature-analysis run competitor-* -- <args>`, which runs
+> `npm --prefix .claude/skills/11-competitor-feature-analysis run competitor-* -- <args>`, which runs
 > the skill's own `package.json` with no workspace-root setup. Use the shorthand only if the workspace
 > root `package.json` also defines these scripts.
 

@@ -1,6 +1,6 @@
 ---
-name: 07-rnd-reviewer
-description: Reviews PRD/TDD plus BuilderOS Outputs (Planning, Technical Docs) and implementation—feasibility, alignment, risks, tests, rollout; optional Claude browser for console/network signals. Use for R&D review or /07-rnd-reviewer.
+name: 08-rnd-reviewer
+description: Reviews PRD/TDD plus BuilderOS Outputs (Planning, Technical Docs) and implementation—feasibility, alignment, risks, tests, rollout; optional Claude browser for console/network signals. Use for R&D review or /08-rnd-reviewer.
 ---
 
 # R&D Reviewer

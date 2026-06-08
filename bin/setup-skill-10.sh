@@ -1,60 +1,23 @@
 #!/usr/bin/env bash
-# Setup helper for skill 10 (competitor analysis).
+# Deprecation stub for the old setup-skill-10.sh path.
+# In v1.0.0 the competitor-analysis skill was renumbered 10 → 11.
+# The setup helper moved with it: bin/setup-skill-11.sh.
 #
-# Installs the Node dependencies and downloads the CloakBrowser binary that
-# skill 10 needs. Safe to re-run — npm is idempotent.
-#
-# Usage:
-#   bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/bin/setup-skill-10.sh
+# This stub is shipped for one release so older READMEs and notes that
+# reference the old path still print a useful message instead of "file not found".
+# It will be removed in a future version.
 
-set -euo pipefail
+cat <<'EOF'
+⚠ This script was renamed in v1.0.0.
+
+The competitor-analysis skill is now skill 11 (was skill 10), and its setup
+helper is:
+
+    bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/bin/setup-skill-11.sh
+
+Running setup-skill-11.sh now...
+
+EOF
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
-SKILL_DIR="$PLUGIN_DIR/skills/10-competitor-feature-analysis"
-
-if [ ! -d "$SKILL_DIR" ]; then
-  echo "✗ Couldn't find skill 10 at: $SKILL_DIR"
-  echo "  Is the plugin installed? See INSTALL.md Steps 1–2."
-  exit 1
-fi
-
-# Sanity-check Node.
-if ! command -v node >/dev/null 2>&1; then
-  echo "✗ Node.js isn't installed."
-  echo "  Skill 10 needs Node 18 or newer. Install from https://nodejs.org/ then re-run."
-  exit 1
-fi
-
-NODE_MAJOR="$(node -v | sed 's/^v//' | cut -d. -f1)"
-if [ "$NODE_MAJOR" -lt 18 ]; then
-  echo "✗ Node $(node -v) is too old. Skill 10 needs Node 18 or newer."
-  echo "  Update from https://nodejs.org/ then re-run."
-  exit 1
-fi
-
-echo "Setting up skill 10 in: $SKILL_DIR"
-echo "Using Node $(node -v)"
-echo
-
-cd "$SKILL_DIR"
-
-echo "→ Installing Node dependencies (this may take a minute)..."
-npm install --silent
-echo "✓ Dependencies installed"
-echo
-
-echo "→ Downloading the CloakBrowser binary for your OS..."
-npm run competitor-setup
-echo
-echo "✓ Skill 10 is ready."
-echo
-echo "Next:"
-echo "  1. cd back to your workspace folder."
-echo "  2. Create Knowledge/competitors.md listing the competitors you want to track."
-echo "     (If you skip this and run a competitor command, the skill will print a template you can fill in.)"
-echo "  3. Log in to each competitor once with:"
-echo "     npm --prefix \"$SKILL_DIR\" run competitor-login -- --competitor <slug> --verify \"<url>\""
-echo "  4. Then run /10-competitor-feature-analysis inside Claude Code."
-echo
-echo "Full skill 10 walkthrough: $SKILL_DIR/INSTALL.md"
+exec bash "$SCRIPT_DIR/setup-skill-11.sh" "$@"

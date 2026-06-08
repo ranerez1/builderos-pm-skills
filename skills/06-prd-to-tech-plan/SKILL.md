@@ -1,6 +1,6 @@
 ---
-name: 05-prd-to-tech-plan
-description: Converts a PRD into a build-ready Technical Design Doc (TDD) and saves it under Outputs/Technical Docs. Use when the user wants to turn a PRD into an implementation plan, or runs /05-prd-to-tech-plan.
+name: 06-prd-to-tech-plan
+description: Converts a PRD into a build-ready Technical Design Doc (TDD) and saves it under Outputs/Technical Docs. Use when the user wants to turn a PRD into an implementation plan, or runs /06-prd-to-tech-plan.
 ---
 
 # PRD → Technical Plan (Technical Design Doc)

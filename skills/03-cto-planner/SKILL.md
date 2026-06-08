@@ -1,14 +1,14 @@
 ---
 name: 03-cto-planner
-description: Technical brainstorm partner that stress-tests an initiative against the existing codebase to surface gaps, edge cases, and open questions before writing a TDD. Run after /02-pm-planner and before /05-prd-to-tech-plan to make the resulting Technical Design Doc grounded and actionable. Use when the user asks for a technical brainstorm, pre-TDD review, or runs /03-cto-planner.
+description: Technical brainstorm partner that stress-tests an initiative against the existing codebase to surface gaps, edge cases, and open questions before writing a TDD. Run after /02-pm-planner and before /06-prd-to-tech-plan to make the resulting Technical Design Doc grounded and actionable. Use when the user asks for a technical brainstorm, pre-TDD review, or runs /03-cto-planner.
 ---
 
 # Technical Brainstorm (pre-TDD)
 
-This is a **technical brainstorm partner**, not a CTO execution plan and **not a TDD**. The goal is to ground an initiative in the actual codebase and produce the **questions, gaps, and edge cases** that will make `/05-prd-to-tech-plan` produce a much better Technical Design Doc.
+This is a **technical brainstorm partner**, not a CTO execution plan and **not a TDD**. The goal is to ground an initiative in the actual codebase and produce the **questions, gaps, and edge cases** that will make `/06-prd-to-tech-plan` produce a much better Technical Design Doc.
 
 - Run **after** `/02-pm-planner` (chosen initiative + MVP shape).
-- Run **before** `/05-prd-to-tech-plan` so the TDD isn't hand-wavy.
+- Run **before** `/06-prd-to-tech-plan` so the TDD isn't hand-wavy.
 
 ## Inputs (ask only if missing)
 
@@ -93,7 +93,7 @@ Stay grounded in the actual repo.
 
 ### 6) Pre-TDD checklist (explicit handoff)
 
-- **Decisions to lock before `/05-prd-to-tech-plan`** (so the TDD has concrete inputs).
+- **Decisions to lock before `/06-prd-to-tech-plan`** (so the TDD has concrete inputs).
 - **Specific files / modules / contracts the TDD must reference**.
 - **Unknowns to resolve**, marked `[NEED: ...]`.
 
@@ -160,9 +160,9 @@ Use this template:
 - For each risk → PM implication:
 
 ### Pre-TDD checklist
-- Decisions to lock before `/05-prd-to-tech-plan`:
+- Decisions to lock before `/06-prd-to-tech-plan`:
 - Files / modules / contracts the TDD must reference:
 - Unknowns to resolve: `[NEED: ...]`
 ```
 
-Related: once gaps and questions are answered, run `/05-prd-to-tech-plan` to produce the TDD.
+Related: once gaps and questions are answered, run `/06-prd-to-tech-plan` to produce the TDD.

@@ -1,6 +1,6 @@
 ---
-name: 06-ui-ux-review
-description: Reviews PRD plus UI implementation (screens, flows, copy) using optional Claude browser or screenshots; returns prioritized feedback and fixes. Use for UI/UX review, microcopy review, or /06-ui-ux-review.
+name: 07-ui-ux-review
+description: Reviews PRD plus UI implementation (screens, flows, copy) using optional Claude browser or screenshots; returns prioritized feedback and fixes. Use for UI/UX review, microcopy review, or /07-ui-ux-review.
 ---
 
 # UI/UX Review

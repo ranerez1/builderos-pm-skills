@@ -1,6 +1,6 @@
 ---
-name: 09-learn
-description: Captures BuilderOS learnings anytime—ship retros (PRD/TDD updates) or process/skill tuning from user and model feedback—and writes durable notes under Learnings/. Use for retro, postmortem, lessons learned, skill improvements, or /09-learn.
+name: 10-learn
+description: Captures BuilderOS learnings anytime—ship retros (PRD/TDD updates) or process/skill tuning from user and model feedback—and writes durable notes under Learnings/. Use for retro, postmortem, lessons learned, skill improvements, or /10-learn.
 ---
 
 # Learn (retro + continuous improvement)

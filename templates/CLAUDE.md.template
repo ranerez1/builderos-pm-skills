@@ -30,7 +30,7 @@
 | **People Problem** | User's real-world friction — no solution baked in; grounded in evidence |
 | **TL;DR (GIFTS)** | PRD format: Goal, Insights, Focus, Trade-offs, Suggested solution, Success |
 | **RICE** | Backlog prioritization: Reach, Impact, Confidence, Effort |
-| **Skill** | Reusable AI-powered task (e.g., `/05-prd-to-tech-plan`) shipped via the BuilderOS plugin |
+| **Skill** | Reusable AI-powered task (e.g., `/05-create-prd`, `/06-prd-to-tech-plan`) shipped via the BuilderOS plugin |
 | **Board** | A tracker project for Backlog, Releases, Tickets, etc. (vendor-agnostic) |
 | **MCP server** | API gateway connecting Claude to external tools (Monday, Mixpanel, Notion, …) |
 
@@ -75,7 +75,7 @@ For any deliverable:
 
 - PRDs → `Outputs/Product PRDs/YYYY-MM-DD_<itemId>_<slug>.md`
 - Technical Design Docs → `Outputs/Technical Docs/`
-- Learnings / retros (`/09-learn`) → `Learnings/`
+- Learnings / retros (`/10-learn`) → `Learnings/`
 - Tool/MCP IDs → `Knowledge/workspace-tools.md`
 
 ---

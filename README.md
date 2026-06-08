@@ -1,6 +1,6 @@
 # BuilderOS PM Skills
 
-A Claude Code plugin with 10 PM workflow skills covering the full loop from customer discovery → planning → PRD → review → learn → competitor analysis.
+A Claude Code plugin with 11 PM workflow skills covering the full loop from customer discovery → planning → PRD → tech plan → review → learn → competitor analysis.
 
 ## Skills
 
@@ -10,12 +10,15 @@ A Claude Code plugin with 10 PM workflow skills covering the full loop from cust
 | 02 | `/02-pm-planner` | Turn an unstructured problem space into 2–3 initiative candidates, then a focused kickoff one-pager. |
 | 03 | `/03-cto-planner` | Stress-test an initiative against the existing codebase; surface gaps, edge cases, open questions. |
 | 04 | `/04-ux-planner` | Produce a UX plan: users, journeys, IA, key screens/states, UX acceptance criteria. |
-| 05 | `/05-prd-to-tech-plan` | Write a concise, implementation-ready Technical Design Doc to `Outputs/Technical Docs/`. |
-| 06 | `/06-ui-ux-review` | Review PRD + UI implementation; return prioritized feedback and concrete fixes. |
-| 07 | `/07-rnd-reviewer` | Review PRD/TDD + implementation as a senior engineer. |
-| 08 | `/08-pm-reviewer` | Review PRD + shipped experience as a PM (problem, scope, trade-offs, metrics, rollout). |
-| 09 | `/09-learn` | Ship retro (update PRD/TDD) and/or process–skill improvement; writes to `Learnings/`. |
-| 10 | `/10-competitor-feature-analysis` | Capture logged-in competitor product UI via CloakBrowser, compare a feature across competitors, generate a report + HTML deck. |
+| 05 | `/05-create-prd` | Consolidate 01–04 outputs into a decision-ready feature PRD (GIFTS); saves to `Outputs/Product PRDs/`. |
+| 06 | `/06-prd-to-tech-plan` | Write a concise, implementation-ready Technical Design Doc to `Outputs/Technical Docs/`. |
+| 07 | `/07-ui-ux-review` | Review PRD + UI implementation; return prioritized feedback and concrete fixes. |
+| 08 | `/08-rnd-reviewer` | Review PRD/TDD + implementation as a senior engineer. |
+| 09 | `/09-pm-reviewer` | Review PRD + shipped experience as a PM (problem, scope, trade-offs, metrics, rollout). |
+| 10 | `/10-learn` | Ship retro (update PRD/TDD) and/or process–skill improvement; writes to `Learnings/`. |
+| 11 | `/11-competitor-feature-analysis` | Capture logged-in competitor product UI via CloakBrowser, compare a feature across competitors, generate a report + HTML deck. |
+
+> Upgrading from 0.x? Skills 05–10 were renumbered to 06–11 to make room for `/05-create-prd`. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
 
@@ -47,9 +50,11 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 | Skill | Needs an MCP server? | Notes |
 |-------|----------------------|-------|
 | 01 customer-discovery | Tracker / docs MCP **OR** local CSV/folder paths | Set under "Customer Meeting Transcripts" in workspace-tools |
-| 02–08 planning/review | Optional — works with pasted content too | MCP makes it pull context automatically |
-| 09 learn | Tracker MCP optional | Reads PRD/TDD from `Outputs/`, writes to `Learnings/` |
-| 10 competitor-analysis | None — uses CloakBrowser locally | Needs Node 18+, macOS/Windows |
+| 02–04 planning | Optional — works with pasted content too | MCP makes it pull context automatically |
+| 05 create-prd | Tracker MCP optional (to post a comment on a linked issue) | Reads upstream 01–04 outputs; writes `Outputs/Product PRDs/` |
+| 06–09 review | Optional — works with pasted content too | MCP makes it pull context automatically |
+| 10 learn | Tracker MCP optional | Reads PRD/TDD from `Outputs/`, writes to `Learnings/` |
+| 11 competitor-analysis | None — uses CloakBrowser locally | Needs Node 18+, macOS/Windows |
 
 ## Updating
 
@@ -71,12 +76,13 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 │   ├── 02-pm-planner/SKILL.md
 │   ├── 03-cto-planner/SKILL.md
 │   ├── 04-ux-planner/SKILL.md
-│   ├── 05-prd-to-tech-plan/SKILL.md
-│   ├── 06-ui-ux-review/SKILL.md
-│   ├── 07-rnd-reviewer/SKILL.md
-│   ├── 08-pm-reviewer/SKILL.md
-│   ├── 09-learn/SKILL.md
-│   └── 10-competitor-feature-analysis/      # SKILL.md + scripts + INSTALL.md
+│   ├── 05-create-prd/SKILL.md
+│   ├── 06-prd-to-tech-plan/SKILL.md
+│   ├── 07-ui-ux-review/SKILL.md
+│   ├── 08-rnd-reviewer/SKILL.md
+│   ├── 09-pm-reviewer/SKILL.md
+│   ├── 10-learn/SKILL.md
+│   └── 11-competitor-feature-analysis/      # SKILL.md + scripts + INSTALL.md
 └── templates/
     ├── CLAUDE.md.template
     ├── Knowledge/workspace-tools.md.template

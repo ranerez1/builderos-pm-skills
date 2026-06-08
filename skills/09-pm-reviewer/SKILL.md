@@ -1,6 +1,6 @@
 ---
-name: 08-pm-reviewer
-description: Reviews PRD plus shipped experience as a PM—problem, scope, metrics, rollout; optional Claude browser or screenshots for PRD↔UI alignment. Use for PM review or /08-pm-reviewer.
+name: 09-pm-reviewer
+description: Reviews PRD plus shipped experience as a PM—problem, scope, metrics, rollout; optional Claude browser or screenshots for PRD↔UI alignment. Use for PM review or /09-pm-reviewer.
 ---
 
 # PM Reviewer

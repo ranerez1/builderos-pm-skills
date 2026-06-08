@@ -61,4 +61,4 @@ echo
 echo "Next:"
 echo "  1. Open CLAUDE.md in your editor — fill in the [BRACKETED] placeholders."
 echo "  2. Open Knowledge/workspace-tools.md — fill in your tracker/analytics/MCP server names."
-echo "  3. Open Claude Code in this folder and try /05-prd-to-tech-plan to test."
+echo "  3. Open Claude Code in this folder and try /05-create-prd to test."

@@ -7,18 +7,18 @@ screen-by-screen flows, compares a feature across competitors, and generates a r
 
 1. **Unzip into the workspace's skills directory** so the folder lands at:
    ```
-   <workspace>/.claude/skills/10-competitor-feature-analysis/
+   <workspace>/.claude/skills/11-competitor-feature-analysis/
    ```
-   (e.g. `unzip 10-competitor-feature-analysis.zip -d .claude/skills`)
+   (e.g. `unzip 11-competitor-feature-analysis.zip -d .claude/skills`)
 
 2. **Install dependencies** (native CloakBrowser/Playwright deps — not bundled):
    ```bash
-   cd .claude/skills/10-competitor-feature-analysis && npm install && cd -
+   cd .claude/skills/11-competitor-feature-analysis && npm install && cd -
    ```
 
 3. **Download the browser binary** for this OS:
    ```bash
-   npm --prefix .claude/skills/10-competitor-feature-analysis run competitor-setup
+   npm --prefix .claude/skills/11-competitor-feature-analysis run competitor-setup
    ```
 
 4. **Create `Knowledge/competitors.md`** at the workspace root. Run `competitor-setup` first — if the
@@ -26,18 +26,18 @@ screen-by-screen flows, compares a feature across competitors, and generates a r
 
 5. **Log in once per competitor** (interactive terminal — a browser window opens):
    ```bash
-   npm --prefix .claude/skills/10-competitor-feature-analysis run competitor-login -- \
+   npm --prefix .claude/skills/11-competitor-feature-analysis run competitor-login -- \
      --competitor <slug> --verify "<feature-app-url>"
    ```
 
 ## Run
 
 ```bash
-npm --prefix .claude/skills/10-competitor-feature-analysis run competitor-research -- --feature "<name>"
+npm --prefix .claude/skills/11-competitor-feature-analysis run competitor-research -- --feature "<name>"
 ```
 
 Then follow `SKILL.md` (exit-code-driven: `0` analyze · `2` auth · `3` discover · `1` fix flow), or
-invoke `/10-competitor-feature-analysis` in Claude Code.
+invoke `/11-competitor-feature-analysis` in Claude Code.
 
 ## How it stays portable
 
@@ -52,7 +52,7 @@ invoke `/10-competitor-feature-analysis` in Claude Code.
 
 **Optional shortcut:** to use bare `npm run competitor-*` from the workspace root, copy the `scripts`
 block from this folder's `package.json` into the workspace root `package.json`, prefixing each path
-with `.claude/skills/10-competitor-feature-analysis/`.
+with `.claude/skills/11-competitor-feature-analysis/`.
 
 ## Requirements
 
