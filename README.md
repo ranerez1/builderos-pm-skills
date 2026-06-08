@@ -22,11 +22,11 @@ A Claude Code plugin with 10 PM workflow skills covering the full loop from cust
 ### 1. Add the marketplace and install the plugin
 
 ```
-/plugin marketplace add ranerez/builderos-pm-skills
+/plugin marketplace add ranerez1/builderos-pm-skills
 /plugin install builderos-pm-skills@builderos-pm
 ```
 
-(or replace `ranerez/builderos-pm-skills` with the git URL where you host this.)
+(or replace `ranerez1/builderos-pm-skills` with the git URL where you host this.)
 
 ### 2. Bootstrap your workspace
 

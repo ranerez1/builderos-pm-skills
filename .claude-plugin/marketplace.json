@@ -13,10 +13,8 @@
       "author": { "name": "Ran Erez" },
       "category": "product-management",
       "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/ranerez/builderos-pm-skills.git",
-        "path": ".",
-        "ref": "main"
+        "source": "github",
+        "repo": "ranerez1/builderos-pm-skills"
       }
     }
   ]
