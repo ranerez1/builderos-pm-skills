@@ -4,7 +4,11 @@
  */
 import path from 'node:path';
 import { findRepoRoot, competitorsPath, profilesDir, parseArgs, cmd, skillDirRel } from './lib/paths.mjs';
-import { loadCompetitors, validateCompetitorsConfig } from './lib/competitors.mjs';
+import {
+  loadCompetitors,
+  scaffoldCompetitorsIfMissing,
+  validateCompetitorsConfig,
+} from './lib/competitors.mjs';
 import {
   ensureCloakBrowser,
   MIN_CLOAKBROWSER_VERSION,
@@ -34,6 +38,11 @@ async function main() {
   const info = await ensureCloakBrowser({ download: !checkOnly });
 
   const repoRoot = findRepoRoot();
+  const scaffolded = scaffoldCompetitorsIfMissing(repoRoot);
+  if (scaffolded) {
+    console.error(`Created ${scaffolded} — replace every [FILL] before capture.`);
+  }
+
   let sessions = [];
   try {
     const config = loadCompetitors(competitorsPath(repoRoot));

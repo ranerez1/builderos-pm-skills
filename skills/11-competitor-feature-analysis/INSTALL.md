@@ -21,8 +21,8 @@ screen-by-screen flows, compares a feature across competitors, and generates a r
    npm --prefix .claude/skills/11-competitor-feature-analysis run competitor-setup
    ```
 
-4. **Create `Knowledge/competitors.md`** at the workspace root. Run `competitor-setup` first — if the
-   file is missing, the skill prints the template to fill in (slug, login URL, plan tier per competitor).
+4. **Fill in `Knowledge/competitors.md`** at the workspace root. `competitor-setup` creates a starter
+   file with `[FILL]` placeholders when missing — replace them (slug, login URL, plan tier per competitor).
 
 5. **Log in once per competitor** (interactive terminal — a browser window opens):
    ```bash

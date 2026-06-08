@@ -1,4 +1,6 @@
 import fs from 'node:fs';
+import path from 'node:path';
+import { ensureDir, skillRoot } from './paths.mjs';
 
 const FILL_PATTERN = /\[FILL\]/i;
 
@@ -37,6 +39,26 @@ function parseBulletSection(content, heading) {
     if (m) result[m[1].trim()] = m[2].trim();
   }
   return result;
+}
+
+/** Copy the plugin template into the workspace when competitors.md is missing. */
+export function scaffoldCompetitorsIfMissing(repoRoot) {
+  const filePath = path.join(repoRoot, 'Knowledge', 'competitors.md');
+  if (fs.existsSync(filePath)) return null;
+
+  const templatePath = path.join(
+    skillRoot(),
+    '..',
+    '..',
+    'templates',
+    'Knowledge',
+    'competitors.md.template'
+  );
+  if (!fs.existsSync(templatePath)) return null;
+
+  ensureDir(path.join(repoRoot, 'Knowledge'));
+  fs.copyFileSync(templatePath, filePath);
+  return filePath;
 }
 
 export function loadCompetitors(filePath) {

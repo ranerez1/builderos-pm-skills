@@ -243,15 +243,16 @@ It will:
 
 1. Install the Node packages skill 11 depends on.
 2. Download the CloakBrowser binary for your OS.
-3. Print next steps for logging in to each competitor.
+3. Create a starter `Knowledge/competitors.md` in your workspace (if you run the script from inside your workspace folder and the file doesn't exist yet).
+4. Print next steps for logging in to each competitor.
 
 Expect 1–2 minutes for the npm install, plus a download for the browser binary.
 
 ### 6c. Tell skill 11 which competitors to track
 
-In your **workspace folder** (the one you bootstrapped in Step 3 — not the plugin folder), create a file at `Knowledge/competitors.md` listing the competitors you want to capture (slug, login URL, plan tier).
+Open `Knowledge/competitors.md` in your **workspace folder** (the one you bootstrapped in Step 3 — not the plugin folder). The setup helper in 6b creates this file with `[FILL]` placeholders if it doesn't exist yet — replace them with your product slug/name and each competitor's slug, login URL, and plan tier.
 
-If you skip this and run a competitor command, the skill will print the template for you to fill in.
+If the file wasn't created (e.g. you ran setup from outside your workspace), `cd` to your workspace and re-run the 6b command, or copy `templates/Knowledge/competitors.md.template` from the plugin into `Knowledge/competitors.md` yourself.
 
 ### 6d. Log in to each competitor once
 
@@ -388,6 +389,7 @@ Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRA
 | Marketplace registry | `~/.claude/plugins/known_marketplaces.json` |
 | Your PM context | `<workspace>/CLAUDE.md` |
 | MCP/tool config | `<workspace>/Knowledge/workspace-tools.md` |
+| Competitor list (skill 11) | `<workspace>/Knowledge/competitors.md` |
 | Generated PRDs / TDDs | `<workspace>/Outputs/` |
 | Retros / learnings | `<workspace>/Learnings/` |
 | Skill 11 cache + reports | `<workspace>/Knowledge/competitor-flows/`, `<workspace>/Outputs/competitor-research/` |

@@ -33,6 +33,11 @@ if [ "$NODE_MAJOR" -lt 18 ]; then
   exit 1
 fi
 
+WORKSPACE=""
+if [ -d "Knowledge" ] || [ -f "CLAUDE.md" ]; then
+  WORKSPACE="$(pwd)"
+fi
+
 echo "Setting up skill 11 in: $SKILL_DIR"
 echo "Using Node $(node -v)"
 echo
@@ -49,12 +54,24 @@ npm run competitor-setup
 echo
 echo "✓ Skill 11 is ready."
 echo
+
+if [ -n "$WORKSPACE" ] && [ ! -f "$WORKSPACE/Knowledge/competitors.md" ]; then
+  mkdir -p "$WORKSPACE/Knowledge"
+  cp "$PLUGIN_DIR/templates/Knowledge/competitors.md.template" "$WORKSPACE/Knowledge/competitors.md"
+  echo "✓ Created $WORKSPACE/Knowledge/competitors.md (starter template — edit next)"
+  echo
+elif [ -z "$WORKSPACE" ]; then
+  echo "Tip: run this script from your workspace folder (the one with Knowledge/) to auto-create Knowledge/competitors.md."
+  echo
+fi
+
 echo "Next:"
-echo "  1. cd back to your workspace folder."
-echo "  2. Create Knowledge/competitors.md listing the competitors you want to track."
-echo "     (If you skip this and run a competitor command, the skill will print a template you can fill in.)"
-echo "  3. Log in to each competitor once with:"
+echo "  1. Open Knowledge/competitors.md in your workspace — replace every [FILL] (slug, login URL, plan tier per competitor)."
+if [ -z "$WORKSPACE" ]; then
+  echo "     (Not created yet? cd to your workspace and re-run this script, or copy templates/Knowledge/competitors.md.template from the plugin.)"
+fi
+echo "  2. Log in to each competitor once with:"
 echo "     npm --prefix \"$SKILL_DIR\" run competitor-login -- --competitor <slug> --verify \"<url>\""
-echo "  4. Then run /11-competitor-feature-analysis inside Claude Code."
+echo "  3. Then run /11-competitor-feature-analysis inside Claude Code."
 echo
 echo "Full skill 11 walkthrough: $SKILL_DIR/INSTALL.md"

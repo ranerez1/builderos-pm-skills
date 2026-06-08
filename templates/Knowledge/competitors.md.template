@@ -1,0 +1,24 @@
+# Competitors
+
+Skill 11 reads this file to know which products to capture and compare. Replace every `[FILL]` before running competitor commands.
+
+## Your product
+
+- **Slug**: [FILL]
+- **Name**: [FILL]
+
+## Competitors
+
+Slug is used on the CLI (`--competitor <slug>`). Login URL is where the one-time browser login opens.
+
+| Competitor slug | Name | Login URL | Notes (plan tier, etc.) |
+|-----------------|------|-----------|-------------------------|
+| [FILL] | [FILL] | [FILL] | [FILL] |
+
+## Feature screens
+
+Filled automatically after discovery. Pre-seed a URL here if you already know the feature page.
+
+| Competitor slug | Feature | Cached URL | Last verified |
+|-----------------|---------|------------|---------------|
+| | | | |
