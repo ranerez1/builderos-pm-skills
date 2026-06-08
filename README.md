@@ -19,39 +19,16 @@ A Claude Code plugin with 10 PM workflow skills covering the full loop from cust
 
 ## Install
 
-### 1. Add the marketplace and install the plugin
+**Quick start:**
 
 ```
 /plugin marketplace add ranerez1/builderos-pm-skills
 /plugin install builderos-pm-skills@builderos-pm
 ```
 
-(or replace `ranerez1/builderos-pm-skills` with the git URL where you host this.)
+Then copy `templates/CLAUDE.md.template` and `templates/Knowledge/workspace-tools.md.template` into your workspace and edit them.
 
-### 2. Bootstrap your workspace
-
-The plugin can't write to your project tree. Copy the starter files in once per workspace:
-
-```bash
-# from your workspace root
-cp -n <plugin-path>/templates/CLAUDE.md.template ./CLAUDE.md
-mkdir -p Knowledge Outputs Learnings
-cp -n <plugin-path>/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
-```
-
-Edit `CLAUDE.md` (fill in your role/company/product/metric) and `Knowledge/workspace-tools.md` (fill in your tracker/analytics/MCP server names).
-
-### 3. (Skill 10 only) Install Node deps for competitor analysis
-
-Skill 10 ships its own `package.json` and uses CloakBrowser. From your workspace root:
-
-```bash
-cd .claude/plugins/builderos-pm/builderos-pm-skills/skills/10-competitor-feature-analysis
-npm install
-npm run competitor-setup
-```
-
-See `skills/10-competitor-feature-analysis/INSTALL.md` for full details (creates `Knowledge/competitors.md`, login flow per competitor, etc.).
+**Full step-by-step walkthrough** (recommended for first install): [INSTALL.md](INSTALL.md).
 
 ## What you need to provide
 
