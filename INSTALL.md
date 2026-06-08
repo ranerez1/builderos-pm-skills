@@ -133,30 +133,65 @@ You should see `builderos-pm-skills@builderos-pm` with status `✔ enabled`.
 
 ---
 
-## Step 3 — Bootstrap your workspace
+## Step 3 — Set up a workspace folder
 
-The plugin can't write into your project — Claude Code plugins are read-only at install time. You need to copy two starter files into your workspace once.
+> **What's a "workspace"?** Just a regular folder on your computer where you'll keep your PM work — PRDs the skills generate, retros, your tool config, etc. The skills read and write files relative to this folder. You only do this setup once per workspace.
 
-From the workspace root where you'll use the skills:
+### 3a. Pick or create a workspace folder
+
+If you already have one (e.g. a product repo you work in), use that. Otherwise create a fresh one anywhere you like. For example, on macOS:
 
 ```bash
-# Replace this with wherever the plugin cache is on your machine.
-PLUGIN_DIR=~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0
-
-# 1. CLAUDE.md — PM context the skills assume (role, terminology, writing rules).
-cp -n "$PLUGIN_DIR/templates/CLAUDE.md.template" ./CLAUDE.md
-
-# 2. workspace-tools.md — your tracker/analytics/MCP server names.
-mkdir -p Knowledge Outputs Learnings
-cp -n "$PLUGIN_DIR/templates/Knowledge/workspace-tools.md.template" Knowledge/workspace-tools.md
+mkdir -p ~/Documents/my-pm-workspace
+cd ~/Documents/my-pm-workspace
 ```
 
-Now **edit both files**:
+The `cd` puts your terminal "inside" that folder so the next commands act on it. You can confirm where you are with `pwd`.
+
+### 3b. Run the bootstrap helper
+
+The plugin ships a one-command setup script that creates the right folders and copies two starter files in. Run this **in the same terminal**, from inside your workspace folder:
+
+```bash
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/bin/bootstrap.sh
+```
+
+You'll see output like:
+
+```
+✓ Created Knowledge/, Outputs/, Learnings/
+✓ Copied CLAUDE.md (PM context — edit this next)
+✓ Copied Knowledge/workspace-tools.md (tool config — edit this next)
+
+Next: open CLAUDE.md and Knowledge/workspace-tools.md in your editor and fill in your details.
+```
+
+> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `0.1.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
+
+### 3c. Edit the two starter files
+
+Open them in any text editor (TextEdit, VS Code, Cursor, vim — your call):
 
 - **`CLAUDE.md`** — fill in the `[BRACKETED]` placeholders: your role, company, product, primary metric. Delete anything that doesn't apply. This is the context every skill reads first.
 - **`Knowledge/workspace-tools.md`** — fill in your tracker / analytics / docs tool names and the MCP server names that connect to them. Skip the sections you don't have — the skills that need a missing tool will tell you what's missing.
 
-The `Outputs/`, `Learnings/`, and `Knowledge/` directories are where skills write their artifacts (PRDs, retros, reference docs).
+That's it. The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them.
+
+<details>
+<summary><strong>Manual alternative (if the bootstrap script doesn't work)</strong></summary>
+
+From your workspace folder, run these four lines:
+
+```bash
+mkdir -p Knowledge Outputs Learnings
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/templates/CLAUDE.md.template ./CLAUDE.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.1.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
+ls -la
+```
+
+The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` are there. Then edit `CLAUDE.md` and `Knowledge/workspace-tools.md` per 3c.
+
+</details>
 
 ---
 
