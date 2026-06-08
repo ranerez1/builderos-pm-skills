@@ -118,7 +118,7 @@ claude plugin list
 
 You should see `builderos-pm-skills@builderos-pm` with status `✔ enabled`.
 
-**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/`. The 10 skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/01-customer-discovery` through `/10-competitor-feature-analysis`) and auto-triggered by the model when relevant.
+**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/`. The 10 skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/01-customer-discovery` through `/10-competitor-feature-analysis`) and auto-triggered by the model when relevant.
 
 ---
 
@@ -142,7 +142,7 @@ The `cd` puts your terminal "inside" that folder so the next commands act on it.
 The plugin ships a one-command setup script that creates the right folders and copies two starter files in. Run this **in the same terminal**, from inside your workspace folder:
 
 ```bash
-bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/bin/bootstrap.sh
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/bin/bootstrap.sh
 ```
 
 You'll see output like:
@@ -155,7 +155,7 @@ You'll see output like:
 Next: open CLAUDE.md and Knowledge/workspace-tools.md in your editor and fill in your details.
 ```
 
-> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `0.2.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
+> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `0.3.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
 
 ### 3c. Edit the two starter files
 
@@ -173,8 +173,8 @@ From your workspace folder, run these four lines:
 
 ```bash
 mkdir -p Knowledge Outputs Learnings
-cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/templates/CLAUDE.md.template ./CLAUDE.md
-cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/templates/CLAUDE.md.template ./CLAUDE.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
 ls -la
 ```
 
@@ -217,24 +217,67 @@ For a richer test, try `/01-customer-discovery` with a tracker MCP configured (i
 
 ## Step 6 — (Optional) Set up skill 10 (competitor analysis)
 
-Skill 10 captures logged-in competitor product UI via [CloakBrowser](https://cloakbrowser.dev/) and compares features across competitors. It has native dependencies the plugin can't auto-install.
+> Skip this step entirely if you don't plan to use skill 10. The other 9 skills work without it.
+
+Skill 10 captures logged-in competitor product UI via [CloakBrowser](https://cloakbrowser.dev/) so it can compare a feature across multiple competitors. It needs Node.js and a one-time browser download — the plugin can't bundle these for you.
+
+### 6a. Check Node.js is installed
+
+In your terminal, run:
 
 ```bash
-PLUGIN_DIR=~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0
-cd "$PLUGIN_DIR/skills/10-competitor-feature-analysis"
-
-# Install Node deps
-npm install
-
-# Download the CloakBrowser binary for your OS
-npm run competitor-setup
+node --version
 ```
 
-Then, in your **workspace root** (not the plugin dir), create `Knowledge/competitors.md` listing the competitors you want to track. Running `competitor-setup` once with no file present prints a template you can fill in.
+You need **v18.0.0 or newer** on **macOS or Windows** (Linux isn't supported by CloakBrowser yet). If `node` is missing or too old, install/update it from [nodejs.org](https://nodejs.org/) first.
 
-Full skill 10 walkthrough is in [`skills/10-competitor-feature-analysis/INSTALL.md`](skills/10-competitor-feature-analysis/INSTALL.md).
+### 6b. Run the skill 10 setup helper
 
-**Requirements**: Node 18+, macOS or Windows (CloakBrowser binary platforms).
+The plugin ships a one-command setup script. Run it from any terminal:
+
+```bash
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/bin/setup-skill-10.sh
+```
+
+It will:
+
+1. Install the Node packages skill 10 depends on.
+2. Download the CloakBrowser binary for your OS.
+3. Print next steps for logging in to each competitor.
+
+Expect 1–2 minutes for the npm install, plus a download for the browser binary.
+
+### 6c. Tell skill 10 which competitors to track
+
+In your **workspace folder** (the one you bootstrapped in Step 3 — not the plugin folder), create a file at `Knowledge/competitors.md` listing the competitors you want to capture (slug, login URL, plan tier).
+
+If you skip this and run a competitor command, the skill will print the template for you to fill in.
+
+### 6d. Log in to each competitor once
+
+For each competitor in your list, run this once per competitor (replace `<slug>` and `<url>`):
+
+```bash
+npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/skills/10-competitor-feature-analysis run competitor-login -- --competitor <slug> --verify "<url>"
+```
+
+A browser window opens — log in like a normal user. The session is saved so the skill can re-enter as you next time.
+
+### 6e. Use the skill
+
+Inside Claude Code in your workspace folder:
+
+```
+/10-competitor-feature-analysis
+```
+
+Or from a terminal:
+
+```bash
+npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/skills/10-competitor-feature-analysis run competitor-research -- --feature "<name>"
+```
+
+Full skill 10 walkthrough with all flags and outputs: [`skills/10-competitor-feature-analysis/INSTALL.md`](skills/10-competitor-feature-analysis/INSTALL.md).
 
 ---
 
@@ -302,7 +345,7 @@ Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRA
 
 | What | Where |
 |------|-------|
-| Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.2.0/` |
+| Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/0.3.0/` |
 | Marketplace registry | `~/.claude/plugins/known_marketplaces.json` |
 | Your PM context | `<workspace>/CLAUDE.md` |
 | MCP/tool config | `<workspace>/Knowledge/workspace-tools.md` |
