@@ -1,0 +1,14 @@
+# 01-Templates
+
+Reusable doc templates the PM workflow leans on. Hand-curated, not ingested.
+
+`/12-ingest-knowledge` **never writes here.** It only reads the templates as reference scaffolds when proposing a new doc structure.
+
+## What belongs here
+
+- PRD outlines, kickoff one-pager skeletons, persona-card blanks, market-brief skeletons, retro templates
+- Anything a human pre-defines as the "shape" of a recurring doc type
+
+## Schema
+
+Free-form. Templates are starting points, not structured data. Name files `<doc-type>.md.template`.

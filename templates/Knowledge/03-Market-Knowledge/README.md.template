@@ -1,0 +1,40 @@
+# 03-Market-Knowledge
+
+Market sizing, segment trends, competitive landscape, analyst notes, regulatory signals.
+
+The competitor registry used by `/11-competitor-feature-analysis` lives at `Knowledge/competitors.md` (root), not here. This folder holds **ingested market signals** — observations from external docs, calls, articles.
+
+## What belongs here
+
+- Market Signal Cards: trend / competitor-move / regulation / pricing-shift observations
+- Segment characterizations beyond a single persona (TAM bands, vertical specifics)
+
+Not here: product-internal insights (→ `02-Product-Knowledge/`), persona/account details (→ `04-ICP/`).
+
+## Schema: Market Signal Card
+
+```markdown
+---
+source: <connector>
+source_url: <link to raw doc — required>
+source_date: YYYY-MM-DD
+ingested_on: YYYY-MM-DD
+confidence: high | medium | low
+schema: market-signal
+segment: <segment slug>
+signal_type: trend | competitor-move | regulation | pricing | analyst
+entities: [<competitor-slug>, <segment-slug>]
+intents: [insight | risk]
+last_seen: YYYY-MM-DD
+---
+
+# <Short factual claim (≤ 12 words)>
+
+- Atomic fact 1. evidence: [source ref](source_url)
+- Atomic fact 2. evidence: "quote snippet…" [link]
+- Atomic fact 3. evidence: [source ref](source_url)
+```
+
+## Append rules
+
+Same `segment` + `signal_type` → append evidence, bump `last_seen`.

@@ -54,6 +54,19 @@ for sub in "${KNOWLEDGE_SUBDIRS[@]}"; do
     fi
     made_dirs+=("$dest/")
   fi
+  # Per-subfolder README (routing rubric for /12-ingest-knowledge). Copy only if missing.
+  if [ ! -f "$dest/README.md" ] && [ -f "$TEMPLATES_DIR/Knowledge/$sub/README.md.template" ]; then
+    cp "$TEMPLATES_DIR/Knowledge/$sub/README.md.template" "$dest/README.md"
+  fi
+done
+
+# Ingest helper folders for /12-ingest-knowledge (drop zone + manifest log).
+for d in Knowledge/_inbox Knowledge/_ingested; do
+  if [ ! -d "$d" ]; then
+    mkdir -p "$d"
+    touch "$d/.gitkeep"
+    made_dirs+=("$d/")
+  fi
 done
 
 if [ "${#made_dirs[@]}" -gt 0 ]; then

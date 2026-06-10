@@ -1,0 +1,46 @@
+# 04-ICP
+
+Ideal customer profile, personas, jobs-to-be-done, named-account context.
+
+Append-heavy folder: most ingested customer calls add evidence to existing persona/account cards rather than create new ones.
+
+## What belongs here
+
+- Persona Cards (one per persona slug: e.g. `ops-manager.md`, `cfo.md`)
+- Account Cards (one per named account: e.g. `acme-corp.md`)
+- JTBD definitions when stable enough to be referenced across multiple PRDs
+
+Not here: product insights extracted *from* customer calls (→ `02-Product-Knowledge/`), market-level signals (→ `03-Market-Knowledge/`).
+
+## Schema: Persona / Account Card
+
+```markdown
+---
+source: <connector for most-recent evidence>
+source_url: <link>
+source_date: YYYY-MM-DD
+ingested_on: YYYY-MM-DD
+confidence: high | medium | low
+schema: persona-card | account-card
+persona_or_account: <slug>
+entities: [<slug>]
+intents: [pain | request | insight | trigger]
+quotes_count: <integer — incremented on append>
+last_seen: YYYY-MM-DD
+---
+
+# <Persona or account name>
+
+## Jobs
+- Job to be done (≤ 15 words). evidence: [src](url)
+
+## Pains
+- Pain (≤ 15 words). evidence: "quote…" [link]
+
+## Triggers / buying signals
+- Trigger (≤ 15 words). evidence: [src](url)
+```
+
+## Append rules
+
+New evidence for the same persona/account → append one bullet to the relevant section, bump `quotes_count` + `last_seen`. Never duplicate persona files.

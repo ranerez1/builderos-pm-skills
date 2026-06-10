@@ -1,0 +1,43 @@
+# 02-Product-Knowledge
+
+Durable product context: strategy, positioning, OKRs, NSM, roadmap themes, product-area insights extracted from customer evidence.
+
+## What belongs here
+
+- Strategic decisions and the reasoning behind them
+- Product Insight Cards — recurring observations about an area of the product (e.g. "onboarding drop-off cluster", "billing edge cases")
+- NSM definitions, leading indicators, OKR statements
+- Cross-cutting product principles
+
+Not here: market signals (→ `03-Market-Knowledge/`), persona/account context (→ `04-ICP/`), project-specific decisions (→ `06-Projects/`).
+
+## Schema: Product Insight Card
+
+`/12-ingest-knowledge` writes files in this folder using this schema. Every file ≤ 40 lines, no raw transcript text.
+
+```markdown
+---
+source: <connector>
+source_url: <link to raw doc — required>
+source_date: YYYY-MM-DD
+ingested_on: YYYY-MM-DD
+confidence: high | medium | low
+schema: product-insight
+area: <product area slug, e.g. onboarding, billing, search>
+entities: [<feature-slug>, <persona-slug>]
+intents: [problem | request | insight | risk]
+evidence_count: <integer — incremented on append>
+last_seen: YYYY-MM-DD
+related: [[04-ICP/<file>]]
+---
+
+# <Short factual claim (≤ 12 words)>
+
+- Atomic fact 1. evidence: [source ref](source_url#anchor)
+- Atomic fact 2. evidence: "first 6–8 words…" [link]
+- Atomic fact 3. evidence: [source ref](source_url)
+```
+
+## Append rules
+
+If a new doc surfaces the same `area` + `intent`, append one evidence bullet to the existing card and bump `evidence_count` + `last_seen` — do **not** create a new file.

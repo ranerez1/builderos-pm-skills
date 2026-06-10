@@ -42,3 +42,31 @@ Skills read this file to resolve tool URLs/IDs and MCP server names.
 ## Attachments (optional)
 - **How to attach files to tracker items**: `<describe the configured method, e.g. MCP tool / CLI helper / manual>`
 - **Required environment variables (if any)**: `<list-or-empty>`
+
+---
+
+## Knowledge Sources
+
+Used by `/12-ingest-knowledge` to pull external docs and partition them into `Knowledge/02–06` as token-efficient structured cards. Leave a block empty if you don't use that source — the skill will skip it silently.
+
+### Google Drive
+- **MCP Server (or local mount path)**: `<mcp-server-name | /path/to/rclone/mount>`
+- **Folder URLs to scan**: `<one or more Drive folder URLs, comma-separated>`
+
+### Zoom
+- **MCP Server**: `<mcp-server-name>`
+- **Account email**: `<email>`
+- **Folder/topic filter (optional)**: `<string-or-empty>`
+
+### Notetakers (Fathom / Timeless / Otter / Fireflies / Granola / Gong)
+Repeat this block for each notetaker in use:
+- **Service**: _Fathom | Timeless | Otter | Fireflies | Granola | Gong_
+- **MCP Server (or local export folder)**: `<mcp-server-name | /path/to/exports>`
+- **Workspace URL (optional)**: `<paste link>`
+
+### Gmail labels (optional)
+- **MCP Server**: `gmail-personal` _(or another configured gmail MCP)_
+- **Labels to scan**: `<one or more label names, comma-separated>`
+
+### Local Inbox
+- **Path**: `Knowledge/_inbox/` _(always — drop .md / .vtt / .txt / .docx / .pdf files here for ad-hoc ingest)_

@@ -1,0 +1,18 @@
+# 05-Workspace-Tools
+
+Tool registry and configuration notes for workspace integrations beyond what `Knowledge/workspace-tools.md` (root) already lists.
+
+The canonical tool registry **stays at `Knowledge/workspace-tools.md`** — multiple skills (00, 01, 02, 05, 11) reference it by that exact path. This subfolder is for *supplementary* tool docs (e.g., per-tool setup notes, MCP server credentials playbooks, workspace-specific connector quirks).
+
+## What belongs here
+
+- Per-tool setup playbooks (e.g. "how the Drive MCP is wired in this workspace")
+- Custom MCP server READMEs
+- Notes on connector quirks, rate limits, auth recovery
+
+## What does not
+
+- The primary tool registry (→ `Knowledge/workspace-tools.md`)
+- Ingested customer/market/product evidence (→ `02-04`, `06`)
+
+`/12-ingest-knowledge` does **not** route ingested docs here. This folder is hand-curated.

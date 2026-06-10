@@ -1,0 +1,38 @@
+# 06-Projects
+
+Project- or initiative-specific durable context. One subfolder per project slug.
+
+## What belongs here
+
+- Project Context Notes — decisions, constraints, and stakeholder positions scoped to a specific initiative
+- Cross-references to the PRD/TDD for the project under `Outputs/`
+- Project-specific glossary or environment notes
+
+Project work in flight lives under `Outputs/Planning/<slug>/` and `Outputs/Product PRDs/`. This folder is for **durable** project context that outlives any single doc.
+
+## Schema: Project Context Note
+
+```markdown
+---
+source: <connector>
+source_url: <link>
+source_date: YYYY-MM-DD
+ingested_on: YYYY-MM-DD
+confidence: high | medium | low
+schema: project-context
+project_slug: <slug>
+entities: [<slug>]
+intents: [decision | constraint | risk | dependency]
+expires_or_revisit: YYYY-MM-DD | none
+---
+
+# <Short decision or constraint (≤ 12 words)>
+
+- Atomic fact 1. evidence: [src](url)
+- Atomic fact 2. evidence: "quote…" [link]
+- Atomic fact 3. evidence: [src](url)
+```
+
+## Append rules
+
+Same `project_slug` + `intent` → append evidence rather than create a new file. When `expires_or_revisit` passes, the next ingest run flags the card for review (does not auto-delete).

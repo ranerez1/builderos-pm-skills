@@ -1,6 +1,6 @@
 ---
 name: 00-onboarding
-description: Interactive first-time setup for BuilderOS PM Skills — bootstraps the workspace, fills CLAUDE.md and Knowledge/workspace-tools.md conversationally, explains installed skills, and recommends the clearest next step. Use when the user runs /00-onboarding, asks to get started with BuilderOS, or has unfilled workspace templates after plugin install.
+description: Interactive first-time setup for BuilderOS PM Skills — bootstraps the workspace, fills CLAUDE.md and Knowledge/workspace-tools.md conversationally (including Knowledge Sources for /12-ingest-knowledge), explains installed skills, and recommends the clearest next step. Use when the user runs /00-onboarding, asks to get started with BuilderOS, or has unfilled workspace templates after plugin install.
 disable-model-invocation: true
 ---
 
@@ -95,7 +95,7 @@ Valid `phase` values (in order): `welcome` → `workspace` → `claude_md` → `
 
 ## Installed skills reference
 
-Use this table when explaining what the user has. Skills 01–11 ship with the plugin; this skill is `00`.
+Use this table when explaining what the user has. Skills 01–12 ship with the plugin; this skill is `00`.
 
 | # | Slash command | What it does |
 |---|---------------|--------------|
@@ -110,8 +110,9 @@ Use this table when explaining what the user has. Skills 01–11 ship with the p
 | 09 | `/09-pm-reviewer` | PM review of PRD + shipped experience. |
 | 10 | `/10-learn` | Ship retro and/or process improvements; writes to `Learnings/`. |
 | 11 | `/11-competitor-feature-analysis` | Logged-in competitor UI capture; comparison report + HTML deck. |
+| 12 | `/12-ingest-knowledge` | Ingest external docs (Drive, Zoom, Fathom/Otter/Fireflies/Granola/Gong/Timeless, Gmail, local Inbox) into `Knowledge/02–06` as token-efficient cards. Propose-then-confirm. |
 
-**Typical flow:** 01 discovery → 02–04 planning → 05 PRD → 06 tech plan → 07–09 review → 10 learn. Skill 11 is standalone.
+**Typical flow:** 01 discovery → 02–04 planning → 05 PRD → 06 tech plan → 07–09 review → 10 learn. Skills 11 (competitor analysis) and 12 (knowledge ingest) are standalone, run anytime.
 
 ## Workflow
 
@@ -121,7 +122,7 @@ Use this table when explaining what the user has. Skills 01–11 ship with the p
 
 Explain in plain language:
 
-- They have **11 PM workflow skills** (show the table above, compactly)
+- They have **12 PM workflow skills** (show the table above, compactly)
 - Their key files: `CLAUDE.md`, `Knowledge/`, `Outputs/`, `Learnings/`
 
 Ask: *"Ready to set up your workspace? This takes about 5–10 minutes."*
@@ -153,6 +154,7 @@ Add one line of reassurance: *"If you've run bootstrap before, I'll only fill in
 
 1. Verify `Knowledge/`, `Outputs/`, `Learnings/` exist. Create any that are missing (`mkdir -p`).
    - Under `Knowledge/`, also create numbered subfolders if missing: `01-Templates`, `02-Product-Knowledge`, `03-Market-Knowledge`, `04-ICP`, `05-Workspace-Tools`, `06-Projects`.
+   - Also create `Knowledge/_inbox/` (drop zone for files to ingest) and `Knowledge/_ingested/` (manifest log) — both used by `/12-ingest-knowledge`.
    - *Say:* "Created `Outputs/` — this is where your PRDs will land." (or "Already had `Outputs/` — leaving it alone.")
 2. If `CLAUDE.md` or `Knowledge/workspace-tools.md` is missing, bootstrap:
    - Prefer running the plugin bootstrap script if you can resolve its path:
@@ -223,6 +225,12 @@ Categories:
 4. **Support Tickets**
 5. **Analytics** (Mixpanel, Amplitude, PostHog, …)
 6. **Attachments** (optional)
+7. **Knowledge Sources** (optional, for `/12-ingest-knowledge`) — ask one question per source the user mentions using; skip the rest with `_Not configured_`. Sources to offer:
+   - Google Drive (MCP server name or local mount path + folder URLs)
+   - Zoom (MCP server name + account email)
+   - Notetakers: Fathom / Timeless / Otter / Fireflies / Granola / Gong (per service: MCP server name or local export folder)
+   - Gmail labels (MCP server name — default `gmail-personal` — and label names)
+   - Local Inbox: always `Knowledge/_inbox/` (no prompt needed)
 
 Remind: MCP servers are configured in Claude Code (`/mcp` or `~/.claude.json`); this file only records the **server names** skills should call.
 
