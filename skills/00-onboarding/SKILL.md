@@ -141,7 +141,8 @@ Then explain what you're about to create (use this table — adapt if some alrea
 | Folder / file | What it's for |
 |---------------|---------------|
 | `CLAUDE.md` | Your product context — role, company, metrics. Every skill reads this first. |
-| `Knowledge/` | Config and reference docs (tool connections, competitors, etc.) |
+| `Knowledge/` | Reference docs — product, market, ICP, projects, and tool config |
+| `Knowledge/01-Templates/` … `06-Projects/` | Numbered subfolders for templates, product docs, market context, ICP, workspace tools, and active projects |
 | `Knowledge/workspace-tools.md` | Which tools you use (Monday, Mixpanel, …) and their MCP server names |
 | `Outputs/` | Where skills save PRDs, tech plans, and reports |
 | `Learnings/` | Retros and process notes from `/10-learn` |
@@ -151,6 +152,7 @@ Add one line of reassurance: *"If you've run bootstrap before, I'll only fill in
 **Then do the work** (report each action in plain language as you go):
 
 1. Verify `Knowledge/`, `Outputs/`, `Learnings/` exist. Create any that are missing (`mkdir -p`).
+   - Under `Knowledge/`, also create numbered subfolders if missing: `01-Templates`, `02-Product-Knowledge`, `03-Market-Knowledge`, `04-ICP`, `05-Workspace-Tools`, `06-Projects`.
    - *Say:* "Created `Outputs/` — this is where your PRDs will land." (or "Already had `Outputs/` — leaving it alone.")
 2. If `CLAUDE.md` or `Knowledge/workspace-tools.md` is missing, bootstrap:
    - Prefer running the plugin bootstrap script if you can resolve its path:
@@ -166,7 +168,7 @@ Add one line of reassurance: *"If you've run bootstrap before, I'll only fill in
 
 ```
 ✓ Workspace folder: <path>
-✓ Folders: Knowledge/, Outputs/, Learnings/
+✓ Folders: Knowledge/ (with 01–06 subfolders), Outputs/, Learnings/
 ✓ CLAUDE.md — <created | already existed>
 ✓ workspace-tools.md — <created | already existed>
 ```

@@ -2,7 +2,7 @@
 # Bootstrap helper for BuilderOS PM Skills.
 #
 # Run this from your workspace folder. It will:
-#   1. Create Knowledge/, Outputs/, Learnings/ folders if missing.
+#   1. Create Knowledge/ (with numbered subfolders), Outputs/, Learnings/ if missing.
 #   2. Copy CLAUDE.md from the plugin's template (skip if you already have one).
 #   3. Copy Knowledge/workspace-tools.md from the plugin's template (skip if you already have one).
 #
@@ -27,18 +27,39 @@ WORKSPACE="$(pwd)"
 echo "Bootstrapping workspace: $WORKSPACE"
 echo
 
-# 1. Folders
+# 1. Folders (top-level + numbered Knowledge subfolders)
+KNOWLEDGE_SUBDIRS=(
+  01-Templates
+  02-Product-Knowledge
+  03-Market-Knowledge
+  04-ICP
+  05-Workspace-Tools
+  06-Projects
+)
+
 made_dirs=()
 for d in Knowledge Outputs Learnings; do
   if [ ! -d "$d" ]; then
     mkdir -p "$d"
-    made_dirs+=("$d")
+    made_dirs+=("$d/")
   fi
 done
+
+for sub in "${KNOWLEDGE_SUBDIRS[@]}"; do
+  dest="Knowledge/$sub"
+  if [ ! -d "$dest" ]; then
+    mkdir -p "$dest"
+    if [ -f "$TEMPLATES_DIR/empty-dirs/$dest/.gitkeep" ]; then
+      cp "$TEMPLATES_DIR/empty-dirs/$dest/.gitkeep" "$dest/.gitkeep"
+    fi
+    made_dirs+=("$dest/")
+  fi
+done
+
 if [ "${#made_dirs[@]}" -gt 0 ]; then
   echo "✓ Created folders: ${made_dirs[*]}"
 else
-  echo "• All target folders already exist (Knowledge/, Outputs/, Learnings/)"
+  echo "• All target folders already exist (Knowledge/, Outputs/, Learnings/, and Knowledge subfolders)"
 fi
 
 # 2. CLAUDE.md

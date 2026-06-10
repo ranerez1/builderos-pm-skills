@@ -43,7 +43,7 @@ Then bootstrap your workspace and run `/00-onboarding` in Claude Code (recommend
 The skills are vendor-agnostic. To make them work end-to-end, configure your own:
 
 - **MCP servers**: tracker (Monday/Jira/Linear/Notion), analytics (Mixpanel/Amplitude/PostHog), email/calendar (Gmail/Outlook), docs (Notion/Google Drive). Configure these in your Claude Code MCP settings, then list their server names in `Knowledge/workspace-tools.md`.
-- **Workspace folders**: `Outputs/`, `Learnings/`, `Knowledge/` at the workspace root. Skills write artifacts there.
+- **Workspace folders**: `Outputs/`, `Learnings/`, and `Knowledge/` (with numbered subfolders `01-Templates` … `06-Projects`) at the workspace root. Skills write artifacts there.
 - **PM context**: `CLAUDE.md` at workspace root — terminology, writing rules, sub-agent roles. The template ships everything except your company-specific fields.
 
 ## Per-skill prereqs
@@ -88,7 +88,16 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 └── templates/
     ├── CLAUDE.md.template
     ├── Knowledge/workspace-tools.md.template
-    └── empty-dirs/{Outputs,Learnings,Knowledge}/.gitkeep
+    └── empty-dirs/
+        ├── Outputs/.gitkeep
+        ├── Learnings/.gitkeep
+        └── Knowledge/
+            ├── 01-Templates/.gitkeep
+            ├── 02-Product-Knowledge/.gitkeep
+            ├── 03-Market-Knowledge/.gitkeep
+            ├── 04-ICP/.gitkeep
+            ├── 05-Workspace-Tools/.gitkeep
+            └── 06-Projects/.gitkeep
 ```
 
 ## License

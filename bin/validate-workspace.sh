@@ -25,6 +25,24 @@ for d in Knowledge Outputs Learnings; do
   fi
 done
 
+KNOWLEDGE_SUBDIRS=(
+  01-Templates
+  02-Product-Knowledge
+  03-Market-Knowledge
+  04-ICP
+  05-Workspace-Tools
+  06-Projects
+)
+missing_knowledge_subdirs=()
+for sub in "${KNOWLEDGE_SUBDIRS[@]}"; do
+  if [ ! -d "Knowledge/$sub" ]; then
+    missing_knowledge_subdirs+=("Knowledge/$sub/")
+  fi
+done
+if [ "${#missing_knowledge_subdirs[@]}" -gt 0 ]; then
+  warnings+=("Missing Knowledge subfolders (run bootstrap to create): ${missing_knowledge_subdirs[*]}")
+fi
+
 # CLAUDE.md
 if [ ! -f "CLAUDE.md" ]; then
   gaps+=("Missing CLAUDE.md at workspace root")

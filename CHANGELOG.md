@@ -2,6 +2,14 @@
 
 All notable changes to this plugin are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/) loosely.
 
+## Unreleased
+
+### Added
+- **Numbered `Knowledge/` subfolders on bootstrap** — `01-Templates`, `02-Product-Knowledge`, `03-Market-Knowledge`, `04-ICP`, `05-Workspace-Tools`, and `06-Projects` are created on every fresh workspace install via `bin/bootstrap.sh` and documented in `INSTALL.md`.
+
+### Changed
+- `bin/validate-workspace.sh` warns when numbered Knowledge subfolders are missing (re-run bootstrap to add them on existing workspaces).
+
 ## 1.1.0 — 2026-06-08
 
 ### Added

@@ -149,7 +149,7 @@ bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/bin/bootstra
 You'll see output like:
 
 ```
-✓ Created Knowledge/, Outputs/, Learnings/
+✓ Created folders: Knowledge/ Outputs/ Learnings/ Knowledge/01-Templates/ …
 ✓ Copied CLAUDE.md (PM context — edit this next)
 ✓ Copied Knowledge/workspace-tools.md (tool config — edit this next)
 
@@ -184,7 +184,7 @@ If you prefer not to use the guided flow, open the starter files in any text edi
 - **`CLAUDE.md`** — fill in the `[BRACKETED]` placeholders: your role, company, product, primary metric. Delete anything that doesn't apply. This is the context every skill reads first.
 - **`Knowledge/workspace-tools.md`** — fill in your tracker / analytics / docs tool names and the MCP server names that connect to them. Skip the sections you don't have — the skills that need a missing tool will tell you what's missing.
 
-The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them.
+The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them. Under `Knowledge/`, bootstrap also creates six numbered subfolders — `01-Templates` through `06-Projects` — for product docs, market context, ICP, workspace config, and active projects.
 
 <details>
 <summary><strong>Manual alternative (if the bootstrap script doesn't work)</strong></summary>
@@ -192,10 +192,10 @@ The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are
 From your workspace folder, run these four lines:
 
 ```bash
-mkdir -p Knowledge Outputs Learnings
+mkdir -p Knowledge/{01-Templates,02-Product-Knowledge,03-Market-Knowledge,04-ICP,05-Workspace-Tools,06-Projects} Outputs Learnings
 cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/templates/CLAUDE.md.template ./CLAUDE.md
 cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
-ls -la
+ls -la Knowledge
 ```
 
 The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` are there. Then run `/00-onboarding` (Step 3c) or edit the files manually (Step 3d).
@@ -411,6 +411,7 @@ Restart Claude Code after updating the plugin. Run `claude plugin list` to confi
 | Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/` |
 | Marketplace registry | `~/.claude/plugins/known_marketplaces.json` |
 | Your PM context | `<workspace>/CLAUDE.md` |
+| Knowledge layout | `<workspace>/Knowledge/01-Templates/` … `06-Projects/` (product, market, ICP, tools, projects) |
 | MCP/tool config | `<workspace>/Knowledge/workspace-tools.md` |
 | Onboarding summary | `<workspace>/Knowledge/onboarding-summary.md` |
 | Onboarding resume state | `<workspace>/Knowledge/onboarding-state.json` |
