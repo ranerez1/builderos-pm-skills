@@ -1,11 +1,11 @@
 {
   "name": "builderos-pm-skills",
-  "description": "BuilderOS PM workflow skills: customer discovery, PM/CTO/UX planning, PRD-to-tech-plan, UI/PM/R&D review, learn/retro, and competitor feature analysis. Designed for product managers using Monday, Mixpanel, Notion, Gmail and similar tools via MCP.",
-  "version": "1.1.0",
+  "description": "BuilderOS PM workflow skills: customer discovery, PM/CTO/UX planning, PRD-to-tech-plan, UI/PM/R&D review, learn/retro, competitor feature analysis, and external-doc ingestion into the Knowledge layer. Designed for product managers using Monday, Mixpanel, Notion, Gmail and similar tools via MCP.",
+  "version": "1.2.0",
   "author": {
     "name": "Ran Erez",
     "email": "ran@re-focus.io"
   },
   "homepage": "https://github.com/ranerez1/builderos-pm-skills",
-  "keywords": ["product-management", "pm", "prd", "discovery", "competitor-analysis", "monday", "mixpanel"]
+  "keywords": ["product-management", "pm", "prd", "discovery", "competitor-analysis", "knowledge-ingest", "monday", "mixpanel"]
 }

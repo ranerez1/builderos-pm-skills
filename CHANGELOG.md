@@ -4,11 +4,23 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.2.0 — 2026-06-11
+
 ### Added
+- **New skill `/12-ingest-knowledge`** — ingests external docs (Google Drive, Zoom recordings, Fathom / Timeless / Otter / Fireflies / Granola / Gong notetakers, Gmail attachments, local Inbox) and partitions them into `Knowledge/02–06` as token-efficient structured cards. Propose-then-confirm by default; supports `--auto-approve=high-confidence` for scheduled runs via `/schedule`. Hard 40-line / 1500-token cap per card; evidence stored as pointers, not raw quotes; controlled `entities` / `intents` vocab; append-before-create to prevent file sprawl.
+- **Per-folder routing rubric** — `Knowledge/02-Product-Knowledge` / `03-Market-Knowledge` / `04-ICP` / `06-Projects` each ship a `README.md` (via `templates/Knowledge/<folder>/README.md.template`) that defines the card schema and what belongs there. `01-Templates` and `05-Workspace-Tools` are hand-curated; the skill never writes to them.
+- **`Knowledge Sources` section in `workspace-tools.md`** — new template block for Drive, Zoom, notetakers, Gmail labels, and the local Inbox. `/00-onboarding` prompts for these during the tools phase.
+- **Helper folders on bootstrap** — `Knowledge/_inbox/` (drop zone for ad-hoc local files) and `Knowledge/_ingested/` (manifest log for dedupe + audit trail) are created on every fresh workspace install.
 - **Numbered `Knowledge/` subfolders on bootstrap** — `01-Templates`, `02-Product-Knowledge`, `03-Market-Knowledge`, `04-ICP`, `05-Workspace-Tools`, and `06-Projects` are created on every fresh workspace install via `bin/bootstrap.sh` and documented in `INSTALL.md`.
 
 ### Changed
 - `bin/validate-workspace.sh` warns when numbered Knowledge subfolders are missing (re-run bootstrap to add them on existing workspaces).
+- `/00-onboarding` now references 12 skills (was 11) and includes a Knowledge Sources Q&A step.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code to pick up `/12-ingest-knowledge`
+3. On existing workspaces, re-run `bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/bin/bootstrap.sh` from the workspace root to add the new READMEs and `_inbox/_ingested` helper folders. Idempotent — won't overwrite anything you've edited.
 
 ## 1.1.0 — 2026-06-08
 
