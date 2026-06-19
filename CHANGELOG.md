@@ -4,6 +4,24 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.3.0 — 2026-06-19
+
+### Changed
+- **`/12-ingest-knowledge` simplified.** The skill no longer fragments docs into many small claim-cards. New behaviour:
+  - **One topic file per (folder × topic)** with topic-slug filenames (`ops-manager.md`, `billing-edge-cases.md`) — no more `YYYY-MM-DD_<slug>.md` per ingestion. The date moves into a `## YYYY-MM-DD — …` section heading inside the file.
+  - **Append by default.** New evidence appends as a dated section to the best-fit existing file in the target folder. CREATE only when no file fits.
+  - **One routing decision per doc**, not per claim. A doc may produce two rows if it clearly spans two folders, but the unit is still doc → file.
+  - **No strict length caps.** Dropped the 40-line / 1500-token cap, the ≤20-word atomic-claim rule, the per-doc claim splitting, the schema enum, and the controlled-vocab README requirement.
+  - **One hard content rule kept**: never paste raw transcripts — summarise and link the source.
+  - **Lighter confirmation table** (`# / source / action / → file`).
+  - `--auto-approve` is now binary (the `high-confidence` tier is gone since confidence scoring was dropped).
+- Manifest, dedupe, `--dry-run`, `--source`, `--since` flags unchanged.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code.
+3. Existing cards under `Knowledge/02–06` are untouched — only future ingestion runs use the new shape. If you want to consolidate old date-stamped cards into topic files, do it by hand; the skill won't migrate them.
+
 ## 1.2.0 — 2026-06-11
 
 ### Added
