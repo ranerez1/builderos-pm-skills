@@ -1,0 +1,16 @@
+{
+  "name": "13-validation-storyboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validation-storyboard": "node scripts/main.mjs",
+    "validation-capture-url": "node scripts/capture-url.mjs",
+    "validation-capture-video-frames": "node scripts/capture-video-frames.mjs",
+    "validation-render-html": "node scripts/render-html.mjs",
+    "validation-render-md": "node scripts/render-md.mjs"
+  },
+  "dependencies": {
+    "cloakbrowser": "^0.3.31",
+    "playwright-core": "^1.40.0"
+  }
+}

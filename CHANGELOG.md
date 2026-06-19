@@ -4,6 +4,24 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.5.0 — 2026-06-19
+
+### Added
+- **New skill `/13-validation-storyboard`** — accepts either a live URL (`--url=<...>`) or a video (`--video=<path-or-platform-url>`) and produces a step-by-step validation artifact at `Outputs/validation-storyboards/<feature>-<date>/`:
+  - **`storyboard.html`** — self-contained, CSS-only (no JS) interactive page with per-step cards, screenshots, expected behavior, and assertions. CSS-only `:target` lightbox for screenshot zoom.
+  - **`validation.md`** — platform-agnostic prose playbook so any AI agent (Claude with a browser MCP, a Playwright bot, a human QA tester) can execute the validation independently against production.
+  - **`flow.json`** — source-of-truth schema; both renderers read it, and hand-edits re-render cleanly.
+- **URL mode** uses CloakBrowser with a persistent profile (cookies/localStorage survive across runs) — vendors the minimal launcher and profile-lock from skill 11. Interactive walk: navigate in the browser, describe each step in the terminal, screenshot captured per step. `flow.json` written incrementally — Ctrl-C leaves you with what you captured.
+- **Video mode — Tier A (`GEMINI_API_KEY` set)** sends the video to Gemini 2.5 Flash with a step-segmentation prompt and extracts a frame per step via ffmpeg.
+- **Video mode — Tier B (no Gemini key)** falls back to ffmpeg scene-detection (with uniform-sampling safety net) plus an interactive labeling loop. Same `flow.json` schema as Tier A — downstream renderers don't know which tier produced it. Skipped frames are deleted so `screenshots/` ends clean.
+- HTML template-literal + CSS-variables pattern adapted from skill 11's `presentation.mjs`; Gemini upload + polling pattern modeled after `~/.claude/skills/video-ux-review/`. Vendored, not imported — every skill stays self-contained.
+- `INSTALL.md` (skill-level) documents the Node + ffmpeg + yt-dlp + Python prerequisites; auto-installs `google-genai` into a `.venv` on first Tier A use.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code.
+3. First time you use `/13-validation-storyboard` in a workspace: run `npm install` in the skill folder (or let the skill do it on first invocation). For video mode, install `ffmpeg` and `yt-dlp` system-wide; for Tier A specifically, set `GEMINI_API_KEY` (or `GOOGLE_API_KEY`).
+
 ## 1.4.0 — 2026-06-19
 
 ### Added

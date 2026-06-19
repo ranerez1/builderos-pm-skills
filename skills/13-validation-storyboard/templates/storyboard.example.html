@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+  Visual reference for the storyboard render. The real render is produced by
+  scripts/render-html.mjs from flow.json — do not hand-edit. This file exists
+  so a designer/PM can preview the look without running the skill.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Storyboard mock — billing-export</title>
+  <style>
+    body { margin: 0; padding: 48px 24px; background: #fafaf7; color: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; line-height: 1.55; }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    header.hero { background: #fff; border: 1px solid #e5e3dc; border-radius: 12px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04); }
+    header.hero h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.01em; }
+    .meta-pill { background: #eff6ff; color: #2563eb; padding: 3px 10px; border-radius: 999px; font-weight: 500; font-size: 12px; margin-right: 12px; }
+    .step { background: #fff; border: 1px solid #e5e3dc; border-radius: 12px; padding: 0; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04); overflow: hidden; display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); }
+    .screenshot { background: #0f0f10; display: flex; align-items: center; justify-content: center; min-height: 220px; padding: 16px; color: #888; font-size: 13px; }
+    .body { padding: 24px 28px; }
+    .chip { display: inline-block; background: #2563eb; color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; }
+    h2 { margin: 10px 0 6px; font-size: 19px; }
+    .k { color: #6b6b6b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin: 14px 0 4px; }
+    .v { font-size: 14.5px; }
+    ul.assertions { margin: 4px 0 0; padding-left: 20px; font-size: 14.5px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Validation: billing-export</h1>
+      <p style="color:#6b6b6b;font-size:14px;">
+        <span class="meta-pill">staging</span>
+        captured via url · 2026-06-19
+      </p>
+      <p><strong>Goal:</strong> Ops manager can export a fiscal-month-aligned CSV in under 60 seconds</p>
+    </header>
+    <article class="step">
+      <div class="screenshot">[ screenshot of Exports page would go here ]</div>
+      <div class="body">
+        <span class="chip">Step 01</span>
+        <h2>Open Exports page</h2>
+        <div class="k">Action</div>
+        <div class="v">Click the 'Exports' link in the left navigation</div>
+        <div class="k">Expected behavior</div>
+        <div class="v">Exports page loads; 'New export' button is visible top-right</div>
+        <div class="k">Assertions</div>
+        <ul class="assertions">
+          <li>Page title contains 'Exports'</li>
+          <li>Button labeled 'New export' is visible and enabled</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

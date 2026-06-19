@@ -1,0 +1,68 @@
+{
+  "feature": "billing-export",
+  "url": "https://app.example.com",
+  "captured_at": "2026-06-19T14:22:00Z",
+  "captured_via": "url",
+  "preconditions": [
+    "Logged in as an ops-manager role",
+    "Account has at least one Stripe account connected",
+    "Feature flag 'export-v2' is enabled"
+  ],
+  "goal": "Ops manager can export a fiscal-month-aligned CSV in under 60 seconds",
+  "env": "staging",
+  "steps": [
+    {
+      "id": "01-open-exports",
+      "label": "Open Exports page",
+      "action": "Click the 'Exports' link in the left navigation",
+      "expected_behavior": "Exports page loads; 'New export' button is visible top-right",
+      "screenshot": "screenshots/01-open-exports.png",
+      "assertions": [
+        "Page title contains 'Exports'",
+        "Button labeled 'New export' is visible and enabled",
+        "Existing exports table is rendered (even if empty)"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "02-open-new-export-modal",
+      "label": "Open the new export modal",
+      "action": "Click the 'New export' button",
+      "expected_behavior": "A modal opens with date-range pickers and a 'Fiscal month' toggle",
+      "screenshot": "screenshots/02-open-new-export-modal.png",
+      "assertions": [
+        "Modal is visible with focus trapped inside it",
+        "'Fiscal month' toggle is present and defaults to off",
+        "'Generate' button is visible at the bottom of the modal"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "03-enable-fiscal-month-toggle",
+      "label": "Enable fiscal-month toggle",
+      "action": "Click the 'Fiscal month' toggle and select 'May 2026' from the dropdown",
+      "expected_behavior": "Toggle switches on; date-range pickers are replaced with a single month dropdown",
+      "screenshot": "screenshots/03-enable-fiscal-month-toggle.png",
+      "assertions": [
+        "Date-range pickers are hidden",
+        "Month dropdown shows the last 12 fiscal months",
+        "'Generate' button stays enabled"
+      ],
+      "notes": "Edge case: the dropdown should respect the org's fiscal-year setting"
+    },
+    {
+      "id": "04-generate-csv",
+      "label": "Generate the CSV",
+      "action": "Click 'Generate'",
+      "expected_behavior": "Spinner appears for <60s, then a download dialog opens with a CSV file",
+      "screenshot": "screenshots/04-generate-csv.png",
+      "assertions": [
+        "Spinner is visible during generation",
+        "Generation completes within 60 seconds",
+        "Browser download dialog opens with a .csv file",
+        "File name follows the pattern 'exports-YYYY-MM-fiscal.csv'"
+      ],
+      "notes": ""
+    }
+  ]
+}
