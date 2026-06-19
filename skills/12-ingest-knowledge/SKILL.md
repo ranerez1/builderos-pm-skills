@@ -59,6 +59,17 @@ For each confirmed source, pull docs via its MCP server (or read from `Knowledge
 
 Read `Knowledge/_ingested/manifest.jsonl`. Skip any doc whose `source_id` (or stable URL hash) already appears. Report skips by count.
 
+### 3.5) Salience filter
+
+For each surviving doc, ask one yes/no question: **does this contain content worth keeping as durable knowledge, or is it routine admin/internal noise?** Drop the noise silently — no manifest entry, no log. Report the skip count in step 7.
+
+- **Skip**: calendar holds, internal standups, 1:1s without customer/product/market content, ack/scheduling emails, file-sharing notifications, automated digests, status updates that contain no new information, meeting confirmations.
+- **Keep**: customer calls, prospect calls, strategy docs, competitor analysis, market research, project decisions, anything with concrete claims about users / product / market / personas.
+
+When uncertain, **keep** — the routing step downstream is the second line of defence and the user gets to reject rows in step 5.
+
+If the user passes `--no-salience-filter`, skip this step entirely (used to diagnose false negatives).
+
 ### 4) Route each doc
 
 For each remaining doc, decide:
@@ -69,6 +80,8 @@ For each remaining doc, decide:
 **Cross-folder docs**: if a single doc clearly spans two folders (common for customer calls that touch both persona signals and a feature ask), propose **two routing rows** for that doc — one per folder. Each row is still "doc → file," not "claim → file." Don't split a doc into more than two rows.
 
 **Append bias**: prefer APPEND. Only propose CREATE when no existing file in the target folder fits the doc's topic.
+
+**Pending-review pickup**: before showing the proposal table, read `Knowledge/_inbox/pending-review.md` (if it exists). Each entry there is a previously-queued CREATE proposal from an `--auto-approve=appends-only` run. Surface those entries at the **top** of the proposal table for this run — the user is more likely to want to drain the queue than to add new noise on top of it. Clear an entry from `pending-review.md` once the user approves or rejects it in step 5.
 
 ### 5) Propose-then-confirm
 
@@ -102,6 +115,7 @@ Source: [Zoom](https://zoom.us/rec/share/...) · participants: Ran, Pat
 Related: [billing-edges](../02-Product-Knowledge/billing-edges.md)
 ```
 
+- **Under `--auto-approve=appends-only`**: write APPEND rows directly to their topic files (no confirm). For CREATE rows, **do not write the topic file** — instead append an entry to `Knowledge/_inbox/pending-review.md` (see format below) and skip the topic-file write. The user will drain the queue on the next interactive run.
 - For `APPEND`: open the file, append the section at the bottom. Don't rewrite or reorder existing sections. If the file is missing an opening concept summary (see below), add one above the first dated section as part of this write.
 - For `CREATE`: create the file with an H1 title and a **1–3 sentence concept summary** describing what this topic is, then the first dated section. Example:
 
@@ -124,9 +138,30 @@ Related: [billing-edges](../02-Product-Knowledge/billing-edges.md)
 {"ts":"YYYY-MM-DDTHH:MM:SSZ","source":"zoom","source_id":"...","url":"...","wrote":["04-ICP/ops-manager.md","02-Product-Knowledge/billing-edges.md"],"action":["append","create"]}
 ```
 
+**Pending-review entry format** (for `--auto-approve=appends-only` CREATEs):
+
+```markdown
+## 2026-06-19T07:00 — Drive: "TAM 2026 v3"
+
+Proposed CREATE: `03-Market-Knowledge/smb-tam.md`
+Source: [Drive doc](https://...)
+Preview:
+> 2–4 sentence summary of what the doc is about and what claims it would contribute.
+
+To approve: re-run `/12-ingest-knowledge --since=2026-06-19 --source=drive` interactively.
+```
+
+Append to `Knowledge/_inbox/pending-review.md` (create the file with an `# Pending review` H1 if it doesn't exist). Do **not** add to the manifest — the doc isn't ingested yet.
+
 ### 7) Report
 
-Print: docs scanned / deduped / proposed / approved / written / rejected. List the file paths written.
+Print: docs scanned / deduped / **skipped as noise** / proposed / approved / written / rejected / **queued to pending-review**. List the file paths written.
+
+Example:
+
+```
+14 scanned · 2 deduped · 4 skipped as noise · 6 proposed · 5 written · 1 queued to pending-review
+```
 
 ## Content guidelines (light)
 
@@ -143,18 +178,22 @@ These are suggestions, not enforced rules. Use judgment.
 
 ## Flags
 
-- `--auto-approve` — skip the confirm step and write everything the skill proposes. Used by the scheduled mode.
+- `--auto-approve` (alias `--auto-approve=all`) — skip the confirm step and write everything the skill proposes. Used by interactive power-users; **not recommended for scheduled runs** (use `appends-only` instead).
+- `--auto-approve=appends-only` — write APPEND rows directly without confirm; queue CREATE rows to `Knowledge/_inbox/pending-review.md` for the next interactive run. **Recommended for scheduled mode** — it lets known topics grow unattended without spawning new files in your taxonomy.
+- `--no-salience-filter` — skip step 3.5 entirely; every doc reaches the routing step. Useful for diagnosing what the salience filter is dropping.
 - `--source=<name>` — limit to one configured source (e.g. `--source=zoom`).
 - `--since=YYYY-MM-DD` — override the default 14-day window.
-- `--dry-run` — classify and propose, never write or append to the manifest.
+- `--dry-run` — classify and propose, never write or append to the manifest or pending-review.
 
 ## Continuous / scheduled mode
 
-This skill takes no special action for scheduling. Use the existing `/schedule` skill:
+This skill takes no special action for scheduling. Use the existing `/schedule` skill — and prefer `--auto-approve=appends-only` so CREATEs land in the pending-review queue rather than spawning new topic files unattended:
 
 ```
-/schedule "daily at 7am" /12-ingest-knowledge --auto-approve --since=yesterday
+/schedule "daily at 7am" /12-ingest-knowledge --auto-approve=appends-only --since=yesterday
 ```
+
+Drain the queue on your next interactive run by typing `/12-ingest-knowledge` (no flags). Queued CREATEs surface at the top of the proposal table.
 
 ## Hard rules
 

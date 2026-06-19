@@ -4,6 +4,23 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.4.0 — 2026-06-19
+
+### Added
+- **Salience pre-filter** in `/12-ingest-knowledge` (step 3.5). Before routing, the skill asks "is this content worth keeping or routine admin/internal noise?" and drops noise (calendar holds, internal standups, ack emails, status updates) silently. The single biggest anti-spam move; makes scheduled `--auto-approve` runs safe. Opt out with `--no-salience-filter` to diagnose false negatives.
+- **`--auto-approve=appends-only` mode** for scheduled runs. Writes APPEND rows directly to known topic files but **queues CREATE rows** to `Knowledge/_inbox/pending-review.md` instead of spawning new files unattended. New scheduled-mode recommendation: `/schedule "daily at 7am" /12-ingest-knowledge --auto-approve=appends-only --since=yesterday`.
+- **`Knowledge/_inbox/pending-review.md` queue.** A single append-only markdown file that holds CREATE proposals queued by `--auto-approve=appends-only`. The next interactive run surfaces these entries at the top of the proposal table — drain by typing `/12-ingest-knowledge` (no flags). No new commands, no new lifecycle.
+- **`evals/` folder** with a five-minute runbook, six fixture docs covering the core invariants (salience filter, append vs create, cross-links, concept summary, no-paste rule, dedupe), seed Knowledge state, and an optional LLM-judge prompt template. Human-eyeball default; no CI, no harness, no golden diffs.
+
+### Changed
+- Report line now includes `skipped as noise` and `queued to pending-review` counts.
+- `--auto-approve` (bare) is now an alias for `--auto-approve=all`; behaviour unchanged for existing callers.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code.
+3. If you're running a scheduled ingestion: replace `--auto-approve` with `--auto-approve=appends-only` in your `/schedule` entry. Bare `--auto-approve` keeps working (back-compat) but `appends-only` is now the recommended scheduled-mode flag.
+
 ## 1.3.2 — 2026-06-19
 
 ### Changed
