@@ -98,6 +98,8 @@ Source: [Zoom](https://zoom.us/rec/share/...) · participants: Ran, Pat
 - Ran complained about manual CSV export every Monday morning.
 - Confirms manual reconciliation pain — already noted on 2026-05-30.
 - New: workflow takes ~90 min weekly; uses Excel pivot tables to summarise.
+
+Related: [billing-edges](../02-Product-Knowledge/billing-edges.md)
 ```
 
 - For `APPEND`: open the file, append the section at the bottom. Don't rewrite or reorder existing sections. If the file is missing an opening concept summary (see below), add one above the first dated section as part of this write.
@@ -115,6 +117,7 @@ Source: [Zoom](https://zoom.us/rec/share/...) · participants: Ran, Pat
   ```
 
   Why: downstream skills (PRD writing, customer discovery, reviewers) read top-of-file first. A short concept summary orients them in <100 tokens without scanning every dated section.
+- **Cross-link sibling sections from the same doc.** When a single doc produces multiple routing rows (e.g. one customer call → an ICP section *and* a Product-Knowledge section), each section ends with a `Related: [other-topic](relative/path.md)` line pointing at the other file(s). Use lowercase slug labels and relative paths from the section's own folder. This is the only mandatory linking rule — without it, downstream skills lose the "these came from the same conversation" connection.
 - Then append one line to `Knowledge/_ingested/manifest.jsonl`:
 
 ```json
@@ -134,6 +137,7 @@ These are suggestions, not enforced rules. Use judgment.
 - Lead each section with a one-line summary so the file stays scannable.
 - Use bullets where bullets are clearer, prose where prose is clearer. No atomic-claim word limits.
 - Link the source (Zoom URL, Drive URL, Gmail thread id) at the top of the section.
+- **Inline-link other topic files when their name comes up naturally.** If a section in `02-Product-Knowledge/billing-edges.md` mentions an ops manager and `04-ICP/ops-manager.md` already exists, prefer `[ops-manager](../04-ICP/ops-manager.md)` over a bare mention. Don't force it — only link when the file actually exists and the link would help a reader follow the thread. (Same-doc `Related:` links are mandatory; inline mentions are this softer second tier.)
 - A section can be one line or thirty — whatever fits the doc. No hard caps.
 - When new evidence restates something already in the file, say so explicitly ("confirms X — already noted on YYYY-MM-DD") instead of repeating the full point.
 

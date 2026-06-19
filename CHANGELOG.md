@@ -4,6 +4,12 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.3.2 — 2026-06-19
+
+### Changed
+- `/12-ingest-knowledge` now writes **cross-links between sibling sections from the same doc.** When a single ingestion produces multiple routing rows (e.g. one customer call → an ICP section *and* a Product-Knowledge section), each section ends with a `Related: [other-topic](relative/path.md)` line pointing at its siblings. Preserves the "these came from the same conversation" connection that was previously lost across folders.
+- Added a softer second-tier guideline: **inline-link other topic files** when their name comes up naturally in section prose and the file already exists. Not enforced — only suggested when it helps a reader follow the thread.
+
 ## 1.3.1 — 2026-06-19
 
 ### Changed
