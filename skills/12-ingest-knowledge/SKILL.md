@@ -100,8 +100,21 @@ Source: [Zoom](https://zoom.us/rec/share/...) · participants: Ran, Pat
 - New: workflow takes ~90 min weekly; uses Excel pivot tables to summarise.
 ```
 
-- For `APPEND`: open the file, append the section at the bottom. Don't rewrite or reorder existing sections.
-- For `CREATE`: create the file with this section as the first content. Optional one-line H1 title at the top (e.g. `# Ops Manager`).
+- For `APPEND`: open the file, append the section at the bottom. Don't rewrite or reorder existing sections. If the file is missing an opening concept summary (see below), add one above the first dated section as part of this write.
+- For `CREATE`: create the file with an H1 title and a **1–3 sentence concept summary** describing what this topic is, then the first dated section. Example:
+
+  ```markdown
+  # Ops Manager
+
+  Operations managers at mid-market SaaS companies who own weekly reconciliation
+  workflows. They're our primary buyer for the billing-edge surface — typically
+  Excel-fluent, time-boxed, and easily blocked by manual CSV exports.
+
+  ## 2026-06-19 — Zoom call with Acme (ops manager)
+  ...
+  ```
+
+  Why: downstream skills (PRD writing, customer discovery, reviewers) read top-of-file first. A short concept summary orients them in <100 tokens without scanning every dated section.
 - Then append one line to `Knowledge/_ingested/manifest.jsonl`:
 
 ```json
@@ -117,6 +130,7 @@ Print: docs scanned / deduped / proposed / approved / written / rejected. List t
 These are suggestions, not enforced rules. Use judgment.
 
 - **Never paste raw transcripts.** The one hard rule. Pasted transcripts defeat the point of an ingested layer — they belong at the source URL. Summarise instead.
+- **Open every topic file with a 1–3 sentence concept summary** under the H1, before any dated sections. It describes what the topic *is*, not what arrived today. Downstream skills (PRD, discovery, reviewers) read this first to orient cheaply. If you're appending to a file that lacks this summary, add one as part of the write.
 - Lead each section with a one-line summary so the file stays scannable.
 - Use bullets where bullets are clearer, prose where prose is clearer. No atomic-claim word limits.
 - Link the source (Zoom URL, Drive URL, Gmail thread id) at the top of the section.

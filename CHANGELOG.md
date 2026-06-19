@@ -4,6 +4,11 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.3.1 — 2026-06-19
+
+### Changed
+- `/12-ingest-knowledge` topic files now open with a **1–3 sentence concept summary** under the H1, before any dated sections. `CREATE` writes it on first contact; `APPEND` retroactively adds one if the file is missing it. Downstream skills (PRD, discovery, reviewers) read the top-of-file to orient in <100 tokens without scanning every section. Inspired by the [llms.txt](https://llmstxt.org/) convention and Matuschak's evergreen-notes "concept-oriented" principle.
+
 ## 1.3.0 — 2026-06-19
 
 ### Changed
