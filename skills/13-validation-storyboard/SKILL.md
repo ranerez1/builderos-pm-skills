@@ -126,6 +126,8 @@ Prints the three output paths and a one-line "open `storyboard.html` to review, 
 
 The folder is portable — zip and ship; screenshots are referenced relatively. Any agent that can read markdown + open a browser can run the validation.
 
+`storyboard.html` ships with an **"Inspection Console"** visual treatment (dark editorial-technical aesthetic, Newsreader serif + IBM Plex Sans + JetBrains Mono via Bunny Fonts with system fallback). Self-contained, CSS-only, no JS. The `assertions` field in `flow.json` renders under the label **"Checklist to validate"** in both `storyboard.html` and `validation.md` — the JSON field name is stable, only the rendered label changed in 1.7.0.
+
 ## flow.json schema
 
 See `templates/flow.example.json`. Minimal shape:

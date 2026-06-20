@@ -4,6 +4,18 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.7.0 — 2026-06-20
+
+### Changed
+- **`/13-validation-storyboard` storyboard.html got a full visual redesign** — "Inspection Console" aesthetic: dark editorial-technical look (warm off-white ink on near-black paper, amber accent, terminal-green for status), Newsreader serif display + IBM Plex Sans body + JetBrains Mono technical metadata via Bunny Fonts (Google Fonts mirror, no tracking) with graceful system fallback when offline. Asymmetric hero, left-rail step IDs, hairline-rule manifests, framed screenshots, film-grain SVG overlay. Page-load cascade animation (CSS-only, no JS). Replaces the previous generic dashboard-card look that hit `/frontend-design`'s warned-against "generic AI aesthetics" pattern.
+- **Renamed the rendered label from "Assertions" → "Checklist to validate"** in both `storyboard.html` and `validation.md`. The underlying `flow.json` field name stays `assertions` — schema is stable across versions, so any downstream consumer or hand-edit workflow is unaffected.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code.
+3. To refresh existing artifacts under the new look, re-run the renderers against any existing `flow.json`: `node scripts/render-html.mjs --flow=<path>` and `node scripts/render-md.mjs --flow=<path>`. No re-capture needed.
+4. `flow.json` schema unchanged; no migration.
+
 ## 1.6.0 — 2026-06-19
 
 ### Added

@@ -1,10 +1,8 @@
 #!/usr/bin/env node
-// Render storyboard.html from flow.json. Self-contained: CSS inline, image
-// paths relative. CSS-only :target lightbox for screenshot zoom — zero JS.
-// Adapted from skill 11 presentation.mjs template-literal pattern.
-//
-// Usage:
-//   node scripts/render-html.mjs --flow=Outputs/validation-storyboards/<dir>/flow.json
+// Render storyboard.html from flow.json — "Inspection Console" aesthetic.
+// Self-contained: CSS inline, image paths relative. CSS-only :target lightbox.
+// Fonts via Bunny Fonts (Google Fonts mirror); graceful system fallback offline.
+// No JavaScript. Re-render anytime by hand-editing flow.json and re-running.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,120 +27,463 @@ function escapeHtml(s) {
     .replace(/'/g, '&#39;');
 }
 
+// SVG noise overlay (data-URI) for film-grain atmosphere on surfaces.
+const NOISE_SVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.85  0 0 0 0 0.8  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`;
+
+const FONT_IMPORT = `@import url('https://fonts.bunny.net/css?family=newsreader:400,500,500i,600|ibm-plex-sans:300,400,500|jetbrains-mono:400,500&display=swap');`;
+
 const CSS = `
+  ${FONT_IMPORT}
+
   :root {
-    --ink: #1a1a1a;
-    --muted: #6b6b6b;
-    --paper: #fafaf7;
-    --card: #ffffff;
-    --border: #e5e3dc;
-    --accent: #2563eb;
-    --accent-soft: #eff6ff;
-    --pass: #16a34a;
-    --warn: #d97706;
-    --fail: #dc2626;
-    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
-    --radius: 12px;
-    --maxw: 1100px;
+    --ink:           #e8e6df;
+    --ink-soft:      #a8a59a;
+    --ink-faint:     #66635c;
+    --paper:         #0c0c10;
+    --surface:       #15151b;
+    --surface-edge:  rgba(255, 255, 255, 0.07);
+    --hairline:      rgba(255, 255, 255, 0.06);
+    --accent:        #f59e0b;
+    --accent-soft:   rgba(245, 158, 11, 0.12);
+    --pass:          #4ade80;
+
+    --f-display:     'Newsreader', Georgia, 'Iowan Old Style', 'Charter', serif;
+    --f-body:        'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --f-mono:        'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --maxw: 1140px;
+    --radius: 4px;
   }
+
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; line-height: 1.55; }
-  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 48px 24px 96px; }
-  header.hero { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 32px; box-shadow: var(--shadow); }
-  header.hero h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.01em; }
-  header.hero .feature-meta { color: var(--muted); font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
-  header.hero .meta-pill { background: var(--accent-soft); color: var(--accent); padding: 3px 10px; border-radius: 999px; font-weight: 500; font-size: 12px; }
-  header.hero .goal { font-size: 16px; margin: 12px 0 0; }
-  header.hero .pre { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
-  header.hero .pre h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
-  header.hero .pre ul { margin: 0; padding-left: 20px; font-size: 14px; color: var(--ink); }
-  .step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0; margin-bottom: 18px; box-shadow: var(--shadow); overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 0; }
-  @media (max-width: 760px) { .step { grid-template-columns: 1fr; } }
-  .step .screenshot { background: #0f0f10; display: flex; align-items: center; justify-content: center; min-height: 220px; padding: 16px; }
-  .step .screenshot a { display: block; width: 100%; }
-  .step .screenshot img { display: block; max-width: 100%; max-height: 380px; margin: 0 auto; border-radius: 6px; object-fit: contain; }
-  .step .body { padding: 24px 28px; }
-  .step .chip { display: inline-block; background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; }
-  .step h2 { margin: 10px 0 6px; font-size: 19px; letter-spacing: -0.005em; }
-  .step .field { margin-top: 14px; }
-  .step .field .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
-  .step .field .v { font-size: 14.5px; }
-  .step ul.assertions { margin: 4px 0 0; padding-left: 20px; font-size: 14.5px; }
-  .step ul.assertions li { margin: 3px 0; }
-  .step .notes { color: var(--muted); font-size: 13.5px; font-style: italic; margin-top: 12px; }
-  footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 48px; }
-  footer code { background: var(--border); padding: 1px 6px; border-radius: 4px; }
-  /* CSS-only lightbox */
-  .lb { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+  html { background: var(--paper); }
+  body {
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-weight: 300;
+    line-height: 1.6;
+    font-size: 15px;
+    letter-spacing: 0.005em;
+    background:
+      radial-gradient(circle at 50% 0%, #11111a 0%, #06060a 70%) fixed,
+      var(--paper);
+    background-blend-mode: normal;
+    min-height: 100vh;
+  }
+  /* Subtle film grain over the whole page */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("${NOISE_SVG}");
+    opacity: 0.04;
+    z-index: 0;
+  }
+  .wrap { position: relative; z-index: 1; max-width: var(--maxw); margin: 0 auto; padding: 72px 32px 96px; }
+
+  /* HERO ================================================================== */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 48px 56px;
+    margin-bottom: 72px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--hairline);
+    animation: hero-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .hero .doc-meta {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 18px;
+  }
+  .hero .doc-meta .dot { color: var(--accent); margin: 0 8px; }
+  .hero h1 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(36px, 5.5vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin: 0 0 24px;
+    color: var(--ink);
+  }
+  .hero h1 .subtle {
+    color: var(--ink-faint);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .hero .goal {
+    margin: 0;
+    padding: 4px 0 4px 16px;
+    border-left: 2px solid var(--accent);
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 60ch;
+  }
+  .hero .goal::before {
+    content: 'Goal · ';
+    font-family: var(--f-mono);
+    font-style: normal;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-right: 6px;
+    vertical-align: 4px;
+  }
+
+  .hero .col-right { min-width: 220px; }
+  .hero .pills {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+  }
+  .hero .pill {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    padding: 5px 12px;
+    border: 1px solid var(--surface-edge);
+    border-radius: 999px;
+    text-transform: lowercase;
+    white-space: nowrap;
+  }
+  .hero .pill.env { color: var(--accent); border-color: rgba(245, 158, 11, 0.4); }
+  .hero .pill a { color: inherit; text-decoration: none; }
+  .hero .pre h3 {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 0 0 12px;
+    text-align: right;
+  }
+  .hero .pre ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: right;
+  }
+  .hero .pre ol li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 4px 0;
+  }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; }
+    .hero .col-right .pills { align-items: flex-start; }
+    .hero .pre h3, .hero .pre ol { text-align: left; }
+  }
+
+  /* STEPS ================================================================= */
+  .steps { display: flex; flex-direction: column; gap: 56px; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 0 32px;
+    align-items: start;
+    opacity: 0;
+    animation: step-in 500ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    animation-delay: calc(180ms + var(--i, 0) * 70ms);
+  }
+  .step .rail {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--accent);
+    line-height: 1;
+    padding-top: 4px;
+    text-align: right;
+    position: relative;
+  }
+  .step .rail::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 100%;
+    background: var(--hairline);
+    position: absolute;
+    right: -16px;
+    top: 28px;
+    bottom: -56px;
+  }
+  .step:last-child .rail::after { display: none; }
+
+  .step .content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--surface-edge);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset, 0 10px 30px rgba(0,0,0,0.25);
+  }
+  @media (max-width: 760px) {
+    .step { grid-template-columns: 40px minmax(0, 1fr); gap: 0 16px; }
+    .step .content { grid-template-columns: 1fr; }
+    .step .rail::after { right: -12px; }
+  }
+
+  .step .frame {
+    background: #050507;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    min-height: 240px;
+    border-right: 1px solid var(--surface-edge);
+    position: relative;
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+  @media (max-width: 760px) { .step .frame { border-right: none; border-bottom: 1px solid var(--surface-edge); } }
+  .step .frame:hover {
+    box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.25), 0 0 60px rgba(245, 158, 11, 0.05);
+  }
+  .step .frame a {
+    display: block;
+    width: 100%;
+    transition: transform 220ms ease;
+  }
+  .step .frame a:hover { transform: scale(1.01); }
+  .step .frame img {
+    display: block;
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    border-radius: 2px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03),
+      0 0 0 2px rgba(0,0,0,0.5),
+      0 20px 40px rgba(0,0,0,0.4);
+  }
+  .step .frame .no-shot {
+    color: var(--ink-faint);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .step .body { padding: 32px 36px 36px; }
+  .step .body .step-no {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .step .body h2 {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    margin: 0 0 22px;
+    color: var(--ink);
+  }
+  .step .field { margin-top: 18px; }
+  .step .field .k {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 0 0 6px;
+    font-weight: 500;
+  }
+  .step .field .v {
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+
+  /* Checklist to validate — written-manifest treatment */
+  .step .checklist { list-style: none; padding: 0; margin: 6px 0 0; counter-reset: chk; }
+  .step .checklist li {
+    counter-increment: chk;
+    padding: 12px 0 12px 36px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .step .checklist li:last-child { border-bottom: none; }
+  .step .checklist li::before {
+    content: counter(chk, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  .step .notes {
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: rgba(245, 158, 11, 0.04);
+    border-left: 2px solid var(--accent);
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* FOOTER ================================================================ */
+  footer {
+    margin-top: 96px;
+    padding-top: 28px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    line-height: 1.8;
+  }
+  footer .stamp { color: var(--accent); }
+  footer code {
+    color: var(--ink-soft);
+    background: var(--surface);
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--surface-edge);
+  }
+
+  /* LIGHTBOX (CSS-only :target) =========================================== */
+  .lb {
+    position: fixed; inset: 0;
+    background: rgba(2, 2, 4, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 32px;
+  }
   .lb:target { display: flex; }
-  .lb img { max-width: 100%; max-height: 100%; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-  .lb .close { position: absolute; top: 18px; right: 24px; color: #fff; font-size: 30px; text-decoration: none; line-height: 1; opacity: 0.8; }
-  .lb .close:hover { opacity: 1; }
+  .lb img {
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .lb .close {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    color: var(--ink-soft);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    text-decoration: none;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid var(--surface-edge);
+    padding: 6px 12px;
+    border-radius: 3px;
+  }
+  .lb .close:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ANIMATIONS ============================================================ */
+  @keyframes hero-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes step-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 `;
 
 function renderStep(step, idx) {
   const num = String(idx + 1).padStart(2, '0');
   const lightboxId = `lb-${step.id}`;
-  const assertions = (step.assertions || [])
+  const checklist = (step.assertions || [])
     .map((a) => `<li>${escapeHtml(a)}</li>`)
     .join('');
-  const screenshotHtml = step.screenshot
+  const frameInner = step.screenshot
     ? `
-      <div class="screenshot">
-        <a href="#${lightboxId}"><img src="${escapeHtml(step.screenshot)}" alt="${escapeHtml(step.label)}"></a>
-      </div>
-      <div id="${lightboxId}" class="lb">
-        <a href="#" class="close" aria-label="Close">×</a>
-        <img src="${escapeHtml(step.screenshot)}" alt="${escapeHtml(step.label)}">
-      </div>`
-    : '<div class="screenshot"><span style="color:#666;font-size:13px;">No screenshot</span></div>';
+          <a href="#${lightboxId}"><img src="${escapeHtml(step.screenshot)}" alt="${escapeHtml(step.label)}"></a>
+        </div>
+        <div id="${lightboxId}" class="lb">
+          <a href="#" class="close">close</a>
+          <img src="${escapeHtml(step.screenshot)}" alt="${escapeHtml(step.label)}">`
+    : `<span class="no-shot">No screenshot</span>`;
 
   return `
-    <article class="step">
-      ${screenshotHtml}
-      <div class="body">
-        <span class="chip">Step ${num}</span>
-        <h2>${escapeHtml(step.label)}</h2>
-        ${step.action ? `<div class="field"><div class="k">Action</div><div class="v">${escapeHtml(step.action)}</div></div>` : ''}
-        ${step.expected_behavior ? `<div class="field"><div class="k">Expected behavior</div><div class="v">${escapeHtml(step.expected_behavior)}</div></div>` : ''}
-        ${assertions ? `<div class="field"><div class="k">Assertions</div><ul class="assertions">${assertions}</ul></div>` : ''}
-        ${step.notes ? `<div class="notes">${escapeHtml(step.notes)}</div>` : ''}
+      <div class="step" style="--i: ${idx};">
+        <div class="rail">${num}</div>
+        <div class="content">
+          <div class="frame">${frameInner}
+        </div>
+        <div class="body">
+          <p class="step-no">Step ${num}</p>
+          <h2>${escapeHtml(step.label)}</h2>
+          ${step.action ? `<div class="field"><div class="k">Action</div><div class="v">${escapeHtml(step.action)}</div></div>` : ''}
+          ${step.expected_behavior ? `<div class="field"><div class="k">Expected behavior</div><div class="v">${escapeHtml(step.expected_behavior)}</div></div>` : ''}
+          ${checklist ? `<div class="field"><div class="k">Checklist to validate</div><ol class="checklist">${checklist}</ol></div>` : ''}
+          ${step.notes ? `<div class="notes">${escapeHtml(step.notes)}</div>` : ''}
+        </div>
       </div>
-    </article>`;
+    </div>`;
 }
 
 function render(flow) {
-  const title = `Validation: ${flow.feature}`;
+  const title = flow.feature;
   const preconditions = (flow.preconditions || [])
     .map((p) => `<li>${escapeHtml(p)}</li>`)
     .join('');
   const stepsHtml = flow.steps.map((s, i) => renderStep(s, i)).join('\n');
   const capturedDate = flow.captured_at ? new Date(flow.captured_at).toISOString().slice(0, 10) : '';
+  const stepCount = (flow.steps || []).length;
 
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(title)}</title>
+  <title>Validation · ${escapeHtml(title)}</title>
   <style>${CSS}</style>
 </head>
 <body>
   <div class="wrap">
     <header class="hero">
-      <h1>${escapeHtml(title)}</h1>
-      <div class="feature-meta">
-        ${flow.env ? `<span class="meta-pill">${escapeHtml(flow.env)}</span>` : ''}
-        ${flow.captured_via ? `<span>captured via ${escapeHtml(flow.captured_via)}</span>` : ''}
-        ${capturedDate ? `<span>${escapeHtml(capturedDate)}</span>` : ''}
-        ${flow.url ? `<span><a href="${escapeHtml(flow.url)}" style="color: var(--accent); text-decoration: none;">${escapeHtml(flow.url)}</a></span>` : ''}
+      <div class="col-left">
+        <p class="doc-meta">Validation Manifest <span class="dot">·</span> ${stepCount} step${stepCount === 1 ? '' : 's'}${capturedDate ? ` <span class="dot">·</span> ${escapeHtml(capturedDate)}` : ''}</p>
+        <h1>${escapeHtml(title)}</h1>
+        ${flow.goal ? `<p class="goal">${escapeHtml(flow.goal)}</p>` : ''}
       </div>
-      ${flow.goal ? `<p class="goal"><strong>Goal:</strong> ${escapeHtml(flow.goal)}</p>` : ''}
-      ${preconditions ? `<div class="pre"><h3>Preconditions</h3><ul>${preconditions}</ul></div>` : ''}
+      <div class="col-right">
+        <div class="pills">
+          ${flow.env ? `<span class="pill env">${escapeHtml(flow.env)}</span>` : ''}
+          ${flow.captured_via ? `<span class="pill">captured via ${escapeHtml(flow.captured_via)}</span>` : ''}
+          ${flow.url ? `<span class="pill"><a href="${escapeHtml(flow.url)}">${escapeHtml(flow.url.replace(/^https?:\/\//, ''))}</a></span>` : ''}
+        </div>
+        ${preconditions ? `<div class="pre"><h3>Preconditions</h3><ol>${preconditions}</ol></div>` : ''}
+      </div>
     </header>
-    ${stepsHtml}
+    <section class="steps">
+${stepsHtml}
+    </section>
     <footer>
-      Generated by <code>/13-validation-storyboard</code> from <code>flow.json</code>. Re-render with <code>node scripts/render-html.mjs --flow=&lt;path&gt;</code>.
+      <span class="stamp">/13-validation-storyboard</span> <span style="color:var(--ink-faint)">·</span> generated from <code>flow.json</code><br>
+      Re-render with <code>node scripts/render-html.mjs --flow=&lt;path&gt;</code>
     </footer>
   </div>
 </body>

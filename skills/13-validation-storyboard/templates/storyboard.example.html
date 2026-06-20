@@ -1,55 +1,88 @@
 <!doctype html>
 <!--
-  Visual reference for the storyboard render. The real render is produced by
-  scripts/render-html.mjs from flow.json — do not hand-edit. This file exists
-  so a designer/PM can preview the look without running the skill.
+  Visual reference for the "Inspection Console" storyboard render (v1.7.0+).
+  The real render is produced by scripts/render-html.mjs from flow.json — do
+  not hand-edit. This file exists so a designer/PM can preview the look
+  without running the skill.
 -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Storyboard mock — billing-export</title>
   <style>
-    body { margin: 0; padding: 48px 24px; background: #fafaf7; color: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; line-height: 1.55; }
-    .wrap { max-width: 1100px; margin: 0 auto; }
-    header.hero { background: #fff; border: 1px solid #e5e3dc; border-radius: 12px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04); }
-    header.hero h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.01em; }
-    .meta-pill { background: #eff6ff; color: #2563eb; padding: 3px 10px; border-radius: 999px; font-weight: 500; font-size: 12px; margin-right: 12px; }
-    .step { background: #fff; border: 1px solid #e5e3dc; border-radius: 12px; padding: 0; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04); overflow: hidden; display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); }
-    .screenshot { background: #0f0f10; display: flex; align-items: center; justify-content: center; min-height: 220px; padding: 16px; color: #888; font-size: 13px; }
-    .body { padding: 24px 28px; }
-    .chip { display: inline-block; background: #2563eb; color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; }
-    h2 { margin: 10px 0 6px; font-size: 19px; }
-    .k { color: #6b6b6b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin: 14px 0 4px; }
-    .v { font-size: 14.5px; }
-    ul.assertions { margin: 4px 0 0; padding-left: 20px; font-size: 14.5px; }
+    @import url('https://fonts.bunny.net/css?family=newsreader:400,500,500i,600|ibm-plex-sans:300,400|jetbrains-mono:400,500&display=swap');
+    :root {
+      --ink: #e8e6df; --ink-soft: #a8a59a; --ink-faint: #66635c;
+      --paper: #0c0c10; --surface: #15151b; --surface-edge: rgba(255,255,255,0.07);
+      --hairline: rgba(255,255,255,0.06);
+      --accent: #f59e0b;
+      --f-display: 'Newsreader', Georgia, serif;
+      --f-body: 'IBM Plex Sans', system-ui, sans-serif;
+      --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 72px 32px; background: radial-gradient(circle at 50% 0%, #11111a 0%, #06060a 70%) fixed, var(--paper); color: var(--ink); font-family: var(--f-body); font-weight: 300; line-height: 1.6; }
+    .wrap { max-width: 1140px; margin: 0 auto; }
+    .hero { display: grid; grid-template-columns: 1fr auto; gap: 48px 56px; margin-bottom: 72px; padding-bottom: 40px; border-bottom: 1px solid var(--hairline); }
+    .doc-meta { font-family: var(--f-mono); font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.14em; margin: 0 0 18px; }
+    .doc-meta .dot { color: var(--accent); margin: 0 8px; }
+    h1 { font-family: var(--f-display); font-weight: 500; font-size: 56px; line-height: 1.04; letter-spacing: -0.02em; margin: 0 0 24px; }
+    .goal { padding: 4px 0 4px 16px; border-left: 2px solid var(--accent); font-family: var(--f-display); font-style: italic; font-size: 19px; max-width: 60ch; margin: 0; }
+    .goal::before { content: 'Goal · '; font-family: var(--f-mono); font-style: normal; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.14em; margin-right: 6px; vertical-align: 4px; }
+    .pills { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; margin-bottom: 24px; }
+    .pill { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-soft); padding: 5px 12px; border: 1px solid var(--surface-edge); border-radius: 999px; text-transform: lowercase; }
+    .pill.env { color: var(--accent); border-color: rgba(245,158,11,0.4); }
+    .step { display: grid; grid-template-columns: 64px 1fr; gap: 0 32px; margin-bottom: 56px; }
+    .rail { font-family: var(--f-mono); font-size: 13px; color: var(--accent); padding-top: 4px; text-align: right; }
+    .content { display: grid; grid-template-columns: 1.15fr 1fr; background: var(--surface); border: 1px solid var(--surface-edge); border-radius: 4px; overflow: hidden; }
+    .frame { background: #050507; min-height: 240px; display: flex; align-items: center; justify-content: center; color: var(--ink-faint); font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; border-right: 1px solid var(--surface-edge); }
+    .body { padding: 32px 36px; }
+    .step-no { font-family: var(--f-mono); font-size: 10px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 6px; }
+    h2 { font-family: var(--f-display); font-weight: 500; font-size: 26px; margin: 0 0 22px; }
+    .k { font-family: var(--f-mono); font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.18em; margin: 18px 0 6px; font-weight: 500; }
+    .v { font-size: 14.5px; line-height: 1.55; }
+    .checklist { list-style: none; padding: 0; margin: 6px 0 0; counter-reset: chk; }
+    .checklist li { counter-increment: chk; padding: 12px 0 12px 36px; border-bottom: 1px solid var(--hairline); position: relative; font-size: 14.5px; }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: counter(chk, decimal-leading-zero); position: absolute; left: 0; top: 14px; font-family: var(--f-mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.08em; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="hero">
-      <h1>Validation: billing-export</h1>
-      <p style="color:#6b6b6b;font-size:14px;">
-        <span class="meta-pill">staging</span>
-        captured via url · 2026-06-19
-      </p>
-      <p><strong>Goal:</strong> Ops manager can export a fiscal-month-aligned CSV in under 60 seconds</p>
-    </header>
-    <article class="step">
-      <div class="screenshot">[ screenshot of Exports page would go here ]</div>
-      <div class="body">
-        <span class="chip">Step 01</span>
-        <h2>Open Exports page</h2>
-        <div class="k">Action</div>
-        <div class="v">Click the 'Exports' link in the left navigation</div>
-        <div class="k">Expected behavior</div>
-        <div class="v">Exports page loads; 'New export' button is visible top-right</div>
-        <div class="k">Assertions</div>
-        <ul class="assertions">
-          <li>Page title contains 'Exports'</li>
-          <li>Button labeled 'New export' is visible and enabled</li>
-        </ul>
+      <div>
+        <p class="doc-meta">Validation Manifest <span class="dot">·</span> 4 steps <span class="dot">·</span> 2026-06-19</p>
+        <h1>billing-export</h1>
+        <p class="goal">Ops manager can export a fiscal-month-aligned CSV in under 60 seconds</p>
       </div>
-    </article>
+      <div>
+        <div class="pills">
+          <span class="pill env">staging</span>
+          <span class="pill">captured via url</span>
+          <span class="pill">app.example.com</span>
+        </div>
+      </div>
+    </header>
+    <div class="step">
+      <div class="rail">01</div>
+      <div class="content">
+        <div class="frame">[ screenshot of Exports page ]</div>
+        <div class="body">
+          <p class="step-no">Step 01</p>
+          <h2>Open Exports page</h2>
+          <div class="k">Action</div>
+          <div class="v">Click the 'Exports' link in the left navigation</div>
+          <div class="k">Expected behavior</div>
+          <div class="v">Exports page loads; 'New export' button is visible top-right</div>
+          <div class="k">Checklist to validate</div>
+          <ol class="checklist">
+            <li>Page title contains 'Exports'</li>
+            <li>Button labeled 'New export' is visible and enabled</li>
+            <li>Existing exports table is rendered (even if empty)</li>
+          </ol>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>

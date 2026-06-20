@@ -33,7 +33,7 @@ function renderStep(step, idx) {
     lines.push('');
   }
   if (step.assertions && step.assertions.length) {
-    lines.push('**Assertions:**');
+    lines.push('**Checklist to validate:**');
     for (const a of step.assertions) lines.push(`- ${a}`);
     lines.push('');
   }
