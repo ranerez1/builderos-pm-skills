@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "validation-storyboard": "node scripts/main.mjs",
-    "validation-capture-url": "node scripts/capture-url.mjs",
+    "validation-capture-url-auto": "node scripts/capture-url-auto.mjs",
+    "validation-capture-url-interactive": "node scripts/capture-url-interactive.mjs",
     "validation-capture-video-frames": "node scripts/capture-video-frames.mjs",
     "validation-render-html": "node scripts/render-html.mjs",
     "validation-render-md": "node scripts/render-md.mjs"

@@ -63,8 +63,16 @@ async function main() {
 
   // ---- Capture phase ---------------------------------------------------------
   if (args.url) {
-    const captureArgs = [path.join(__dirname, 'capture-url.mjs')];
-    for (const k of ['url', 'feature', 'env', 'goal', 'headless']) {
+    // Default to auto-walk (headless, no user input). --interactive opts into
+    // the manual walk-and-label flow.
+    const captureScript = args.interactive ? 'capture-url-interactive.mjs' : 'capture-url-auto.mjs';
+    if (args.interactive) {
+      console.log('Interactive mode: a browser will open and you will walk the flow yourself.');
+    } else {
+      console.log('Auto-walk mode: headless capture of discovered page sections. Pass --interactive to walk the flow yourself, --headed to watch the browser.');
+    }
+    const captureArgs = [path.join(__dirname, captureScript)];
+    for (const k of ['url', 'feature', 'env', 'goal', 'headless', 'headed', 'preconditions', 'max-sections']) {
       if (args[k] !== undefined) {
         const v = args[k];
         captureArgs.push(v === true ? `--${k}` : `--${k}=${v}`);

@@ -1,6 +1,6 @@
 ---
 name: 13-validation-storyboard
-description: Captures a product flow from either a live URL (CloakBrowser walk) or a video (Gemini-based step segmentation, or ffmpeg-based fallback when no Gemini key is set), then produces a self-contained interactive HTML storyboard plus a platform-agnostic validation.md playbook that any AI agent or human QA can execute against production. Use when the user asks to build a validation/QA storyboard, turn a video into a test plan, generate a regression checklist from a screen recording, or runs /13-validation-storyboard.
+description: Captures a product flow from either a live URL (headless auto-walk by default, interactive opt-in) or a video (Gemini-based step segmentation, or ffmpeg-based fallback when no Gemini key is set, with transcript awareness for both tiers). Produces a self-contained interactive HTML storyboard plus a platform-agnostic validation.md playbook that any AI agent or human QA can execute against production. Use when the user asks to build a validation/QA storyboard, turn a video into a test plan, generate a regression checklist from a screen recording, or runs /13-validation-storyboard.
 disable-model-invocation: true
 ---
 
@@ -35,9 +35,12 @@ Plus required:
 
 Plus optional:
 
-- `--goal="<one-line>"` — what success means. If omitted, you'll be asked interactively.
+- `--goal="<one-line>"` — what success means. If omitted, a templated goal is used (`The <feature> page renders all core sections...`).
 - `--env=<staging|production|preview>` — annotates the storyboard (default `staging`).
-- `--headless` — URL mode only; run the browser headless (default: headed so you can actually navigate).
+- `--interactive` — URL mode only; switch from headless auto-walk to a real-browser walk where you navigate by hand and type labels per step (the pre-1.6.0 behavior).
+- `--headed` — URL mode only; show the browser window during auto-walk (useful for debugging selectors).
+- `--max-sections=N` — auto-walk only; cap the number of discovered sections (default 8).
+- `--preconditions="line1|line2"` — pipe-separated preconditions to skip the prompt in auto-walk.
 
 ## Workflow
 
@@ -51,22 +54,47 @@ If `--goal` wasn't passed, the skill asks for it. Preconditions (e.g. "logged in
 
 ### 2) Capture
 
-**URL mode** (`scripts/capture-url.mjs`):
-- Launches CloakBrowser in headed mode against `--url` with a persistent profile under `~/.cache/builderos-validation-storyboard/<feature>/` (so re-runs stay logged in).
-- You navigate the flow in the browser. At each meaningful screen: switch back to the terminal, type a short label + action + expected behavior + assertions, screenshot is captured.
+**URL mode — Auto-walk (default)** (`scripts/capture-url-auto.mjs`):
+- Launches CloakBrowser **headless** at viewport `1440×700` against `--url` with a persistent profile under `~/.cache/builderos-validation-storyboard/<feature>/` (so re-runs stay logged in).
+- Always captures step `01-initial-load` (full page at scroll 0).
+- Discovers section headings via the heuristic in `scripts/lib/page-discovery.mjs`:
+  - Queries `h1, h2, h3, h4, [role="heading"]`.
+  - Groups by trimmed lowercase text. Within each group, picks the heading with the **largest absolute Y** (skips the common pattern where pages duplicate headings in a hidden mobile-nav at `top: 0`).
+  - Drops text < 2 chars or > 60 chars (skip icon-only nav labels and over-long page titles).
+  - Sorts by reading order down the page; caps at 8 (override with `--max-sections=N`).
+- For each section: scrolls heading to viewport-top + 24px, waits 700ms for layout settle, screenshots.
+- Auto-fills `action`, `expected_behavior`, and `assertions` heuristically (templated action; assertion count derived from visible cards/tiles/links within ~800px below each heading).
+- The user types **nothing**. Pass `--headed` to watch the browser, `--interactive` to switch to the manual walk.
+
+**URL mode — Interactive** (`scripts/capture-url-interactive.mjs`, opt-in via `--interactive`):
+- Launches CloakBrowser **headed** so you can navigate by hand.
+- At each meaningful screen: switch back to the terminal, type a short label + action + expected behavior + assertions, screenshot is captured.
 - `flow.json` is written incrementally — Ctrl-C leaves you with whatever you captured.
 - Type `done` as the label to finish.
 
 **Video mode — Tier A** (`scripts/capture-video.py`, runs when `GEMINI_API_KEY` is set):
-- Downloads the video (yt-dlp for URLs, direct file path otherwise).
-- Uploads to Gemini 2.5 Flash with a step-segmentation prompt: returns 4–12 sequential validation steps with timestamps + action + expected + assertions.
+- Downloads the video (yt-dlp for URLs, direct file path otherwise) and **best-effort fetches captions** (yt-dlp `--write-auto-subs` for platform URLs; looks for sidecar `.vtt`/`.srt` next to local files).
+- Uploads to Gemini 2.5 Flash with a step-segmentation prompt; **appends transcript** as a `TRANSCRIPT (timestamps in seconds): …` block when captions are available. Speaker narration grounds the step labels in what's said, not just what's visible.
+- Returns 4–12 sequential validation steps with timestamps + action + expected + assertions.
 - `ffmpeg` extracts a frame per step at its timestamp.
 
 **Video mode — Tier B** (`scripts/capture-video-frames.mjs`, fallback when no Gemini key):
 - Prints a notice: `No Gemini key found — falling back to frame extraction + interactive labeling. Set GEMINI_API_KEY to enable automatic step segmentation.`
-- `ffmpeg` scene-detect extracts 4–20 candidate frames. If outside that range, falls back to 8 uniformly-spaced frames.
-- For each candidate: shows the file path, asks for label (blank = skip), action, expected, assertions. Skipped frames are deleted.
-- Net result: same `flow.json` schema as Tier A. Downstream renderers don't know which tier produced it.
+- Also best-effort fetches captions (same logic as Tier A).
+- `ffmpeg` scene-detect extracts 4–20 candidate frames with timestamps. If outside that range, falls back to 8 uniformly-spaced frames.
+- For each candidate: shows the file path **plus the transcript snippet covering `[t-2s, t+5s]`** when captions are available, and pre-fills the label / action prompts from that snippet (you accept with Enter or edit).
+- Skipped frames are deleted. Same `flow.json` schema as Tier A — downstream renderers don't know which tier produced it.
+
+### How auto-walk decides what to capture
+
+Auto-walk is a **section-by-heading walker**, not a full-flow recorder. It captures the initial load plus every distinct section the page announces via a heading. This is the right model for **homepage and dashboard validation** where the page reveals its structure through headings.
+
+It is **not** the right model for:
+- Multi-screen flows (form wizards, signup funnels, modal sequences). Use `--interactive`.
+- Pages that hide content behind tabs, accordions, or hover states. Use `--interactive`.
+- Single-screen interstitials with no headings. Auto-walk captures only `01-initial-load` and tells you to re-run with `--interactive`.
+
+After auto-walk, edit `flow.json` to tighten assertions, then re-run only the renderers (`node scripts/render-html.mjs --flow=<path>` and similar) — no recapture needed.
 
 ### 3) Render
 

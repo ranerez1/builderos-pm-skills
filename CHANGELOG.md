@@ -4,6 +4,33 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.6.0 — 2026-06-19
+
+### Added
+- **`/13-validation-storyboard` URL mode now defaults to a fully headless auto-walk** (no user input). `scripts/capture-url-auto.mjs` discovers page section headings, scrolls to each, screenshots, and writes `flow.json` with templated `action` / `expected_behavior` / `assertions`. Lessons from real-world capture runs (a Halo dashboard test on `halo.preview.pixellot.tv`) are baked into the new lib:
+  - `scripts/lib/page-discovery.mjs` — `findHeadings` deduplicates same-text headings by picking the **deepest by absolute Y** (skips the common pattern where pages duplicate headings in a hidden mobile-nav at `top: 0`). `scrollToHeading` and `collectContextAroundHeading` are reusable for future capture modes.
+  - Viewport default lowered from `1440×900` → `1440×700` so tall pages have enough scroll runway for each section to land near the viewport top instead of clamping at max-scroll.
+  - Section cap defaults to 8 (`--max-sections=N` to override).
+- **`--interactive` flag** preserves the pre-1.6.0 manual walk (`scripts/capture-url-interactive.mjs` = renamed from `capture-url.mjs`). Use it for multi-screen flows, modals, or pages that hide content behind tabs/accordions.
+- **`--headed` flag** for auto-walk lets you watch the browser during a debugging run.
+- **Transcript-aware video capture** for both tiers. New `scripts/lib/transcript.mjs` fetches captions:
+  - **Platform URLs** (Loom, YouTube, Vimeo, etc.) — yt-dlp `--write-auto-subs --sub-format vtt --sub-langs "en.*,en-orig" --skip-download` runs alongside the video download.
+  - **Local files** — looks for a sidecar `<videofile>.vtt` or `.srt` in the same directory.
+  - Best-effort: silent fallback when no captions are available.
+- **Tier A (Gemini)** now appends a `TRANSCRIPT (timestamps in seconds): …` block to the prompt when captions are available. Speaker narration grounds step labels in what's said, not just what's visible — large quality lift on screen recordings.
+- **Tier B (no Gemini key)** now shows the transcript snippet around each scene-change timestamp (±2s/+5s window) and pre-fills the interactive label/action prompts so the user accepts with Enter rather than starting blank.
+
+### Changed
+- Auto-walk emits `01-initial-load` followed by `02-` … `0N-` step-per-discovered-heading. Filename schema unchanged (still `<NN>-<topic-slug>.png`).
+- ffmpeg helpers (`scripts/lib/ffmpeg.mjs`) now return `[{ path, timestamp }]` instead of bare paths so Tier B can align transcripts to scene-change frames. Internal API change only; renderers/flow.json untouched.
+- `--auto-approve=appends-only` from skill 12 is unaffected; no cross-skill changes.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code.
+3. If you were running `/13-validation-storyboard --url=<...>`: that command now defaults to auto-walk. To keep the old behavior (manual walk + label per step), add `--interactive`.
+4. No deps changed; no migration needed for existing `flow.json` artifacts.
+
 ## 1.5.0 — 2026-06-19
 
 ### Added

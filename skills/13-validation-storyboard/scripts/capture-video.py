@@ -78,6 +78,92 @@ def download_video(url: str, dest_dir: Path) -> Path:
     return files[0]
 
 
+def fetch_captions_for_url(url: str, dest_dir: Path) -> Path | None:
+    """Best-effort: try to fetch English captions for a platform URL.
+    Returns the .vtt path or None if no captions available."""
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    before = set(dest_dir.iterdir()) if dest_dir.exists() else set()
+    try:
+        subprocess.run(
+            [
+                "yt-dlp",
+                "--write-subs",
+                "--write-auto-subs",
+                "--sub-format",
+                "vtt",
+                "--sub-langs",
+                "en.*,en-orig",
+                "--skip-download",
+                "-o",
+                str(dest_dir / "captions.%(ext)s"),
+                url,
+            ],
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:
+        return None
+    new = [p for p in dest_dir.iterdir() if p.suffix.lower() == ".vtt" and p not in before]
+    return new[0] if new else None
+
+
+def find_sidecar_captions(video_path: Path) -> Path | None:
+    base = video_path.with_suffix("")
+    for ext in (".vtt", ".srt", ".VTT", ".SRT"):
+        candidate = base.with_suffix(ext)
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def parse_vtt(path: Path) -> list[dict]:
+    """Minimal VTT/SRT parser. Returns [{'start': float, 'end': float, 'text': str}]."""
+    if not path or not path.exists():
+        return []
+    raw = path.read_text(encoding="utf-8", errors="replace").replace("\r", "")
+    lines = raw.split("\n")
+    cues: list[dict] = []
+    ts_re = re.compile(
+        r"(\d{1,2}:)?(\d{1,2}):(\d{2})[.,](\d{1,3})\s*-->\s*(\d{1,2}:)?(\d{1,2}):(\d{2})[.,](\d{1,3})"
+    )
+    i = 0
+    while i < len(lines):
+        m = ts_re.search(lines[i])
+        if m:
+            start = _ts_to_seconds(m.group(1), m.group(2), m.group(3), m.group(4))
+            end = _ts_to_seconds(m.group(5), m.group(6), m.group(7), m.group(8))
+            text_lines = []
+            i += 1
+            while i < len(lines) and lines[i].strip() != "":
+                text_lines.append(_strip_vtt_inline(lines[i]))
+                i += 1
+            text = re.sub(r"\s+", " ", " ".join(text_lines)).strip()
+            if text:
+                cues.append({"start": start, "end": end, "text": text})
+        i += 1
+    return cues
+
+
+def _ts_to_seconds(hh: str | None, mm: str, ss: str, ms: str) -> float:
+    h = int(hh.replace(":", "")) if hh else 0
+    return h * 3600 + int(mm) * 60 + int(ss) + int((ms or "0").ljust(3, "0")[:3]) / 1000
+
+
+def _strip_vtt_inline(line: str) -> str:
+    line = re.sub(r"<\d{1,2}:\d{2}:\d{2}\.\d{3}>", "", line)
+    line = re.sub(r"</?[cv][^>]*>", "", line)
+    return line.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").strip()
+
+
+def format_cues_for_prompt(cues: list[dict], max_chars: int = 12000) -> str:
+    lines = [f'[{c["start"]:.1f}–{c["end"]:.1f}] "{c["text"]}"' for c in cues]
+    out = "\n".join(lines)
+    if len(out) > max_chars:
+        out = out[:max_chars] + "\n…(transcript truncated for length)…"
+    return out
+
+
 def extract_frame(video: Path, out_path: Path, seconds: float) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(
@@ -100,7 +186,7 @@ def extract_frame(video: Path, out_path: Path, seconds: float) -> None:
     )
 
 
-def call_gemini(video_path: Path) -> list[dict]:
+def call_gemini(video_path: Path, transcript: str = "") -> list[dict]:
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY (or GOOGLE_API_KEY) not set")
@@ -124,9 +210,17 @@ def call_gemini(video_path: Path) -> list[dict]:
     if uploaded.state.name != "ACTIVE":
         raise RuntimeError(f"Gemini upload failed: state={uploaded.state.name}")
 
+    prompt = PROMPT
+    if transcript:
+        prompt = (
+            PROMPT
+            + "\n\nTRANSCRIPT (timestamps in seconds — use this to ground the step labels in what the speaker says, not just what's visible):\n"
+            + transcript
+        )
+
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=[uploaded, PROMPT],
+        contents=[uploaded, prompt],
         config=genai_types.GenerateContentConfig(response_mime_type="application/json"),
     )
 
@@ -173,8 +267,21 @@ def main() -> int:
         sys.stderr.write("ffmpeg not found. Install: brew install ffmpeg\n")
         return 3
 
+    # Best-effort transcript fetch.
+    transcript_str = ""
+    captions_path: Path | None = None
+    if is_url(args.video):
+        captions_path = fetch_captions_for_url(args.video, Path("/tmp") / f"validation-captions-{os.getpid()}")
+    else:
+        captions_path = find_sidecar_captions(video_file)
+    if captions_path:
+        cues = parse_vtt(captions_path)
+        if cues:
+            transcript_str = format_cues_for_prompt(cues)
+            print(f"Transcript: {len(cues)} cue(s) loaded from {captions_path.name}", flush=True)
+
     print("Uploading to Gemini ...", flush=True)
-    steps = call_gemini(video_file)
+    steps = call_gemini(video_file, transcript=transcript_str)
     print(f"Gemini returned {len(steps)} step(s).", flush=True)
 
     preconditions = [s.strip() for s in (args.preconditions or "").splitlines() if s.strip()]

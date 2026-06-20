@@ -32,6 +32,12 @@ import {
   extractUniformFrames,
   videoDuration,
 } from './lib/ffmpeg.mjs';
+import {
+  fetchCaptionsForUrl,
+  findSidecarCaptions,
+  parseCaptions,
+  captionsAround,
+} from './lib/transcript.mjs';
 
 function parseArgs(argv) {
   const args = {};
@@ -122,6 +128,26 @@ async function main() {
   const duration = await videoDuration(videoFile);
   console.log(`Duration: ${duration.toFixed(1)}s`);
 
+  // Try to get captions (best-effort, silent on miss).
+  let cues = [];
+  if (tempVideoDir) {
+    try {
+      const capsPath = await fetchCaptionsForUrl(args.video, tempVideoDir);
+      if (capsPath) {
+        cues = parseCaptions(capsPath);
+        console.log(`Transcript: ${cues.length} cue(s) loaded from ${path.basename(capsPath)}`);
+      }
+    } catch {
+      /* ignore — proceed without */
+    }
+  } else {
+    const sidecar = findSidecarCaptions(videoFile);
+    if (sidecar) {
+      cues = parseCaptions(sidecar);
+      console.log(`Transcript: ${cues.length} cue(s) loaded from ${path.basename(sidecar)}`);
+    }
+  }
+
   // Tier B extraction: scene-detect first, fallback to uniform.
   console.log('Extracting candidate frames via scene-change detection ...');
   const sceneTmp = path.join(screenshotsDir, '_candidates-scene');
@@ -130,7 +156,7 @@ async function main() {
   if (candidates.length < 4 || candidates.length > 20) {
     console.log(`  scene-detect returned ${candidates.length} frame(s) — falling back to uniform sampling.`);
     // wipe scene candidates
-    for (const f of candidates) fs.rmSync(f, { force: true });
+    for (const c of candidates) fs.rmSync(c.path, { force: true });
     fs.rmSync(sceneTmp, { recursive: true, force: true });
     const uniformTmp = path.join(screenshotsDir, '_candidates-uniform');
     candidates = await extractUniformFrames(videoFile, uniformTmp, { count: 8 });
@@ -153,15 +179,31 @@ async function main() {
   let kept = 0;
   for (let i = 0; i < candidates.length; i += 1) {
     const candidate = candidates[i];
-    console.log(`\nFrame ${i + 1}/${candidates.length}: ${candidate}`);
+    const t = candidate.timestamp;
+    console.log(`\nFrame ${i + 1}/${candidates.length}${t != null ? ` (at ${t.toFixed(1)}s)` : ''}: ${candidate.path}`);
     console.log('  (open this file in Preview/Finder to view)');
 
-    const label = await prompt(rl, '  Label (blank = skip this frame)');
+    // Pre-fill from transcript when available.
+    let suggestedLabel = '';
+    let suggestedAction = '';
+    if (cues.length && t != null) {
+      const snippet = captionsAround(cues, t, { before: 2, after: 5 });
+      if (snippet) {
+        console.log(`\n  Transcript around this moment:`);
+        console.log(`  > "${snippet}"\n`);
+        // Cheap suggestion: first sentence as label, full snippet as action draft.
+        const firstSentence = snippet.split(/(?<=[.!?])\s+/)[0].trim();
+        suggestedLabel = firstSentence.replace(/[.!?]+$/, '').slice(0, 60);
+        suggestedAction = snippet.slice(0, 200);
+      }
+    }
+
+    const label = await prompt(rl, '  Label (blank = skip this frame)', suggestedLabel);
     if (!label) {
-      fs.rmSync(candidate, { force: true });
+      fs.rmSync(candidate.path, { force: true });
       continue;
     }
-    const action = await prompt(rl, '  Action taken');
+    const action = await prompt(rl, '  Action taken', suggestedAction);
     const expected = await prompt(rl, '  Expected behavior');
     const assertions = await promptMulti(rl, '  Assertions');
 
@@ -170,7 +212,7 @@ async function main() {
     const slug = slugify(label) || `step-${padded}`;
     const finalRel = path.join('screenshots', `${padded}-${slug}.png`);
     const finalAbs = path.join(outDir, finalRel);
-    fs.renameSync(candidate, finalAbs);
+    fs.renameSync(candidate.path, finalAbs);
 
     appendStep(
       flow,

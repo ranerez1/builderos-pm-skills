@@ -43,31 +43,41 @@ export async function videoDuration(videoPath) {
 
 /**
  * Extract scene-change frames. Writes PNGs into `outDir` named scene-001.png …
- * Returns the list of written file paths.
+ * Returns [{ path, timestamp }] — timestamp in seconds parsed from ffmpeg's
+ * showinfo filter stderr.
  */
 export async function extractSceneFrames(videoPath, outDir, { threshold = 0.3 } = {}) {
   fs.mkdirSync(outDir, { recursive: true });
   const pattern = path.join(outDir, 'scene-%03d.png');
-  await run('ffmpeg', [
+  const { stderr } = await run('ffmpeg', [
     '-y',
     '-i',
     videoPath,
     '-vf',
-    `select='gt(scene,${threshold})'`,
+    `select='gt(scene,${threshold})',showinfo`,
     '-vsync',
     'vfr',
     pattern,
   ]);
-  return fs
+  // showinfo lines look like: [Parsed_showinfo_1 @ 0x...] n: 0 pts: ... pts_time:3.456 pos: ...
+  const timestamps = [];
+  for (const m of stderr.matchAll(/pts_time:([\d.]+)/g)) {
+    timestamps.push(parseFloat(m[1]));
+  }
+  const files = fs
     .readdirSync(outDir)
     .filter((f) => f.startsWith('scene-') && f.endsWith('.png'))
-    .sort()
-    .map((f) => path.join(outDir, f));
+    .sort();
+  return files.map((f, i) => ({
+    path: path.join(outDir, f),
+    timestamp: timestamps[i] != null ? timestamps[i] : null,
+  }));
 }
 
 /**
  * Extract `count` frames evenly spaced across the video.
  * Names them uniform-001.png … inside outDir.
+ * Returns [{ path, timestamp }].
  */
 export async function extractUniformFrames(videoPath, outDir, { count = 8 } = {}) {
   fs.mkdirSync(outDir, { recursive: true });
@@ -75,10 +85,10 @@ export async function extractUniformFrames(videoPath, outDir, { count = 8 } = {}
   const step = duration / (count + 1);
   const out = [];
   for (let i = 1; i <= count; i += 1) {
-    const t = (step * i).toFixed(2);
+    const t = step * i;
     const fname = path.join(outDir, `uniform-${String(i).padStart(3, '0')}.png`);
-    await run('ffmpeg', ['-y', '-ss', t, '-i', videoPath, '-frames:v', '1', '-q:v', '2', fname]);
-    out.push(fname);
+    await run('ffmpeg', ['-y', '-ss', String(t.toFixed(2)), '-i', videoPath, '-frames:v', '1', '-q:v', '2', fname]);
+    out.push({ path: fname, timestamp: t });
   }
   return out;
 }
