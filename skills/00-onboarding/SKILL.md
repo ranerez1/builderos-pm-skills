@@ -10,7 +10,7 @@ Walk a PM through **post-install workspace setup** so they finish with:
 
 1. A clear mental model of what skills they have and where files live
 2. `CLAUDE.md` and `Knowledge/workspace-tools.md` filled for their product and company
-3. Awareness of all 11 workflow skills and which to run first
+3. Awareness of all 13 workflow skills and which to run first
 4. A saved summary at `Knowledge/onboarding-summary.md` with a personalized next step
 
 **Assumes:** the `builderos-pm-skills` plugin is already installed. Do not walk through `claude plugin install`.
@@ -95,7 +95,7 @@ Valid `phase` values (in order): `welcome` → `workspace` → `claude_md` → `
 
 ## Installed skills reference
 
-Use this table when explaining what the user has. Skills 01–12 ship with the plugin; this skill is `00`.
+Use this table when explaining what the user has. Skills 01–13 ship with the plugin; this skill is `00`.
 
 | # | Slash command | What it does |
 |---|---------------|--------------|
@@ -111,8 +111,9 @@ Use this table when explaining what the user has. Skills 01–12 ship with the p
 | 10 | `/10-learn` | Ship retro and/or process improvements; writes to `Learnings/`. |
 | 11 | `/11-competitor-feature-analysis` | Logged-in competitor UI capture; comparison report + HTML deck. |
 | 12 | `/12-ingest-knowledge` | Ingest external docs (Drive, Zoom, Fathom/Otter/Fireflies/Granola/Gong/Timeless, Gmail, local Inbox) into `Knowledge/02–06` as token-efficient cards. Propose-then-confirm. |
+| 13 | `/13-validation-storyboard` | Capture a URL or product/demo video into a validation storyboard — screenshots + checklist to validate. Needs Node (see INSTALL). |
 
-**Typical flow:** 01 discovery → 02–04 planning → 05 PRD → 06 tech plan → 07–09 review → 10 learn. Skills 11 (competitor analysis) and 12 (knowledge ingest) are standalone, run anytime.
+**Typical flow:** 01 discovery → 02–04 planning → 05 PRD → 06 tech plan → 07–09 review → 10 learn. Skills 11 (competitor analysis), 12 (knowledge ingest), and 13 (validation storyboard) are standalone, run anytime.
 
 ## Workflow
 
@@ -122,7 +123,7 @@ Use this table when explaining what the user has. Skills 01–12 ship with the p
 
 Explain in plain language:
 
-- They have **12 PM workflow skills** (show the table above, compactly)
+- They have **13 PM workflow skills** (show the table above, compactly)
 - Their key files: `CLAUDE.md`, `Knowledge/`, `Outputs/`, `Learnings/`
 
 Ask: *"Ready to set up your workspace? This takes about 5–10 minutes."*
@@ -257,7 +258,7 @@ Update state: `completed` includes `mcp`, `phase` → `tour`. Refresh `Knowledge
 
 **Progress:** Print progress header first (step 6 of 7 — Skills tour is current). Write `Knowledge/onboarding-progress.md`.
 
-1. Show the skill pipeline briefly: discovery (01) → planning (02–04) → PRD (05) → tech plan (06) → review (07–09) → learn (10). Skill 11 is separate.
+1. Show the skill pipeline briefly: discovery (01) → planning (02–04) → PRD (05) → tech plan (06) → review (07–09) → learn (10). Skills 11–13 (competitor analysis, knowledge ingest, validation storyboard) are standalone.
 2. Ask one question: **"What are you trying to accomplish this week?"**
 3. Pick a recommended next skill using this decision tree:
 
@@ -268,6 +269,8 @@ Update state: `completed` includes `mcp`, `phase` → `tour`. Refresh `Knowledge
 | Write a PRD (has a feature brief or prior planning) | `/05-create-prd` |
 | Review something already shipped | `/09-pm-reviewer` |
 | Compare competitors on a feature | `/11-competitor-feature-analysis` (+ INSTALL.md Step 6 for setup) |
+| Build the Knowledge base from docs, calls, or transcripts | `/12-ingest-knowledge` |
+| Validate / QA a shipped flow or a product/demo video | `/13-validation-storyboard` (+ INSTALL for setup) |
 | Unsure / just testing | `/05-create-prd` smoke test — paste a short problem statement; no MCP required |
 
 Store the recommendation for the finish phase.
@@ -290,7 +293,7 @@ Update state: `completed` includes `tour`, `phase` → `finish`. Refresh `Knowle
 - Tools: <compact list, e.g. backlog=Monday, analytics=Mixpanel, or "none configured (paste mode)">
 
 ## Your installed skills
-<compact table or bullet list of /01 through /11>
+<compact table or bullet list of /01 through /13>
 
 ## Recommended next step
 Run `<slash-command>` because <one sentence tied to their stated goal>.
@@ -298,6 +301,7 @@ Run `<slash-command>` because <one sentence tied to their stated goal>.
 ## Optional later
 - Configure MCP servers you skipped: <list or "none">
 - Skill 11 competitor analysis: see INSTALL.md Step 6
+- Skill 13 validation storyboard: needs Node — see INSTALL.md
 - Re-run `/00-onboarding` anytime to update context
 ```
 

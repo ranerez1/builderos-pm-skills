@@ -22,12 +22,10 @@ If the session also exposed **skill or process** gaps, add the **Process / skill
 When there is **no** ship context (bad chat, wrong tool use, missed rule, user critique, repeated corrections): **do not** invent product intent or force PRD/TDD edits.
 
 1. Classify **explicit** user feedback vs **implicit** signals (misunderstandings, tool errors, plan drift, avoidable retries).
-2. **Inventory relevant skills:** paths the user named plus implicated `.cursor/skills/**/SKILL.md` (and matching `.claude/commands/*.md`)—use **lightweight** search/read; do not rewrite every skill.
-3. For each implicated file: **concrete** recommendations (new step, input, guardrail, wording).
+2. **Identify the implicated skill(s) by slash command / name** (e.g. `/05-create-prd`). BuilderOS skills are installed **read-only** from the plugin (under `~/.claude/plugins/cache/...`, replaced on every update), so you can't edit them in place — capture *what should change*, don't try to patch files.
+3. For each implicated skill: write a **concrete** recommendation (new step, input, guardrail, wording) in the learning note.
 4. Write **`Learnings/YYYY-MM-DD_<short-slug>.md`** using the full template.
-5. **Apply** changes to skills/commands **only if** the user explicitly asks to **apply** in the **same** run. Otherwise recommendations live in chat + the learning note only.
-
-When applying: follow **skills sync**—any change under `.cursor/skills/**/SKILL.md` that has a numbered command must update the matching **self-contained** `.claude/commands/<same-name>.md` (no links to `.cursor/skills/...` in the command body).
+5. **Send it upstream (optional):** offer to file the recommendations as feedback to the plugin author — draft a ready-to-paste issue body, or run `gh issue create` against the plugin repo if the user asks. **Never edit installed plugin files.**
 
 ## Inputs (minimal; infer when possible)
 
@@ -116,11 +114,11 @@ When applying: follow **skills sync**—any change under `.cursor/skills/**/SKIL
 ## Implicit signals / model–tool failures
 - Wrong assumptions, missed rules, tool errors, approval friction, plan drift
 
-## Affected skills / commands
-- `path/to/SKILL.md` or `.claude/commands/....md`
+## Affected skills
+- `/NN-skill-name` (the installed BuilderOS skill this concerns)
 
-## Recommended changes (do not apply unless user requested apply in this run)
-- **File:** `...` — change: ...
+## Recommended changes (for the plugin author)
+- **Skill:** `/NN-skill-name` — change: ...
 
 ## Ship retro (if mode A or mixed)
 ### What went well
@@ -149,11 +147,11 @@ When applying: follow **skills sync**—any change under `.cursor/skills/**/SKIL
 2. **Mode A:** locate/update PRD + TDD; append retro blocks.
 3. **Mode B (or mixed):** classify feedback; list implicated skills; write recommendations.
 4. Write **`Learnings/...md`** (full template; omit sections that truly don’t apply).
-5. If user said **apply**: patch skills + mirror commands per sync rule; summarize diffs.
+5. **Mode B:** optionally offer to file the recommendations upstream to the plugin author (ready-to-paste issue or `gh issue create`); never edit installed plugin files.
 
 ## Output (to the user)
 
 - Path to **`Learnings/...`**
 - Paths of updated PRD/TDD **if** mode A ran
-- If recommendations only: list **recommended** file edits; if applied: note **what changed**
+- Mode B: the list of **recommended skill changes** (and the issue link, if one was filed)
 - **5–10 bullets** summarizing learnings and follow-ups

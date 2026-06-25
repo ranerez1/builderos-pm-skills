@@ -21,6 +21,9 @@ This is a **technical brainstorm partner**, not a CTO execution plan and **not a
   - **Non-goals**: what is explicitly out
   - **Constraints**: timing, platform, dependencies, compliance
   - **Non-functional needs (if any are known)**: latency, scale, reliability, security/compliance, data retention
+- **Codebase location** (important — this skill is grounded in real code):
+  - If the workspace **is** the product repo, or the user gives a repo/module path, scan it (Step 2).
+  - If **no codebase is accessible** (e.g. a PM workspace with no product code checked out), say so and run an **assumption-based** brainstorm instead: mark every code-dependent item `[NEED: confirm in code — …]`, and tell the user they'll get a far stronger result by re-running with the repo open or passing a repo path.
 
 Mark unknowns with `[NEED: ...]` (matching the `/02-pm-planner` convention).
 
@@ -54,9 +57,9 @@ If multiple versions exist for a role, prefer the **highest `_vN`**; otherwise u
   - **Evidence** (so we don't overbuild)
 - **Discovery-first branch**: if the PM picked a discovery / validation candidate, shift focus to "what would we instrument and what data would tell us this works" — do **not** stress-test architecture for a feature that hasn't been validated yet.
 
-### 2) Targeted codebase scan
+### 2) Targeted codebase scan (when a codebase is accessible)
 
-Stay grounded in the actual repo.
+**If no codebase is accessible**, skip this step: note "no codebase scanned — findings are assumption-based" and mark every code-dependent item `[NEED: confirm in code — …]` throughout the rest of the doc. Otherwise, stay grounded in the actual repo.
 
 - Identify the **likely-affected modules / files** from the initiative description.
 - Read those files, then follow imports **1 hop** to understand neighbors.
@@ -135,7 +138,7 @@ Use this template:
 - Evidence:
 
 ### Codebase findings (targeted scan)
-- Likely-affected modules / files:
+- Likely-affected modules / files: <!-- or "No codebase scanned — assumption-based" -->
 - Existing patterns to follow (auth / errors / logging / data access / feature flags):
 - Sharp edges / legacy / hidden coupling:
 - Public contracts at risk:
