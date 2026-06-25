@@ -192,8 +192,10 @@ Interview for `CLAUDE.md`. Map answers to these fields from the template:
 | Company | `[Your company]` |
 | Product | `[One-line product description]` |
 | Target users | `[Who the product serves]` |
+| Product stage / business model | `[e.g. seed-stage B2B SaaS, PLG \| growth, sales-led \| consumer subscription]` |
+| Key stakeholders / decision-makers | `[Who approves/decides — e.g. CEO, eng lead, design lead]` |
 | Current focus | `[Current quarter/half theme]` |
-| Primary metric | `[Your North Star or current priority metric]` |
+| Primary metric | `[The one metric you're driving now — your North Star (NSM), or this quarter's priority if different]` |
 | OKRs | `[Paste OKRs or [NEED: define explicit OKRs]]` |
 
 **If file already exists:** read it first. Only replace lines that still contain `[BRACKETED]` placeholders or obvious template defaults. Preserve terminology, guardrails, writing rules, sub-agent roles, verification sequence, and workspace conventions sections unchanged.
@@ -202,9 +204,10 @@ Interview for `CLAUDE.md`. Map answers to these fields from the template:
 
 1. What's your role and company?
 2. In one line, what does your product do, and who is it for?
-3. What's your current focus this quarter/half?
-4. What's your primary metric or North Star right now?
-5. (Optional) Paste OKRs or say "skip" → use `[NEED: define explicit OKRs]`
+3. (Optional) What stage / business model is the product (e.g. seed B2B SaaS, PLG), and who are the key decision-makers? Skip → `[NEED: ...]`
+4. What's your current focus this quarter/half?
+5. What's the one metric you're driving now — your North Star, or this quarter's priority if different?
+6. (Optional) Paste OKRs or say "skip" → use `[NEED: define explicit OKRs]`
 
 Show a preview of the PM Context header block, then write/update `CLAUDE.md`.
 

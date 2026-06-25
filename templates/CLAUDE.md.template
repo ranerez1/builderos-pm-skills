@@ -9,15 +9,16 @@
 - **Company:** [Your company]
 - **Product:** [One-line product description]
 - **Target users:** [Who the product serves]
+- **Product stage / business model:** [e.g. seed-stage B2B SaaS, PLG | growth, sales-led | consumer subscription]
+- **Key stakeholders / decision-makers:** [Who approves/decides — e.g. CEO, eng lead, design lead]
 - **Current focus:** [Current quarter/half theme]
-- **Primary metric:** [Your North Star or current priority metric]
+- **Primary metric:** [The one metric you're driving now — your North Star (NSM), or this quarter's priority if different from the NSM]
 - **Guardrails:**
   - Never fabricate data, quotes, or metrics — use `[NEED: data from X]` for gaps
   - Separate problem space from solution space in all PRDs
   - Evidence-based requirements: 2–5 bullets of user research, quotes, or analytics per PRD
   - No solution-led requirements
-  - Max 3 files per backlog issue; default priority: Medium
-- **OKRs:** [Paste OKRs or `[NEED: define explicit OKRs]`]
+- **OKRs:** [Paste OKRs or `[NEED: define explicit OKRs]` — the objectives this metric ladders up to]
 
 ---
 
@@ -44,7 +45,6 @@
 - Lead with the recommendation, then context.
 - Audience-match: casual for Slack, structured for docs, precise for specs.
 - Banned words: delve, landscape, synergy, leverage, robust, streamline, cutting-edge.
-- Never fabricate data, quotes, or metrics. Use `[NEED: data from X]` for gaps.
 
 ---
 
@@ -66,7 +66,7 @@ When you say "review as [role]," fully adopt that perspective:
 ## Verification Sequence
 
 For any deliverable:
-1. Clarify — ask 3–5 questions before generating. Never assume.
+1. Clarify — when the workspace/Knowledge doesn't already answer them, ask up to 3–5 questions before generating. Don't interrogate when context already exists; never invent missing facts.
 2. Draft — default short. Over 2 pages? Ask first.
 3. Self-review — check against the relevant skill's checklist and anti-patterns.
 4. Flag gaps — surface unknowns with `[NEED: ...]`, don't fill them with guesses.
@@ -75,10 +75,9 @@ For any deliverable:
 
 ## Workspace conventions
 
-- PRDs → `Outputs/Product PRDs/YYYY-MM-DD_<itemId>_<slug>.md`
+- PRDs → `Outputs/Product PRDs/YYYY-MM-DD_<short-slug>.md` (prefix the tracker key when known: `YYYY-MM-DD_<TRACKER-KEY>-<n>_<short-slug>.md`)
 - Technical Design Docs → `Outputs/Technical Docs/`
 - Learnings / retros (`/10-learn`) → `Learnings/`
-- Tool/MCP IDs → `Knowledge/workspace-tools.md`
 
 ---
 
