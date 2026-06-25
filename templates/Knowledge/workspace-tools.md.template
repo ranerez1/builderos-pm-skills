@@ -36,6 +36,7 @@ Skills read this file to resolve tool URLs/IDs and MCP server names.
 - **MCP Server**: `<mcp-server-name>`
 
 ## Analytics
+_Used by `/14-mixpanel-data-analysis`._
 - **Tool**: _e.g. Mixpanel / Amplitude / PostHog_
 - **MCP Server**: `<mcp-server-name>`
 

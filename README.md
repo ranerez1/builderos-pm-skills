@@ -1,6 +1,6 @@
 # BuilderOS PM Skills
 
-A Claude Code plugin with 11 PM workflow skills (+ interactive onboarding) covering the full loop from customer discovery → planning → PRD → tech plan → review → learn → competitor analysis.
+A Claude Code plugin with 14 PM workflow skills (+ interactive onboarding) covering the full loop from customer discovery → planning → PRD → tech plan → review → learn, plus competitor analysis, knowledge ingest, validation storyboards, and Mixpanel data analysis.
 
 ## Skills
 
@@ -18,6 +18,9 @@ A Claude Code plugin with 11 PM workflow skills (+ interactive onboarding) cover
 | 09 | `/09-pm-reviewer` | Review PRD + shipped experience as a PM (problem, scope, trade-offs, metrics, rollout). |
 | 10 | `/10-learn` | Ship retro (update PRD/TDD) and/or process–skill improvement; writes to `Learnings/`. |
 | 11 | `/11-competitor-feature-analysis` | Capture logged-in competitor product UI via CloakBrowser, compare a feature across competitors, generate a report + HTML deck. |
+| 12 | `/12-ingest-knowledge` | Ingest external docs (Drive, Zoom, notetakers, Gmail, local Inbox) into `Knowledge/` as structured cards. Propose-then-confirm. |
+| 13 | `/13-validation-storyboard` | Capture a URL or product/demo video into a validation storyboard — screenshots + a checklist to validate. |
+| 14 | `/14-mixpanel-data-analysis` | Investigate why a metric moved in Mixpanel, then build a live dashboard + a saved analysis memo in `Outputs/Analytics/`. |
 
 > Upgrading from 0.x? Skills 05–10 were renumbered to 06–11 to make room for `/05-create-prd`. See [CHANGELOG.md](CHANGELOG.md).
 
@@ -58,6 +61,9 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 | 06–09 review | Optional — works with pasted content too | MCP makes it pull context automatically |
 | 10 learn | Tracker MCP optional | Reads PRD/TDD from `Outputs/`, writes to `Learnings/` |
 | 11 competitor-analysis | None — uses CloakBrowser locally | Needs Node 18+, macOS/Windows |
+| 12 ingest-knowledge | Source MCPs (Drive/Zoom/notetakers/Gmail) **OR** local `Knowledge/_inbox/` | Set under "Knowledge Sources" in workspace-tools |
+| 13 validation-storyboard | None — drives a local browser | Needs Node 18+ |
+| 14 mixpanel-data-analysis | Mixpanel MCP (query + dashboard tools) | Reads NSM from `CLAUDE.md`; writes `Outputs/Analytics/` |
 
 ## Updating
 
@@ -86,7 +92,10 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 │   ├── 08-rnd-reviewer/SKILL.md
 │   ├── 09-pm-reviewer/SKILL.md
 │   ├── 10-learn/SKILL.md
-│   └── 11-competitor-feature-analysis/      # SKILL.md + scripts + INSTALL.md
+│   ├── 11-competitor-feature-analysis/      # SKILL.md + scripts + INSTALL.md
+│   ├── 12-ingest-knowledge/SKILL.md
+│   ├── 13-validation-storyboard/            # SKILL.md + scripts
+│   └── 14-mixpanel-data-analysis/SKILL.md
 └── templates/
     ├── CLAUDE.md.template
     ├── Knowledge/workspace-tools.md.template

@@ -4,8 +4,22 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.8.0 — 2026-06-25
+
 ### Added
+- **New skill `/14-mixpanel-data-analysis`.** Runs a structured metric investigation in Mixpanel (frame → confirm data → investigate loop), then turns the findings into a live dashboard *and* a saved analysis memo under `Outputs/Analytics/`. Reads the analytics MCP server name from `Knowledge/workspace-tools.md`, grounds the question in the North Star metric from `CLAUDE.md`, and hands off to `/02-pm-planner`, `/05-create-prd`, and `/09-pm-reviewer`. Positioned as the quantitative counterpart to `/01-customer-discovery`. Degrades gracefully (memo + query specs) when the analytics MCP has no dashboard tools.
 - **Optional "Taskley" practice workspace.** A ready-made sample workspace built around a fictional task-management product, for trying the skills without wiring up your own product. Ships as plugin assets under `templates/sample-workspace/` (populated `Knowledge/` 01–06, a self-contained single-file web app at `06-Projects/Taskley-App/index.html`, and pre-captured `competitor-flows/` so `/11` runs with no competitor logins). New `bin/load-sample.sh` copies it into a throwaway workspace folder — **copy-if-missing**, so it never overwrites existing files. Documented as optional **INSTALL.md Step 3e**. Strictly opt-in: `bin/bootstrap.sh` and a normal install are unchanged.
+
+### Changed
+- **`/10-learn` fixed for installed (read-only) skills.** Dropped the `.cursor/skills` + `.claude/commands` "skills sync" and the "apply edits to installed skills" path — a marketplace user can't patch plugin files. Process/skill-tuning mode now writes recommendations to the user's Learnings note and optionally files them upstream to the plugin author. Ship-retro mode (edits the user's own PRDs/TDDs) is unchanged.
+- **`CLAUDE.md` template tightened.** Removed two dead guardrails ("Max 3 files per backlog issue", "default priority: Medium"); reconciled the Verification "ask 3–5 questions" rule with the skills' "ask only if missing"; de-duplicated the fabrication rule and the workspace-tools pointer; clarified the Primary metric vs OKRs fields; added *Product stage / business model* and *Key stakeholders* context fields; aligned the PRD filename convention with `/05-create-prd`.
+- **`/03-cto-planner` no-codebase fallback.** Repo scan stays primary, but when no product code is accessible it now runs an assumption-based brainstorm and marks code-dependent items `[NEED: confirm in code]`.
+- **Docs synced.** README/INSTALL skill inventory brought current (the previously-missing `/12` and `/13` rows added alongside `/14`); `/00-onboarding` skill map and counts updated through 14; update command qualified with the `@builderos-pm` marketplace.
+
+### Upgrade path
+1. `claude plugin update builderos-pm-skills@builderos-pm`
+2. Restart Claude Code.
+3. To use `/14-mixpanel-data-analysis`, set an analytics tool + MCP server name under **Analytics** in `Knowledge/workspace-tools.md`. No migration needed.
 
 ## 1.7.0 — 2026-06-20
 

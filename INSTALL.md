@@ -119,7 +119,7 @@ claude plugin list
 
 You should see `builderos-pm-skills@builderos-pm` with status `✔ enabled`.
 
-**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/`. Skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/00-onboarding` for setup, `/01-customer-discovery` through `/11-competitor-feature-analysis` for PM work) and auto-triggered by the model when relevant.
+**What just happened:** Claude Code cloned this repo into `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/<version>/`. Skills under `skills/*/SKILL.md` are now discoverable as slash commands (`/00-onboarding` for setup, `/01-customer-discovery` through `/14-mixpanel-data-analysis` for PM work) and auto-triggered by the model when relevant.
 
 ---
 
@@ -173,7 +173,7 @@ The guide will walk you through:
 - What the plugin installed and where files live
 - Filling `CLAUDE.md` with your role, company, product, and metrics
 - Configuring `Knowledge/workspace-tools.md` for your tracker, analytics, and other tools
-- A tour of skills 01–11 and a **personalized recommendation** for what to run first
+- A tour of skills 01–14 and a **personalized recommendation** for what to run first
 
 When you finish, it saves a summary at `Knowledge/onboarding-summary.md`. You can re-run `/00-onboarding` anytime to update context — it merges with existing files instead of overwriting your edits.
 
@@ -448,6 +448,7 @@ Restart Claude Code after updating the plugin. Run `claude plugin list` to confi
 | Onboarding resume state | `<workspace>/Knowledge/onboarding-state.json` |
 | Competitor list (skill 11) | `<workspace>/Knowledge/competitors.md` |
 | Generated PRDs / TDDs | `<workspace>/Outputs/` |
+| Analysis memos (skill 14) | `<workspace>/Outputs/Analytics/` |
 | Retros / learnings | `<workspace>/Learnings/` |
 | Skill 11 cache + reports | `<workspace>/Knowledge/competitor-flows/`, `<workspace>/Outputs/competitor-research/` |
 
