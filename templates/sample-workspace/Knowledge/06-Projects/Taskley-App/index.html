@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taskley</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #fff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warn: #d97706;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(160deg, var(--bg) 0%, #f0f9ff 100%);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 42rem; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 300;
+      text-align: center;
+      background: linear-gradient(90deg, var(--primary), #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { text-align: center; color: var(--muted); margin: 0 0 1rem; }
+    .notice {
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat strong { display: block; font-size: 1.5rem; }
+    .stat span { font-size: 0.8rem; color: var(--muted); }
+    .panel {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+    }
+    .panel h2 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+    .panel p { margin: 0 0 1rem; font-size: 0.875rem; color: var(--muted); }
+    .add-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    input[type="text"], textarea, select, input[type="date"] {
+      font: inherit;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      background: #fff;
+      color: var(--text);
+    }
+    input[type="text"] { flex: 1; min-width: 12rem; }
+    textarea { width: 100%; min-height: 7rem; resize: vertical; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 0.55rem 0.9rem;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 500;
+    }
+    button:hover { background: var(--primary-dark); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button.ghost { background: transparent; color: var(--text); border-color: var(--border); }
+    button.ghost:hover { background: #f1f5f9; }
+    button.danger { background: var(--danger); }
+    button.sm { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .tabs { display: flex; gap: 0.25rem; background: #f1f5f9; padding: 0.25rem; border-radius: 8px; }
+    .tabs button { background: transparent; color: var(--muted); padding: 0.4rem 0.75rem; font-size: 0.85rem; }
+    .tabs button.active { background: #fff; color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .task {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.85rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left-width: 4px;
+      border-radius: var(--radius);
+    }
+    .task.p1 { border-left-color: var(--danger); }
+    .task.p2 { border-left-color: var(--warn); }
+    .task.p3 { border-left-color: #cbd5e1; }
+    .task.overdue { background: #fef2f2; border-color: #fecaca; }
+    .task-main { display: flex; gap: 0.65rem; flex: 1; min-width: 14rem; align-items: flex-start; }
+    .task-body { flex: 1; min-width: 0; }
+    .task-title {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0;
+      font: inherit;
+      cursor: text;
+    }
+    .task-title.done { text-decoration: line-through; color: var(--muted); }
+    .task-meta { font-size: 0.75rem; color: var(--muted); margin-top: 0.35rem; }
+    .task-meta .overdue { color: var(--danger); font-weight: 600; }
+    .task-actions { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+    .prio-p1 { color: var(--danger); border-color: #fecaca; }
+    .prio-p2 { color: var(--warn); border-color: #fde68a; }
+    .prio-p3 { color: var(--muted); }
+    .empty { text-align: center; padding: 2.5rem 1rem; color: var(--muted); }
+    .badge-done { font-size: 0.75rem; color: var(--success); border: 1px solid #bbf7d0; background: #f0fdf4; padding: 0.2rem 0.5rem; border-radius: 999px; }
+    .has-notes { position: relative; }
+    .has-notes::after {
+      content: "";
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 6px; height: 6px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      width: 100%;
+      max-width: 28rem;
+      box-shadow: var(--shadow);
+    }
+    .modal h3 { margin: 0 0 0.25rem; }
+    .modal .task-name { margin: 0 0 1rem; font-size: 0.875rem; color: var(--muted); }
+    .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--text);
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      transition: transform 0.25s ease;
+      z-index: 200;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .edit-input { width: 100%; margin-bottom: 0.25rem; }
+    @media (max-width: 520px) {
+      .add-row button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Taskley</h1>
+    <p class="subtitle">Your tasks, priorities, and deadlines in one clear view.</p>
+    <p class="notice">Tasks are saved in this browser—no install, no server, no account.</p>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="panel">
+      <h2>Your tasks</h2>
+      <p>Add, complete, and manage your daily tasks.</p>
+
+      <form class="add-row" id="add-form">
+        <input type="text" id="new-task" placeholder="What needs to be done?" autocomplete="off" />
+        <button type="submit">Add</button>
+      </form>
+
+      <div class="toolbar">
+        <div class="tabs" id="filter-tabs">
+          <button type="button" data-filter="all" class="active">All</button>
+          <button type="button" data-filter="active">Active</button>
+          <button type="button" data-filter="completed">Completed</button>
+        </div>
+        <button type="button" class="ghost sm" id="clear-btn" disabled>Clear completed</button>
+      </div>
+
+      <div class="list" id="task-list"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="notes-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-labelledby="notes-title">
+      <h3 id="notes-title">Notes</h3>
+      <p class="task-name" id="notes-task-name"></p>
+      <textarea id="notes-text" placeholder="Add details, links, or context…"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="ghost" id="notes-cancel">Cancel</button>
+        <button type="button" id="notes-save">Save notes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="confirm-modal" aria-hidden="true">
+    <div class="modal" role="dialog">
+      <h3>Clear completed tasks?</h3>
+      <p class="task-name">This permanently deletes all completed tasks.</p>
+      <div class="modal-actions">
+        <button type="button" class="ghost" id="confirm-cancel">Cancel</button>
+        <button type="button" class="danger" id="confirm-ok">Clear completed</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "taskley-todos-v1";
+
+    let todos = [];
+    let filter = "all";
+    let editingId = null;
+    let notesId = null;
+
+    function uid() {
+      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
+    }
+
+    function seed() {
+      const now = new Date().toISOString();
+      return [
+        {
+          id: "local-seed-1",
+          task: "Welcome to Taskley",
+          is_complete: false,
+          created_at: now,
+          details: "Tasks are saved in this browser only—no account or server required.",
+          priority: 2,
+          due_at: null,
+        },
+        {
+          id: "local-seed-2",
+          task: "Try adding a task below",
+          is_complete: false,
+          created_at: now,
+          details: null,
+          priority: 1,
+          due_at: null,
+        },
+      ];
+    }
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { todos: seed(), fresh: true };
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return { todos: [], fresh: false };
+        return {
+          todos: parsed.filter(isTodo),
+          fresh: false,
+        };
+      } catch {
+        return { todos: [], fresh: false };
+      }
+    }
+
+    function isTodo(x) {
+      return (
+        x &&
+        typeof x.id === "string" &&
+        typeof x.task === "string" &&
+        typeof x.is_complete === "boolean" &&
+        typeof x.created_at === "string" &&
+        (x.details === null || typeof x.details === "string") &&
+        typeof x.priority === "number" &&
+        (x.due_at === null || typeof x.due_at === "string")
+      );
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    }
+
+    function toast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove("show"), 2200);
+    }
+
+    function fmtDate(iso) {
+      return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+
+    function isOverdue(todo) {
+      return todo.due_at && !todo.is_complete && new Date(todo.due_at) < new Date();
+    }
+
+    function prioClass(p) {
+      if (p >= 2) return "p1";
+      if (p >= 1) return "p2";
+      return "p3";
+    }
+
+    function filtered() {
+      return todos
+        .filter((t) => {
+          if (filter === "active") return !t.is_complete;
+          if (filter === "completed") return t.is_complete;
+          return true;
+        })
+        .sort((a, b) => {
+          if (b.priority !== a.priority) return b.priority - a.priority;
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+    }
+
+    function stats() {
+      const active = todos.filter((t) => !t.is_complete).length;
+      return { total: todos.length, active, completed: todos.length - active };
+    }
+
+    function renderStats() {
+      const s = stats();
+      document.getElementById("stats").innerHTML = `
+        <div class="stat"><strong style="color:var(--primary)">${s.total}</strong><span>Total</span></div>
+        <div class="stat"><strong style="color:var(--warn)">${s.active}</strong><span>Active</span></div>
+        <div class="stat"><strong style="color:var(--success)">${s.completed}</strong><span>Completed</span></div>
+      `;
+      document.getElementById("clear-btn").disabled = s.completed === 0;
+      document.querySelectorAll("#filter-tabs button").forEach((btn) => {
+        const f = btn.dataset.filter;
+        const n = f === "all" ? s.total : f === "active" ? s.active : s.completed;
+        btn.textContent = f.charAt(0).toUpperCase() + f.slice(1) + ` (${n})`;
+        btn.classList.toggle("active", f === filter);
+      });
+    }
+
+    function renderList() {
+      const list = document.getElementById("task-list");
+      const items = filtered();
+
+      if (!items.length) {
+        const msg =
+          filter === "all"
+            ? "Add your first task to get started!"
+            : filter === "active"
+              ? "All your tasks are completed!"
+              : "No completed tasks yet.";
+        list.innerHTML = `<div class="empty"><p><strong>No tasks found</strong></p><p>${msg}</p></div>`;
+        return;
+      }
+
+      list.innerHTML = items
+        .map((todo) => {
+          const overdue = isOverdue(todo);
+          const hasNotes = Boolean(todo.details && todo.details.trim());
+          const dueVal = todo.due_at ? todo.due_at.slice(0, 10) : "";
+          const editing = editingId === todo.id;
+
+          return `
+            <article class="task ${prioClass(todo.priority)} ${overdue ? "overdue" : ""}" data-id="${todo.id}">
+              <div class="task-main">
+                <input type="checkbox" ${todo.is_complete ? "checked" : ""} aria-label="Complete task" />
+                <div class="task-body">
+                  ${
+                    editing
+                      ? `<input class="edit-input" type="text" value="${escapeHtml(todo.task)}" data-edit />`
+                      : `<button type="button" class="task-title ${todo.is_complete ? "done" : ""}">${escapeHtml(todo.task)}</button>`
+                  }
+                  <div class="task-meta">
+                    <span>Created ${fmtDate(todo.created_at)}</span>
+                    ${todo.due_at ? `<span class="${overdue ? "overdue" : ""}">Due ${fmtDate(todo.due_at)}${overdue ? " (overdue)" : ""}</span>` : ""}
+                  </div>
+                </div>
+              </div>
+              <div class="task-actions">
+                <select class="prio-p${todo.priority >= 2 ? "1" : todo.priority >= 1 ? "2" : "3"}" data-priority aria-label="Priority">
+                  <option value="2" ${todo.priority === 2 ? "selected" : ""}>P1</option>
+                  <option value="1" ${todo.priority === 1 ? "selected" : ""}>P2</option>
+                  <option value="0" ${todo.priority === 0 ? "selected" : ""}>P3</option>
+                </select>
+                <input type="date" value="${dueVal}" aria-label="Due date" data-due />
+                <button type="button" class="ghost sm ${hasNotes ? "has-notes" : ""}" data-notes title="Notes">Notes</button>
+                ${todo.is_complete ? `<span class="badge-done">Done</span>` : ""}
+                <button type="button" class="ghost sm danger" data-delete title="Delete">Delete</button>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      list.querySelectorAll(".task").forEach(bindTask);
+    }
+
+    function escapeHtml(s) {
+      return s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function bindTask(row) {
+      const id = row.dataset.id;
+      const todo = todos.find((t) => t.id === id);
+      if (!todo) return;
+
+      row.querySelector('input[type="checkbox"]').addEventListener("change", () => {
+        todo.is_complete = !todo.is_complete;
+        save();
+        render();
+        toast(todo.is_complete ? "Task completed!" : "Task marked active");
+      });
+
+      const titleBtn = row.querySelector(".task-title");
+      if (titleBtn) {
+        titleBtn.addEventListener("click", () => {
+          editingId = id;
+          renderList();
+          const input = row.querySelector("[data-edit]");
+          if (input) {
+            input.focus();
+            input.select();
+            input.addEventListener("blur", commitEdit);
+            input.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") commitEdit.call(input);
+              if (e.key === "Escape") {
+                editingId = null;
+                renderList();
+              }
+            });
+          }
+        });
+      }
+
+      const editInput = row.querySelector("[data-edit]");
+      if (editInput && editingId === id) {
+        editInput.focus();
+        editInput.select();
+        editInput.addEventListener("blur", commitEdit);
+        editInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") commitEdit.call(editInput);
+          if (e.key === "Escape") {
+            editingId = null;
+            renderList();
+          }
+        });
+      }
+
+      function commitEdit() {
+        const val = this.value.trim();
+        if (!val) {
+          toast("Task cannot be empty");
+          return;
+        }
+        todo.task = val;
+        editingId = null;
+        save();
+        render();
+        toast("Task updated");
+      }
+
+      row.querySelector("[data-priority]").addEventListener("change", (e) => {
+        todo.priority = Number(e.target.value);
+        save();
+        renderList();
+      });
+
+      row.querySelector("[data-due]").addEventListener("change", (e) => {
+        const v = e.target.value;
+        if (!v) {
+          todo.due_at = null;
+        } else {
+          const d = new Date(v + "T23:59:59");
+          todo.due_at = d.toISOString();
+        }
+        save();
+        render();
+        toast(v ? "Due date updated" : "Due date cleared");
+      });
+
+      row.querySelector("[data-notes]").addEventListener("click", () => openNotes(id));
+      row.querySelector("[data-delete]").addEventListener("click", () => {
+        todos = todos.filter((t) => t.id !== id);
+        save();
+        render();
+        toast("Task deleted");
+      });
+    }
+
+    function openNotes(id) {
+      notesId = id;
+      const todo = todos.find((t) => t.id === id);
+      document.getElementById("notes-task-name").textContent = todo ? todo.task : "";
+      document.getElementById("notes-text").value = todo?.details || "";
+      document.getElementById("notes-modal").classList.add("open");
+    }
+
+    function closeNotes() {
+      notesId = null;
+      document.getElementById("notes-modal").classList.remove("open");
+    }
+
+    function render() {
+      renderStats();
+      renderList();
+    }
+
+    document.getElementById("add-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("new-task");
+      const task = input.value.trim();
+      if (!task) return;
+      todos.unshift({
+        id: uid(),
+        task,
+        is_complete: false,
+        created_at: new Date().toISOString(),
+        details: null,
+        priority: 1,
+        due_at: null,
+      });
+      input.value = "";
+      save();
+      render();
+      toast("Task added!");
+    });
+
+    document.getElementById("filter-tabs").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-filter]");
+      if (!btn) return;
+      filter = btn.dataset.filter;
+      render();
+    });
+
+    document.getElementById("clear-btn").addEventListener("click", () => {
+      document.getElementById("confirm-modal").classList.add("open");
+    });
+
+    document.getElementById("confirm-cancel").addEventListener("click", () => {
+      document.getElementById("confirm-modal").classList.remove("open");
+    });
+
+    document.getElementById("confirm-ok").addEventListener("click", () => {
+      todos = todos.filter((t) => !t.is_complete);
+      save();
+      document.getElementById("confirm-modal").classList.remove("open");
+      render();
+      toast("Completed tasks cleared");
+    });
+
+    document.getElementById("notes-cancel").addEventListener("click", closeNotes);
+    document.getElementById("notes-save").addEventListener("click", () => {
+      const todo = todos.find((t) => t.id === notesId);
+      if (!todo) return;
+      const v = document.getElementById("notes-text").value.trim();
+      todo.details = v || null;
+      save();
+      closeNotes();
+      render();
+      toast("Notes saved");
+    });
+
+    const loaded = load();
+    todos = loaded.todos;
+    if (loaded.fresh) save();
+    render();
+  </script>
+</body>
+</html>

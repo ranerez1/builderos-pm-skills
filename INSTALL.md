@@ -202,6 +202,35 @@ The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`,
 
 </details>
 
+### 3e. (Optional) Try the skills on a practice workspace
+
+If you'd rather kick the tires before wiring up your own product, the plugin ships a
+ready-made sample workspace built around a fictional task-management product, **Taskley**.
+This is completely optional — it has nothing to do with a normal install.
+
+Load it into a **separate, throwaway folder** so it never mixes with your real work:
+
+```bash
+mkdir -p ~/Documents/pm-practice && cd ~/Documents/pm-practice
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/bin/load-sample.sh
+```
+
+> Same path caveat as Step 3b — if it says "No such file or directory", run `claude plugin list` and replace `1.0.0` with the installed version.
+
+You get populated `Knowledge/` (Taskley company, product strategy, ICP, competitive
+analysis, a PRD template), a self-contained single-file web app at
+`Knowledge/06-Projects/Taskley-App/index.html`, and pre-captured `competitor-flows/` so
+`/11` works without any logins. The loader only adds files that don't already exist, so
+it never overwrites your content.
+
+Then open that folder in Claude Code and try a few skills against it:
+
+- `/05-create-prd` — drafts a PRD from the Taskley product Knowledge
+- `/07-ui-ux-review` — reviews the Taskley app's `index.html`
+- `/11-competitor-feature-analysis` — uses the bundled competitor flows (no login needed)
+
+When you're done, just delete the practice folder.
+
 ---
 
 ## Step 4 — Connect your MCP servers (only what you need)
@@ -238,6 +267,8 @@ For a richer test, try `/01-customer-discovery` with a tracker MCP configured (i
 ## Step 6 — (Optional) Set up skill 11 (competitor analysis)
 
 > Skip this step entirely if you don't plan to use skill 11. The other 10 skills work without it.
+>
+> Just want to *try* skill 11? The Taskley practice workspace (Step 3e) ships pre-captured `competitor-flows/`, so you can run `/11` against it without Node, CloakBrowser, or any competitor logins. This step is only for running it against live competitors of your own.
 
 Skill 11 captures logged-in competitor product UI via [CloakBrowser](https://cloakbrowser.dev/) so it can compare a feature across multiple competitors. It needs Node.js and a one-time browser download — the plugin can't bundle these for you.
 

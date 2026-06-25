@@ -38,6 +38,8 @@ Then bootstrap your workspace and run `/00-onboarding` in Claude Code (recommend
 
 **Full step-by-step walkthrough** (recommended for first install): [INSTALL.md](INSTALL.md).
 
+**Want to try the skills first?** An optional "Taskley" practice workspace (sample product Knowledge + a single-file app + competitor flows) loads into a throwaway folder via `bin/load-sample.sh` — see [INSTALL.md, Step 3e](INSTALL.md#3e-optional-try-the-skills-on-a-practice-workspace).
+
 ## What you need to provide
 
 The skills are vendor-agnostic. To make them work end-to-end, configure your own:
@@ -88,6 +90,7 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 └── templates/
     ├── CLAUDE.md.template
     ├── Knowledge/workspace-tools.md.template
+    ├── sample-workspace/            # optional "Taskley" practice workspace (load-sample.sh)
     └── empty-dirs/
         ├── Outputs/.gitkeep
         ├── Learnings/.gitkeep

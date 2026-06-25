@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "feature": "scheduled tasks",
+  "featureSlug": "scheduled-tasks",
+  "competitor": "todoist",
+  "capabilityPattern": "list-and-detail",
+  "scope": "today",
+  "lastVerified": "2026-06-05",
+  "startUrl": "https://app.todoist.com/app/today",
+  "notes": "Seeded from Knowledge/competitors.md Feature screens.",
+  "screens": [
+    {
+      "state": "main",
+      "label": "Today — scheduled tasks",
+      "url": "https://app.todoist.com/app/today",
+      "actions": [],
+      "successSignals": [
+        "today",
+        "task"
+      ]
+    }
+  ],
+  "forbiddenActions": [
+    "delete_production",
+    "revoke_all",
+    "billing_checkout"
+  ]
+}

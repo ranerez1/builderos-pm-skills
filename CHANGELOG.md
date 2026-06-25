@@ -4,6 +4,9 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+### Added
+- **Optional "Taskley" practice workspace.** A ready-made sample workspace built around a fictional task-management product, for trying the skills without wiring up your own product. Ships as plugin assets under `templates/sample-workspace/` (populated `Knowledge/` 01–06, a self-contained single-file web app at `06-Projects/Taskley-App/index.html`, and pre-captured `competitor-flows/` so `/11` runs with no competitor logins). New `bin/load-sample.sh` copies it into a throwaway workspace folder — **copy-if-missing**, so it never overwrites existing files. Documented as optional **INSTALL.md Step 3e**. Strictly opt-in: `bin/bootstrap.sh` and a normal install are unchanged.
+
 ## 1.7.0 — 2026-06-20
 
 ### Changed

@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "feature": "filters & labels",
+  "featureSlug": "filters-labels",
+  "competitor": "todoist",
+  "capabilityPattern": "list-and-detail",
+  "scope": "web app — filters & labels hub, result views, create/edit modals",
+  "lastVerified": "2026-06-06",
+  "startUrl": "https://app.todoist.com/app/filters-labels",
+  "notes": "Hub lists filters (query-based saved views) and labels (cross-project tags). Filter limit enforced on free tier; labels unlimited.",
+  "screens": [
+    {
+      "state": "main",
+      "label": "Filters & Labels hub",
+      "url": "https://app.todoist.com/app/filters-labels",
+      "actions": [],
+      "successSignals": ["filters", "labels"]
+    },
+    {
+      "state": "filter-view",
+      "label": "Filter result — Priority 1",
+      "url": "https://app.todoist.com/app/filters-labels",
+      "actions": [
+        {
+          "click": {
+            "role": "link",
+            "name": "Priority 1"
+          }
+        },
+        {
+          "wait": {
+            "settle": true
+          }
+        }
+      ],
+      "successSignals": ["priority 1"]
+    },
+    {
+      "state": "label-view",
+      "label": "Label result — Work",
+      "url": "https://app.todoist.com/app/label/work-2164822831",
+      "actions": [],
+      "successSignals": ["work"]
+    },
+    {
+      "state": "create-label",
+      "label": "Add label modal",
+      "url": "https://app.todoist.com/app/filters-labels",
+      "actions": [
+        {
+          "click": {
+            "role": "button",
+            "name": "Add new label"
+          }
+        },
+        {
+          "wait": {
+            "settle": true
+          }
+        }
+      ],
+      "successSignals": []
+    },
+    {
+      "state": "plan-gate",
+      "label": "Filter limit — Pro upsell",
+      "url": "https://app.todoist.com/app/filters-labels",
+      "actions": [
+        {
+          "click": {
+            "role": "button",
+            "name": "Unlock more filters"
+          }
+        },
+        {
+          "wait": {
+            "ms": 1500
+          }
+        }
+      ],
+      "successSignals": []
+    }
+  ],
+  "forbiddenActions": [
+    "delete_production",
+    "revoke_all",
+    "billing_checkout"
+  ]
+}

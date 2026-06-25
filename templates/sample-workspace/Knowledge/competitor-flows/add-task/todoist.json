@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "feature": "add task",
+  "featureSlug": "add-task",
+  "competitor": "todoist",
+  "capabilityPattern": "create-resource",
+  "scope": "today",
+  "lastVerified": "2026-06-05",
+  "startUrl": "https://app.todoist.com/app/today",
+  "notes": "Create flow: main view then Add task composer.",
+  "screens": [
+    {
+      "state": "main",
+      "label": "Today with add affordance",
+      "url": "https://app.todoist.com/app/today",
+      "actions": [],
+      "successSignals": [
+        "today",
+        "task"
+      ]
+    },
+    {
+      "state": "create",
+      "label": "Add task composer",
+      "url": "https://app.todoist.com/app/today",
+      "actions": [
+        {
+          "click": {
+            "role": "button",
+            "name": "Add task"
+          }
+        },
+        {
+          "wait": {
+            "settle": true
+          }
+        }
+      ],
+      "successSignals": []
+    }
+  ],
+  "forbiddenActions": [
+    "delete_production",
+    "revoke_all",
+    "billing_checkout"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "feature": "add task",
+  "featureSlug": "add-task",
+  "competitor": "ticktick",
+  "capabilityPattern": "create-resource",
+  "scope": "unspecified",
+  "startUrl": "https://ticktick.com/webapp/#q/today/tasks",
+  "notes": "Inline quick-add: click placeholder expands row with date, priority, tags, list picker.",
+  "screens": [
+    {
+      "state": "main",
+      "label": "Today with add affordance",
+      "url": "https://ticktick.com/webapp/#q/today/tasks",
+      "actions": [],
+      "successSignals": []
+    },
+    {
+      "state": "create",
+      "label": "Inline add task composer",
+      "url": "https://ticktick.com/webapp/#q/today/tasks",
+      "actions": [
+        {
+          "click": {
+            "text": "Add task"
+          }
+        }
+      ],
+      "successSignals": []
+    }
+  ],
+  "forbiddenActions": [
+    "delete_production",
+    "revoke_all",
+    "billing_checkout"
+  ],
+  "lastVerified": "2026-06-06"
+}

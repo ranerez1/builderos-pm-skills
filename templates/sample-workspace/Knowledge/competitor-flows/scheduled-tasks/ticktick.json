@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "feature": "scheduled tasks",
+  "featureSlug": "scheduled-tasks",
+  "competitor": "ticktick",
+  "capabilityPattern": "list-and-detail",
+  "scope": "today",
+  "lastVerified": "2026-06-05",
+  "startUrl": "https://ticktick.com/webapp/#q/today/tasks",
+  "notes": "Seeded from Knowledge/competitors.md Feature screens.",
+  "screens": [
+    {
+      "state": "main",
+      "label": "Today — scheduled tasks",
+      "url": "https://ticktick.com/webapp/#q/today/tasks",
+      "actions": [],
+      "successSignals": [
+        "today",
+        "task"
+      ]
+    }
+  ],
+  "forbiddenActions": [
+    "delete_production",
+    "revoke_all",
+    "billing_checkout"
+  ]
+}
