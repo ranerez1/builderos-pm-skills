@@ -339,10 +339,10 @@ When this plugin gets new skills or fixes, from a terminal:
 
 ```bash
 claude plugin marketplace update builderos-pm
-claude plugin update builderos-pm-skills
+claude plugin update builderos-pm-skills@builderos-pm
 ```
 
-(or inside Claude Code: `/plugin update builderos-pm-skills`).
+(or inside Claude Code: `/plugin update builderos-pm-skills@builderos-pm`).
 
 Restart Claude Code to apply.
 
@@ -431,7 +431,7 @@ CloakBrowser only ships macOS and Windows binaries today. Skill 11 won't work on
 Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRACKETED]` placeholders. Most skills read it as required context. Run `/00-onboarding` to fill gaps conversationally.
 
 **`/00-onboarding` doesn't appear in the slash menu**
-Restart Claude Code after updating the plugin. Run `claude plugin list` to confirm `builderos-pm-skills` is enabled, then `claude plugin update builderos-pm-skills`.
+Restart Claude Code after updating the plugin. Run `claude plugin list` to confirm `builderos-pm-skills` is enabled, then `claude plugin update builderos-pm-skills@builderos-pm`.
 
 ---
 

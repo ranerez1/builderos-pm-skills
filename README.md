@@ -62,7 +62,7 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 ## Updating
 
 ```
-/plugin update builderos-pm-skills
+/plugin update builderos-pm-skills@builderos-pm
 ```
 
 ## Layout
