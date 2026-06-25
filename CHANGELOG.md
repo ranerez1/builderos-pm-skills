@@ -36,7 +36,7 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 ## 1.6.0 — 2026-06-19
 
 ### Added
-- **`/13-validation-storyboard` URL mode now defaults to a fully headless auto-walk** (no user input). `scripts/capture-url-auto.mjs` discovers page section headings, scrolls to each, screenshots, and writes `flow.json` with templated `action` / `expected_behavior` / `assertions`. Lessons from real-world capture runs (a Halo dashboard test on `halo.preview.pixellot.tv`) are baked into the new lib:
+- **`/13-validation-storyboard` URL mode now defaults to a fully headless auto-walk** (no user input). `scripts/capture-url-auto.mjs` discovers page section headings, scrolls to each, screenshots, and writes `flow.json` with templated `action` / `expected_behavior` / `assertions`. Lessons from real-world capture runs (a live dashboard test) are baked into the new lib:
   - `scripts/lib/page-discovery.mjs` — `findHeadings` deduplicates same-text headings by picking the **deepest by absolute Y** (skips the common pattern where pages duplicate headings in a hidden mobile-nav at `top: 0`). `scrollToHeading` and `collectContextAroundHeading` are reusable for future capture modes.
   - Viewport default lowered from `1440×900` → `1440×700` so tall pages have enough scroll runway for each section to land near the viewport top instead of clamping at max-scroll.
   - Section cap defaults to 8 (`--max-sections=N` to override).
