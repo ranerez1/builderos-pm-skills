@@ -31,11 +31,25 @@
 | **L2** | Team-owned behavioural metrics under each L1; days–weeks timeline |
 | **L3** | Feature-level leading indicators; hours–days feedback; often temporary |
 | **People Problem** | User's real-world friction — no solution baked in; grounded in evidence |
+| **JTBD** | Jobs To Be Done — users "hire" a product to make progress in a context; demand traces to a struggling moment, not the feature |
+| **Competitive alternative** | What the user would do if the product didn't exist (status quo, manual workaround, rival) — the baseline differentiation is measured against |
+| **OST** | Opportunity Solution Tree — outcome → opportunities (problem space) → solutions → experiments; keeps discovery problem-first |
+| **Diagnosis** | The core-challenge statement a strategy must name before choosing a direction |
 | **TL;DR (GIFTS)** | PRD format: Goal, Insights, Focus, Trade-offs, Suggested solution, Success |
 | **RICE** | Backlog prioritization: Reach, Impact, Confidence, Effort |
 | **Skill** | Reusable AI-powered task (e.g., `/05-create-prd`, `/06-prd-to-tech-plan`) shipped via the BuilderOS plugin |
 | **Board** | A tracker project for Backlog, Releases, Tickets, etc. (vendor-agnostic) |
 | **MCP server** | API gateway connecting Claude to external tools (Monday, Mixpanel, Notion, …) |
+
+---
+
+## Product Principles
+
+The product-thinking stance behind every deliverable:
+
+- **Worth-solving filter.** Before committing to a problem, confirm it clears the bar: users will pay to solve it (or it's clearly worth paying for in context), they already build workarounds, and it recurs frequently. One-offs rarely qualify.
+- **Speed to learning.** Optimize for reaching real value fast — ship and learn over exhaustive specs. Right-size the artifact to the decision it serves; a lean PRD that unblocks the team beats a long one that delays it.
+- **Whole product over feature parity.** Users experience the whole product, not a feature checklist — matching a competitor's feature is not the same as solving the problem. Anchor on the job users need done and strip the noise; a feature matrix is not the goal.
 
 ---
 
