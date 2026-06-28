@@ -197,14 +197,6 @@ analysis, a PRD template), a self-contained single-file web app at
 `/11` works without any logins. The loader only adds files that don't already exist, so
 it never overwrites your content.
 
-Then open that folder in Claude Code and try a few skills against it:
-
-- `/05-create-prd` — drafts a PRD from the Taskley product Knowledge
-- `/07-ui-ux-review` — reviews the Taskley app's `index.html`
-- `/11-competitor-feature-analysis` — uses the bundled competitor flows (no login needed)
-
-When you're done, just delete the practice folder.
-
 ---
 
 ## Step 4 — Fill your context
