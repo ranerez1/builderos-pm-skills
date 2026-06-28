@@ -6,7 +6,7 @@ called **Taskley**.
 
 It is **optional** and plays no part in a normal plugin install. You only get it if you
 deliberately load it with `bin/load-sample.sh` (see [INSTALL.md](../../INSTALL.md),
-Step 3e).
+Step 3c).
 
 ## What's inside (`Knowledge/`)
 

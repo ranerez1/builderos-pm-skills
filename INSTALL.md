@@ -158,33 +158,7 @@ Next:
   2. Or edit CLAUDE.md and Knowledge/workspace-tools.md manually.
 ```
 
-> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `1.0.0` in the command above with whatever version it shows. Or paste the manual block at the bottom of this step.
-
-### 3c. Run the onboarding guide (recommended)
-
-Open **Claude Code** (desktop app, CLI, or IDE extension) with your workspace folder as the project root, then run:
-
-```
-/00-onboarding
-```
-
-The guide will walk you through:
-
-- What the plugin installed and where files live
-- Filling `CLAUDE.md` with your role, company, product, and metrics
-- Configuring `Knowledge/workspace-tools.md` for your tracker, analytics, and other tools
-- A tour of skills 01–14 and a **personalized recommendation** for what to run first
-
-When you finish, it saves a summary at `Knowledge/onboarding-summary.md`. You can re-run `/00-onboarding` anytime to update context — it merges with existing files instead of overwriting your edits.
-
-### 3d. Manual alternative (edit files yourself)
-
-If you prefer not to use the guided flow, open the starter files in any text editor (TextEdit, VS Code, Cursor, vim):
-
-- **`CLAUDE.md`** — fill in the `[BRACKETED]` placeholders: your role, company, product, primary metric. Delete anything that doesn't apply. This is the context every skill reads first.
-- **`Knowledge/workspace-tools.md`** — fill in your tracker / analytics / docs tool names and the MCP server names that connect to them. Skip the sections you don't have — the skills that need a missing tool will tell you what's missing.
-
-The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them. Under `Knowledge/`, bootstrap also creates six numbered subfolders — `01-Templates` through `06-Projects` — for product docs, market context, ICP, workspace config, and active projects.
+> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `1.0.0` in the command above with whatever version it shows. Or paste the manual block below.
 
 <details>
 <summary><strong>Manual alternative (if the bootstrap script doesn't work)</strong></summary>
@@ -198,11 +172,11 @@ cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/templates/Know
 ls -la Knowledge
 ```
 
-The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` are there. Then run `/00-onboarding` (Step 3c) or edit the files manually (Step 3d).
+The last `ls -la` lists the folder so you can confirm `CLAUDE.md`, `Knowledge/`, `Outputs/`, and `Learnings/` are there. Then run `/00-onboarding` (Step 4a) or edit the files manually (Step 4b).
 
 </details>
 
-### 3e. (Optional) Try the skills on a practice workspace
+### 3c. (Optional) Try the skills on a practice workspace
 
 If you'd rather kick the tires before wiring up your own product, the plugin ships a
 ready-made sample workspace built around a fictional task-management product, **Taskley**.
@@ -233,7 +207,42 @@ When you're done, just delete the practice folder.
 
 ---
 
-## Step 4 — Connect your MCP servers (only what you need)
+## Step 4 — Fill your context
+
+This is where you tell the skills who you are and what tools you use. You fill two starter
+files the bootstrap created — `CLAUDE.md` (your role, company, product, metrics) and
+`Knowledge/workspace-tools.md` (your tracker / analytics / docs tools) — either through the
+guided onboarding flow (recommended) or by editing them yourself.
+
+### 4a. Run the onboarding guide (recommended)
+
+Open **Claude Code** (desktop app, CLI, or IDE extension) with your workspace folder as the project root, then run:
+
+```
+/00-onboarding
+```
+
+The guide will walk you through:
+
+- What the plugin installed and where files live
+- Filling `CLAUDE.md` with your role, company, product, and metrics
+- Configuring `Knowledge/workspace-tools.md` for your tracker, analytics, and other tools
+- A tour of skills 01–14 and a **personalized recommendation** for what to run first
+
+When you finish, it saves a summary at `Knowledge/onboarding-summary.md`. You can re-run `/00-onboarding` anytime to update context — it merges with existing files instead of overwriting your edits.
+
+### 4b. Manual alternative (edit files yourself)
+
+If you prefer not to use the guided flow, open the starter files in any text editor (TextEdit, VS Code, Cursor, vim):
+
+- **`CLAUDE.md`** — fill in the `[BRACKETED]` placeholders: your role, company, product, primary metric. Delete anything that doesn't apply. This is the context every skill reads first.
+- **`Knowledge/workspace-tools.md`** — fill in your tracker / analytics / docs tool names and the MCP server names that connect to them. Skip the sections you don't have — the skills that need a missing tool will tell you what's missing.
+
+The `Outputs/`, `Learnings/`, and `Knowledge/` folders the bootstrap created are where skills will save PRDs, retros, and reference docs as you use them. Under `Knowledge/`, bootstrap also creates six numbered subfolders — `01-Templates` through `06-Projects` — for product docs, market context, ICP, workspace config, and active projects.
+
+---
+
+## Step 5 — Connect your MCP servers (only what you need)
 
 Skills work without any MCP server if you paste content into chat. To get auto-pulled data, configure MCP servers in your Claude Code MCP settings (`~/.claude.json` or `/mcp` in Claude Code). Common ones:
 
@@ -250,7 +259,7 @@ Set them up via Claude Code's MCP configuration (see [MCP docs](https://docs.cla
 
 ---
 
-## Step 5 — Verify with your first skill
+## Step 6 — Verify with your first skill
 
 Open Claude Code in your workspace root. If you ran `/00-onboarding`, use the slash command it recommended. Otherwise, try a no-MCP-required smoke test:
 
@@ -264,15 +273,15 @@ For a richer test, try `/01-customer-discovery` with a tracker MCP configured (i
 
 ---
 
-## Step 6 — (Optional) Set up skill 11 (competitor analysis)
+## Step 7 — (Optional) Set up skill 11 (competitor analysis)
 
 > Skip this step entirely if you don't plan to use skill 11. The other 10 skills work without it.
 >
-> Just want to *try* skill 11? The Taskley practice workspace (Step 3e) ships pre-captured `competitor-flows/`, so you can run `/11` against it without Node, CloakBrowser, or any competitor logins. This step is only for running it against live competitors of your own.
+> Just want to *try* skill 11? The Taskley practice workspace (Step 3c) ships pre-captured `competitor-flows/`, so you can run `/11` against it without Node, CloakBrowser, or any competitor logins. This step is only for running it against live competitors of your own.
 
 Skill 11 captures logged-in competitor product UI via [CloakBrowser](https://cloakbrowser.dev/) so it can compare a feature across multiple competitors. It needs Node.js and a one-time browser download — the plugin can't bundle these for you.
 
-### 6a. Check Node.js is installed
+### 7a. Check Node.js is installed
 
 In your terminal, run:
 
@@ -282,7 +291,7 @@ node --version
 
 You need **v18.0.0 or newer** on **macOS or Windows** (Linux isn't supported by CloakBrowser yet). If `node` is missing or too old, install/update it from [nodejs.org](https://nodejs.org/) first.
 
-### 6b. Run the skill 11 setup helper
+### 7b. Run the skill 11 setup helper
 
 The plugin ships a one-command setup script. Run it from any terminal:
 
@@ -299,13 +308,13 @@ It will:
 
 Expect 1–2 minutes for the npm install, plus a download for the browser binary.
 
-### 6c. Tell skill 11 which competitors to track
+### 7c. Tell skill 11 which competitors to track
 
-Open `Knowledge/competitors.md` in your **workspace folder** (the one you bootstrapped in Step 3 — not the plugin folder). The setup helper in 6b creates this file with `[FILL]` placeholders if it doesn't exist yet — replace them with your product slug/name and each competitor's slug, login URL, and plan tier.
+Open `Knowledge/competitors.md` in your **workspace folder** (the one you bootstrapped in Step 3 — not the plugin folder). The setup helper in 7b creates this file with `[FILL]` placeholders if it doesn't exist yet — replace them with your product slug/name and each competitor's slug, login URL, and plan tier.
 
-If the file wasn't created (e.g. you ran setup from outside your workspace), `cd` to your workspace and re-run the 6b command, or copy `templates/Knowledge/competitors.md.template` from the plugin into `Knowledge/competitors.md` yourself.
+If the file wasn't created (e.g. you ran setup from outside your workspace), `cd` to your workspace and re-run the 7b command, or copy `templates/Knowledge/competitors.md.template` from the plugin into `Knowledge/competitors.md` yourself.
 
-### 6d. Log in to each competitor once
+### 7d. Log in to each competitor once
 
 For each competitor in your list, run this once per competitor (replace `<slug>` and `<url>`):
 
@@ -315,7 +324,7 @@ npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/skil
 
 A browser window opens — log in like a normal user. The session is saved so the skill can re-enter as you next time.
 
-### 6e. Use the skill
+### 7e. Use the skill
 
 Inside Claude Code in your workspace folder:
 
