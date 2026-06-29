@@ -481,7 +481,7 @@ refresh on its own — you have to pull a newer version. Fix it in three steps:
    Step 3c):
 
    ```bash
-   cd ~/Documents/pm-practice
+   cd ~/Documents/my-pm-workspace
    bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/bin/load-sample.sh
    ls Knowledge/02-Product-Knowledge/taskley-*.md
    ```
