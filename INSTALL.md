@@ -143,7 +143,7 @@ The `cd` puts your terminal "inside" that folder so the next commands act on it.
 The plugin ships a one-command setup script that creates the right folders and copies two starter files in. Run this **in the same terminal**, from inside your workspace folder:
 
 ```bash
-bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/bin/bootstrap.sh
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/bin/bootstrap.sh
 ```
 
 You'll see output like:
@@ -158,7 +158,7 @@ Next:
   2. Or edit CLAUDE.md and Knowledge/workspace-tools.md manually.
 ```
 
-> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `1.0.0` in the command above with whatever version it shows. Or paste the manual block below.
+> If it says "No such file or directory", your plugin cache is at a different path. Run `claude plugin list` to see the installed version, then replace `1.8.0` in the command above with whatever version it shows. Or paste the manual block below.
 
 <details>
 <summary><strong>Manual alternative (if the bootstrap script doesn't work)</strong></summary>
@@ -167,8 +167,8 @@ From your workspace folder, run these four lines:
 
 ```bash
 mkdir -p Knowledge/{01-Templates,02-Product-Knowledge,03-Market-Knowledge,04-ICP,05-Workspace-Tools,06-Projects} Outputs Learnings
-cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/templates/CLAUDE.md.template ./CLAUDE.md
-cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/templates/CLAUDE.md.template ./CLAUDE.md
+cp ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/templates/Knowledge/workspace-tools.md.template Knowledge/workspace-tools.md
 ls -la Knowledge
 ```
 
@@ -186,10 +186,10 @@ Load it into a **separate, throwaway folder** so it never mixes with your real w
 
 ```bash
 mkdir -p ~/Documents/pm-practice && cd ~/Documents/pm-practice
-bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/bin/load-sample.sh
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/bin/load-sample.sh
 ```
 
-> Same path caveat as Step 3b — if it says "No such file or directory", run `claude plugin list` and replace `1.0.0` with the installed version.
+> Same path caveat as Step 3b — if it says "No such file or directory", run `claude plugin list` and replace `1.8.0` with the installed version.
 
 You get populated `Knowledge/` (Taskley company, product strategy, ICP, competitive
 analysis, a PRD template), a self-contained single-file web app at
@@ -288,7 +288,7 @@ You need **v18.0.0 or newer** on **macOS or Windows** (Linux isn't supported by 
 The plugin ships a one-command setup script. Run it from any terminal:
 
 ```bash
-bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/bin/setup-skill-11.sh
+bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/bin/setup-skill-11.sh
 ```
 
 It will:
@@ -311,7 +311,7 @@ If the file wasn't created (e.g. you ran setup from outside your workspace), `cd
 For each competitor in your list, run this once per competitor (replace `<slug>` and `<url>`):
 
 ```bash
-npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/skills/11-competitor-feature-analysis run competitor-login -- --competitor <slug> --verify "<url>"
+npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/skills/11-competitor-feature-analysis run competitor-login -- --competitor <slug> --verify "<url>"
 ```
 
 A browser window opens — log in like a normal user. The session is saved so the skill can re-enter as you next time.
@@ -327,7 +327,7 @@ Inside Claude Code in your workspace folder:
 Or from a terminal:
 
 ```bash
-npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/skills/11-competitor-feature-analysis run competitor-research -- --feature "<name>"
+npm --prefix ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/skills/11-competitor-feature-analysis run competitor-research -- --feature "<name>"
 ```
 
 Full skill 11 walkthrough with all flags and outputs: [`skills/11-competitor-feature-analysis/INSTALL.md`](skills/11-competitor-feature-analysis/INSTALL.md).
@@ -440,7 +440,7 @@ Restart Claude Code after updating the plugin. Run `claude plugin list` to confi
 
 | What | Where |
 |------|-------|
-| Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.0.0/` |
+| Plugin code (read-only) | `~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/` |
 | Marketplace registry | `~/.claude/plugins/known_marketplaces.json` |
 | Your PM context | `<workspace>/CLAUDE.md` |
 | Knowledge layout | `<workspace>/Knowledge/01-Templates/` … `06-Projects/` (product, market, ICP, tools, projects) |
