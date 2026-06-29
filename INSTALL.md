@@ -197,6 +197,20 @@ analysis, a PRD template), a self-contained single-file web app at
 `/11` works without any logins. The loader only adds files that don't already exist, so
 it never overwrites your content.
 
+**Verify the sample actually loaded.** From inside your practice folder, confirm the
+Taskley files landed in `Knowledge/`:
+
+```bash
+ls Knowledge/02-Product-Knowledge/taskley-*.md \
+   Knowledge/04-ICP/taskley-icp.md \
+   Knowledge/06-Projects/Taskley-App/index.html
+```
+
+All three lines should print a path. If instead you see `No such file or directory` — or
+the loader printed `Couldn't find the sample workspace` / `Nothing added` — your plugin
+cache doesn't contain the sample files. See **"`load-sample.sh` added nothing"** in
+[Troubleshooting](#troubleshooting).
+
 ---
 
 ## Step 4 — Fill your context
@@ -427,6 +441,53 @@ The skill reads `Knowledge/workspace-tools.md` for MCP server names. Either fill
 
 **Skill 11: `npm run competitor-setup` fails on Linux**
 CloakBrowser only ships macOS and Windows binaries today. Skill 11 won't work on Linux. The other 10 skills work everywhere.
+
+**`load-sample.sh` added nothing, or the Taskley files aren't in `Knowledge/`**
+The practice workspace (Step 3c) ships in plugin **1.8.0 and later**. If your installed
+cache is an older version, it has neither `bin/load-sample.sh` nor
+`templates/sample-workspace/`, so the command errors with `Couldn't find the sample
+workspace` (or silently copies nothing) and no Taskley files appear in your `Knowledge/`.
+
+Because the plugin cache is keyed on the version in `plugin.json`, an old cache won't
+refresh on its own — you have to pull a newer version. Fix it in three steps:
+
+1. **Check your installed version:**
+
+   ```bash
+   claude plugin list
+   ```
+
+   If it shows anything below `1.8.0`, update it:
+
+   ```bash
+   claude plugin marketplace update builderos-pm
+   claude plugin update builderos-pm-skills@builderos-pm
+   ```
+
+   Then restart Claude Code.
+
+2. **Confirm the sample exists in the cache** (replace `1.8.0` if `claude plugin list`
+   shows a newer version):
+
+   ```bash
+   ls ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/bin/load-sample.sh
+   ls ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/templates/sample-workspace/Knowledge
+   ```
+
+   Both should list files. If they don't, the version you updated to predates the sample —
+   re-run step 1 and make sure the version number actually increased.
+
+3. **Re-run the loader from your practice folder, then verify** (see the verify block in
+   Step 3c):
+
+   ```bash
+   cd ~/Documents/pm-practice
+   bash ~/.claude/plugins/cache/builderos-pm/builderos-pm-skills/1.8.0/bin/load-sample.sh
+   ls Knowledge/02-Product-Knowledge/taskley-*.md
+   ```
+
+   The loader is copy-if-missing, so re-running it is safe — it only fills in files that
+   aren't already there.
 
 **A skill produces blank/empty output**
 Check `CLAUDE.md` exists at your workspace root and isn't full of unfilled `[BRACKETED]` placeholders. Most skills read it as required context. Run `/00-onboarding` to fill gaps conversationally.
