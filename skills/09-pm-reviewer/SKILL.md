@@ -34,7 +34,7 @@ If UI-heavy and no browser/screenshots, infer from code; label **inferred** and 
 5. Check **rollout & risks**:
    - Guardrails, support impact, failure modes
 6. **Shipped check:** Compare PRD **happy path** and **key states** to **Claude browser** or screenshots (code-only if needed). Does the observable experience support the **problem story** and **success metrics**?
-7. Provide **prioritized edits** and **open questions**.
+7. Provide **prioritized edits** and **open questions**. Assign each finding a **severity**: **P0** (must fix — undermines the problem story, MVP, or success metric), **P1** (should fix), **P2** (nice to have).
 
 ## Output (chat)
 
@@ -51,7 +51,12 @@ If UI-heavy and no browser/screenshots, infer from code; label **inferred** and 
 ### Biggest issues (prioritized)
 1. ...
 
-### Gaps / questions
+### Gaps / questions (by severity)
+#### P0 (must fix)
+- ...
+#### P1 (should fix)
+- ...
+#### P2 (nice to have)
 - ...
 
 ### Scope recommendations
