@@ -27,7 +27,7 @@ If UI matters and there is no browser or screenshots, infer from code and label 
 1. **Load spec stack:** Read the PRD, **`tech-high-level.md`** (if present), **`Outputs/Technical Docs/`** files for this work, and other planning files the user pointed at. Use **`pm-high-level`** / **`design-high-level`** for product/UX constraints that affect engineering. Summarize the engineering intent in **3–6 bullets** (prove understanding).
 2. Review **implementation** at the given pointers: fit to **PRD + tech plans + planning docs**, risky shortcuts, gaps in **tests** or **observability** for shipped behavior. Call out **contradictions** between Outputs docs (e.g. PM vs tech) or between docs and code.
 3. From specs + code, outline **happy path** and **key states**; **compare** to browser/screenshots. If **Claude browser** is available: walk **critical flows**; note **console/network** issues worth citing (engineering signals only).
-4. Identify **missing requirements / ambiguities** (including vs what code actually does).
+4. Identify **missing requirements / ambiguities** (including vs what code actually does). Assign each finding a **severity**: **P0** (must fix — blocks ship or breaks the spec), **P1** (should fix), **P2** (nice to have).
 5. List **key technical risks** and mitigations.
 6. Propose **2 implementation approaches** (trade-offs) if still relevant; otherwise note why ship path is settled.
 7. Specify **test plan** and **rollout/rollback**.
@@ -49,7 +49,12 @@ If UI matters and there is no browser or screenshots, infer from code and label 
 ### Summary
 - ...
 
-### Gaps / questions
+### Gaps / questions (by severity)
+#### P0 (must fix)
+- ...
+#### P1 (should fix)
+- ...
+#### P2 (nice to have)
 - ...
 
 ### Risks & mitigations
