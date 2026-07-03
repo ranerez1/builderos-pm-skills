@@ -10,7 +10,7 @@ Walk a PM through **post-install workspace setup** so they finish with:
 
 1. A clear mental model of what skills they have and where files live
 2. `CLAUDE.md` and `Knowledge/workspace-tools.md` filled for their product and company
-3. Awareness of all 14 workflow skills and which to run first
+3. Awareness of all 15 workflow skills and which to run first
 4. A saved summary at `Knowledge/onboarding-summary.md` with a personalized next step
 
 **Assumes:** the `builderos-pm-skills` plugin is already installed. Do not walk through `claude plugin install`.
@@ -95,7 +95,7 @@ Valid `phase` values (in order): `welcome` → `workspace` → `claude_md` → `
 
 ## Installed skills reference
 
-Use this table when explaining what the user has. Skills 01–14 ship with the plugin; this skill is `00`.
+Use this table when explaining what the user has. Skills 01–15 ship with the plugin; this skill is `00`.
 
 | # | Slash command | What it does |
 |---|---------------|--------------|
@@ -113,8 +113,9 @@ Use this table when explaining what the user has. Skills 01–14 ship with the p
 | 12 | `/12-ingest-knowledge` | Ingest external docs (Drive, Zoom, Fathom/Otter/Fireflies/Granola/Gong/Timeless, Gmail, local Inbox) into `Knowledge/02–06` as token-efficient cards. Propose-then-confirm. |
 | 13 | `/13-validation-storyboard` | Capture a URL or product/demo video into a validation storyboard — screenshots + checklist to validate. Needs Node (see INSTALL). |
 | 14 | `/14-mixpanel-data-analysis` | Investigate why a metric moved in Mixpanel; build a live dashboard + a saved analysis memo in `Outputs/Analytics/`. |
+| 15 | `/15-prd-to-epic` | Turn a PRD + prototype into an Epic-level backlog with atomic User Stories; writes `epic-<slug>.md` to `Outputs/Product PRDs/`. |
 
-**Typical flow:** 01 discovery → 02–04 planning → 05 PRD → 06 tech plan → 07–09 review → 10 learn. Skills 11–14 (competitor analysis, knowledge ingest, validation storyboard, Mixpanel analysis) are standalone, run anytime.
+**Typical flow:** 01 discovery → 02–04 planning → 05 PRD → 06 tech plan → 07–09 review → 10 learn. Skill 15 can follow 05 PRD to break the spec into an Epic with User Stories. Skills 11–14 (competitor analysis, knowledge ingest, validation storyboard, Mixpanel analysis) are standalone, run anytime.
 
 ## Workflow
 

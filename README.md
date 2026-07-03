@@ -21,6 +21,7 @@ A Claude Code plugin with 14 PM workflow skills (+ interactive onboarding) cover
 | 12 | `/12-ingest-knowledge` | Ingest external docs (Drive, Zoom, notetakers, Gmail, local Inbox) into `Knowledge/` as structured cards. Propose-then-confirm. |
 | 13 | `/13-validation-storyboard` | Capture a URL or product/demo video into a validation storyboard — screenshots + a checklist to validate. |
 | 14 | `/14-mixpanel-data-analysis` | Investigate why a metric moved in Mixpanel, then build a live dashboard + a saved analysis memo in `Outputs/Analytics/`. |
+| 15 | `/15-prd-to-epic` | Turn a PRD + prototype into an Epic-level backlog with atomic User Stories; writes `epic-<slug>.md` to `Outputs/Product PRDs/`. |
 
 > Upgrading from 0.x? Skills 05–10 were renumbered to 06–11 to make room for `/05-create-prd`. See [CHANGELOG.md](CHANGELOG.md).
 
