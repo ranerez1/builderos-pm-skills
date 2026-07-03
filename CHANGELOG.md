@@ -4,6 +4,11 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.9.0 — 2026-07-03
+
+### Added
+- **New skill `/15-prd-to-epic`.** Turns a Product PRD plus its prototype/mockup into an Epic-level backlog, broken into atomic, value-driven User Stories with acceptance criteria (the dev team splits each Epic into technical tasks). Writes one `epic-<slug>.md` per Epic under `Outputs/Product PRDs/` and mirrors a summary into chat. Tracker-agnostic: reads the tracker MCP server and project key from `Knowledge/workspace-tools.md`, and **never** creates or transitions tracker issues without explicit approval. Positioned to follow `/05-create-prd`. Ported from the `pm-design-agents` fork (originally Jira/Figma-specific) and generalized to this plugin's tracker-agnostic conventions.
+
 ## 1.8.0 — 2026-06-25
 
 ### Added
