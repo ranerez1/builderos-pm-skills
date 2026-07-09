@@ -4,6 +4,19 @@ All notable changes to this plugin are documented here. Format follows [Keep a C
 
 ## Unreleased
 
+## 1.11.0 — 2026-07-10
+
+### Added
+- **New skill `/17-mixpanel-implementation`.** A self-contained, guided Mixpanel instrumentation skill (no companion files): Quick Start, Full Implementation (phases 0–8), Add Tracking, and Audit modes, with a pre-flight codebase scan, the full identity/consent/data-model **critical rules**, and inline SDK init/track/identify-reset snippets for browser JS, Node, Python, React Native, iOS, and Android. Adapted (lean, single-file) from the shared `tracking-implementation` skill.
+
+### Changed
+- **`/16-measure-feature` gained an optional implementation handoff (Phase 5).** After the primary metric passes the 3-ingredient check, it asks whether to turn the plan into a Mixpanel tracking spec and, on yes, emits a build-ready **Tracking spec handoff** (primary-metric formula + snake_case events + properties + identity touchpoints) and points to `/17-mixpanel-implementation`. It still runs fully standalone; the handoff is offered only for building/shipped features. Establishes the loop **/16 (define) → /17 (instrument) → /14 (analyze)**.
+
+## 1.10.0 — 2026-07-09
+
+### Added
+- **New skill `/16-measure-feature`.** Proposes how to measure a new or existing product feature: frames it on the Reach → Adoption → Outcome → Business-impact ladder (primary metric lives on the Outcome rung), links it to the North Star game (Attention / Transaction / Productivity), and produces a full measurement plan — primary + supporting metrics, guardrails, baseline/targets, attribution, and instrumentation. Then stress-tests the primary metric with the **3-ingredient evaluation** (unit of value, truth detector, actionable) and recommends a concrete replacement when it fails. Standalone — no other skills required — with a metric-only fast path for critiquing an existing metric. Ported from the BuilderOS `/measure-feature` command.
+
 ## 1.9.0 — 2026-07-03
 
 ### Added

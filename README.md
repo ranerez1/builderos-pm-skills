@@ -1,6 +1,6 @@
 # BuilderOS PM Skills
 
-A Claude Code plugin with 14 PM workflow skills (+ interactive onboarding) covering the full loop from customer discovery → planning → PRD → tech plan → review → learn, plus competitor analysis, knowledge ingest, validation storyboards, and Mixpanel data analysis.
+A Claude Code plugin with 17 PM workflow skills (+ interactive onboarding) covering the full loop from customer discovery → planning → PRD → tech plan → review → learn, plus competitor analysis, knowledge ingest, validation storyboards, feature measurement, and Mixpanel data analysis + instrumentation.
 
 ## Skills
 
@@ -22,6 +22,8 @@ A Claude Code plugin with 14 PM workflow skills (+ interactive onboarding) cover
 | 13 | `/13-validation-storyboard` | Capture a URL or product/demo video into a validation storyboard — screenshots + a checklist to validate. |
 | 14 | `/14-mixpanel-data-analysis` | Investigate why a metric moved in Mixpanel, then build a live dashboard + a saved analysis memo in `Outputs/Analytics/`. |
 | 15 | `/15-prd-to-epic` | Turn a PRD + prototype into an Epic-level backlog with atomic User Stories; writes `epic-<slug>.md` to `Outputs/Product PRDs/`. |
+| 16 | `/16-measure-feature` | Propose how to measure a feature (Reach → Adoption → Outcome ladder) and stress-test the primary metric with the 3-ingredient evaluation; optionally hands the events to `/17`. |
+| 17 | `/17-mixpanel-implementation` | Guided Mixpanel instrumentation (Quick Start / Full / Add Tracking / Audit) with identity, consent, and data-model critical rules + inline SDK snippets. |
 
 > Upgrading from 0.x? Skills 05–10 were renumbered to 06–11 to make room for `/05-create-prd`. See [CHANGELOG.md](CHANGELOG.md).
 
@@ -96,7 +98,10 @@ The skills are vendor-agnostic. To make them work end-to-end, configure your own
 │   ├── 11-competitor-feature-analysis/      # SKILL.md + scripts + INSTALL.md
 │   ├── 12-ingest-knowledge/SKILL.md
 │   ├── 13-validation-storyboard/            # SKILL.md + scripts
-│   └── 14-mixpanel-data-analysis/SKILL.md
+│   ├── 14-mixpanel-data-analysis/SKILL.md
+│   ├── 15-prd-to-epic/SKILL.md
+│   ├── 16-measure-feature/SKILL.md
+│   └── 17-mixpanel-implementation/SKILL.md
 └── templates/
     ├── CLAUDE.md.template
     ├── Knowledge/workspace-tools.md.template
