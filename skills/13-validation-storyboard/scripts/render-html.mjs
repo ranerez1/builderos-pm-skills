@@ -27,8 +27,9 @@ function escapeHtml(s) {
     .replace(/'/g, '&#39;');
 }
 
-// SVG noise overlay (data-URI) for film-grain atmosphere on surfaces.
-const NOISE_SVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.85  0 0 0 0 0.8  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`;
+// SVG noise overlay (data-URI) for paper-grain atmosphere. Samples a warm
+// brown so it reads as paper texture on the light cream background.
+const NOISE_SVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.09  0 0 0 0 0.07  0 0 0 0.16 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`;
 
 const FONT_IMPORT = `@import url('https://fonts.bunny.net/css?family=newsreader:400,500,500i,600|ibm-plex-sans:300,400,500|jetbrains-mono:400,500&display=swap');`;
 
@@ -36,16 +37,18 @@ const CSS = `
   ${FONT_IMPORT}
 
   :root {
-    --ink:           #e8e6df;
-    --ink-soft:      #a8a59a;
-    --ink-faint:     #66635c;
-    --paper:         #0c0c10;
-    --surface:       #15151b;
-    --surface-edge:  rgba(255, 255, 255, 0.07);
-    --hairline:      rgba(255, 255, 255, 0.06);
-    --accent:        #f59e0b;
-    --accent-soft:   rgba(245, 158, 11, 0.12);
-    --pass:          #4ade80;
+    --ink:           #1a1814;
+    --ink-soft:      #5f5b54;
+    --ink-faint:     #9b968d;
+    --paper:         #faf7f0;
+    --paper-edge:    #f1ece0;
+    --surface:       #ffffff;
+    --surface-edge:  rgba(26, 24, 20, 0.10);
+    --hairline:      rgba(26, 24, 20, 0.08);
+    --accent:        #b65a1d;
+    --accent-soft:   rgba(182, 90, 29, 0.08);
+    --pass:          #1f9d55;
+    --shot-well:     #1a1814;
 
     --f-display:     'Newsreader', Georgia, 'Iowan Old Style', 'Charter', serif;
     --f-body:        'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -62,25 +65,25 @@ const CSS = `
     padding: 0;
     color: var(--ink);
     font-family: var(--f-body);
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.6;
     font-size: 15px;
-    letter-spacing: 0.005em;
+    letter-spacing: 0;
     background:
-      radial-gradient(circle at 50% 0%, #11111a 0%, #06060a 70%) fixed,
+      radial-gradient(circle at 50% 0%, var(--paper) 0%, var(--paper-edge) 80%) fixed,
       var(--paper);
-    background-blend-mode: normal;
     min-height: 100vh;
   }
-  /* Subtle film grain over the whole page */
+  /* Soft paper grain over the whole page */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     background-image: url("${NOISE_SVG}");
-    opacity: 0.04;
+    opacity: 0.05;
     z-index: 0;
+    mix-blend-mode: multiply;
   }
   .wrap { position: relative; z-index: 1; max-width: var(--maxw); margin: 0 auto; padding: 72px 32px 96px; }
 
@@ -232,7 +235,7 @@ const CSS = `
     border: 1px solid var(--surface-edge);
     border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset, 0 10px 30px rgba(0,0,0,0.25);
+    box-shadow: 0 1px 2px rgba(26, 24, 20, 0.03), 0 8px 24px rgba(26, 24, 20, 0.06);
   }
   @media (max-width: 760px) {
     .step { grid-template-columns: 40px minmax(0, 1fr); gap: 0 16px; }
@@ -241,19 +244,21 @@ const CSS = `
   }
 
   .step .frame {
-    background: #050507;
+    background: var(--shot-well);
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.04), transparent 40%);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px;
+    padding: 22px;
     min-height: 240px;
     border-right: 1px solid var(--surface-edge);
     position: relative;
-    transition: transform 220ms ease, box-shadow 220ms ease;
+    transition: box-shadow 220ms ease;
   }
   @media (max-width: 760px) { .step .frame { border-right: none; border-bottom: 1px solid var(--surface-edge); } }
   .step .frame:hover {
-    box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.25), 0 0 60px rgba(245, 158, 11, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(182, 90, 29, 0.5);
   }
   .step .frame a {
     display: block;
@@ -268,12 +273,11 @@ const CSS = `
     object-fit: contain;
     border-radius: 2px;
     box-shadow:
-      0 0 0 1px rgba(255,255,255,0.03),
-      0 0 0 2px rgba(0,0,0,0.5),
-      0 20px 40px rgba(0,0,0,0.4);
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 8px 24px rgba(0,0,0,0.35);
   }
   .step .frame .no-shot {
-    color: var(--ink-faint);
+    color: #a8a59a;
     font-family: var(--f-mono);
     font-size: 12px;
     letter-spacing: 0.1em;
@@ -340,7 +344,7 @@ const CSS = `
   .step .notes {
     margin-top: 18px;
     padding: 12px 16px;
-    background: rgba(245, 158, 11, 0.04);
+    background: var(--accent-soft);
     border-left: 2px solid var(--accent);
     font-family: var(--f-display);
     font-style: italic;
@@ -362,16 +366,16 @@ const CSS = `
   footer .stamp { color: var(--accent); }
   footer code {
     color: var(--ink-soft);
-    background: var(--surface);
+    background: rgba(26, 24, 20, 0.04);
     padding: 2px 8px;
     border-radius: 3px;
-    border: 1px solid var(--surface-edge);
+    border: 1px solid var(--hairline);
   }
 
   /* LIGHTBOX (CSS-only :target) =========================================== */
   .lb {
     position: fixed; inset: 0;
-    background: rgba(2, 2, 4, 0.92);
+    background: rgba(26, 24, 20, 0.88);
     display: none;
     align-items: center;
     justify-content: center;
@@ -382,23 +386,23 @@ const CSS = `
   .lb img {
     max-width: 100%;
     max-height: 100%;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08);
   }
   .lb .close {
     position: absolute;
     top: 22px;
     right: 28px;
-    color: var(--ink-soft);
+    color: #f0ebe0;
     font-family: var(--f-mono);
     font-size: 12px;
     text-decoration: none;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    border: 1px solid var(--surface-edge);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 6px 12px;
     border-radius: 3px;
   }
-  .lb .close:hover { color: var(--accent); border-color: var(--accent); }
+  .lb .close:hover { color: #fff; border-color: #fff; }
 
   /* ANIMATIONS ============================================================ */
   @keyframes hero-in {
